@@ -1,6 +1,6 @@
 # B-Fit and Healthy UI/UX Redesign Design Specification
 
-Status: Approved design, pending implementation-plan approval
+Status: Approved design, implementation authorized
 
 Date: 2026-07-18
 
@@ -53,9 +53,9 @@ without intimidating a beginner.
 - No backend, authentication service, AI service, or synchronization service.
 - No medical diagnosis or individualized medical advice.
 - No random stock photography.
-- No mandatory WebGL experience, general-purpose 3D decoration, or external
-  anatomy data library. A Three.js anatomy view is permitted only as the
-  progressive enhancement defined in Section 12.5.
+- No WebGL, Three.js, GSAP, general-purpose 3D decoration, or external anatomy
+  data library in the current prototype. Section 12.5 documents a future
+  replacement path only.
 - No unrelated product features beyond the approved redesign and anatomy
   explorer.
 
@@ -196,6 +196,25 @@ body size through inline styles.
 ### 7.5 Spacing and shape
 
 Spacing scale: 4, 8, 12, 16, 24, 32, 48, and 64 pixels.
+
+The scale is applied through reusable composition rules instead of page-local
+margin values:
+
+- Inline control clusters: 8px for tightly related icon actions, 12px for
+  sibling buttons, and 16px when primary and secondary actions need separation
+- Label-to-control and eyebrow-to-title spacing: 8px
+- Heading-to-supporting-copy spacing: 8 to 12px depending on heading tier
+- Card-internal content groups: 16px; major card regions: 24px
+- Standard card padding: 24px desktop, 20px tablet, and 16px mobile
+- Feature-card padding: 32px desktop, 24px tablet, and 20px mobile
+- Section rhythm: 48px desktop, 40px tablet, and 32px mobile
+- Page-title region to first section: 32px desktop and 24px mobile
+
+Shared flow, cluster, grid, and page-stack utilities own these relationships.
+Component CSS may choose a named relationship but may not introduce arbitrary
+one-off spacing solely to correct a local screenshot. Wrapped control clusters
+retain both row and column gaps. Empty space must communicate hierarchy; it may
+not result from fixed heights or desktop-only row assumptions.
 
 - Control radius: 8px
 - Card radius: 14px
@@ -364,16 +383,24 @@ indicator has a text alternative and each selection remains keyboard operable.
 
 ### 10.3 Today
 
-Today is the main expression of the daily coaching ledger. It contains:
+Today uses the approved **Guided Daily Canvas** composition. It is the main
+expression of the daily coaching ledger and contains:
 
 - Greeting and short status sentence
 - One primary next action
 - Time-based rhythm rail
-- Compact daily summary for energy, protein, movement, water, and streak
+- One consolidated Daily Balance with readable linear metrics for energy,
+  protein, movement, water, and streak
 - Clear logged, current, and upcoming states
+- One contextual Coach panel that links to the assistant with the current day
+  as context
 
-Nested card density is reduced. Desktop uses a primary ledger column and a
-narrow summary rail. Mobile places the summary before the full timeline.
+Nested card density is reduced. The previous rail of separate Remaining,
+three-ring, streak, and assistant cards is removed. Desktop uses a primary
+canvas with the next action and timeline plus a useful coach column; the Daily
+Balance spans enough width for labels, values, and progress to be scanned
+without tiny circular charts. Mobile places the balance after the next action
+and before the timeline.
 The next-workout hero uses the permitted low-contrast sage gradient. In light
 mode the remaining-energy summary stays on the standard warm surface rather
 than becoming a dark inverted panel. Energy, protein, movement, and streak use
@@ -387,6 +414,12 @@ grammar but adds date scope and full CRUD.
 
 The date controller adapts into stacked groups on mobile. It must not depend on
 global horizontal clipping.
+
+The summary does not repeat the same macro data in rings, bars, and a stacked
+chart. One calm energy summary and three aligned macro rows are canonical.
+Brand, mineral blue, and ochre communicate categories without introducing
+purple, cyan, or saturated childlike accents. The add-food action remains
+visible and wraps below the title region on narrow screens.
 
 ### 10.5 Recipes and recipe detail
 
@@ -408,6 +441,11 @@ shared record and form components.
 Every muscle-coverage group maps to a stable Anatomy muscle ID and links to the
 matching Anatomy selection.
 
+The current program and next session form one focused action surface. Weekly
+metrics become a compact aligned summary instead of a stack of oversized
+cards. Muscle coverage uses a recognizable front/back mini body map plus a
+textual coverage list; it is not represented by an abstract cloud of pills.
+
 ### 10.7 Active session
 
 Desktop retains exercise tables. Mobile renders each set as a readable set
@@ -428,12 +466,24 @@ hierarchy without adopting a separate design system. Article measure stays at
 approximately 68 characters. The reading progress bar accounts for both the
 app bar and contextual navigation.
 
+The listing uses an editorial lead story with clear metadata and a supporting
+story grid with consistent excerpts, rather than giving every article equal
+weight. Search and categories wrap intentionally, retain 44px targets, and do
+not create a page-level horizontal scroller.
+
 ### 10.10 Assistant
 
 The assistant remains a simulated general-guidance experience. The disclaimer
 is visible before or immediately after the first response. Composer controls
 respect mobile safe areas and the on-screen keyboard. New messages are
 announced without re-announcing the entire conversation.
+
+The page is a useful coaching workspace rather than a nearly empty composer.
+It contains a short scope statement, topic starters, a bounded conversation
+column, contextual suggestion cards, and a sticky-within-panel composer on
+desktop. Mobile uses a single column and a full-width composer whose send
+button never clips. The interface clearly distinguishes suggested questions,
+user messages, assistant responses, and the general-guidance disclaimer.
 
 ### 10.11 Profile, progress, habits, settings, and notifications
 
@@ -485,9 +535,18 @@ status; it does not automatically move focus or scroll the page.
 
 ### 11.3 Illustration
 
-The body map is a local inline SVG with front and back views. Each selectable
-region corresponds to a stable muscle ID. The active region uses brand color,
-a visible outline, and a text state. Hover alone is never required.
+The current prototype uses a local inline SVG with front and back views. The
+silhouette has a recognizable head, neck, shoulder width, tapered torso,
+pelvis, articulated arms, thighs, knees, lower legs, and feet. Muscle paths sit
+within that silhouette and follow believable bilateral placement. Regions use
+curved organic paths rather than disconnected rectangles, capsules, or a pill
+cloud. This is an educational interaction prototype, not a medical atlas.
+
+Each selectable region corresponds to a stable muscle ID. Neutral muscle
+groups use warm surface tones with sufficient outline contrast. The active
+region uses anatomy clay, a visible outline, and a text state. Hover alone is
+never required. SVG symbols, data, selection logic, and detail rendering are
+kept separate so a future renderer can consume the same stable muscle IDs.
 
 The illustration covers these initial groups:
 
@@ -625,22 +684,22 @@ be handled consistently:
 - Otherwise label it as a demo or disabled action before interaction.
 - Do not show a normal success message for an action that changed nothing.
 
-### 12.4 GSAP motion layer
+### 12.4 Current vanilla motion layer
 
-GSAP core 3.13.0 is the approved shared motion engine. It is loaded as a pinned
-browser script and requires no package manager, bundler, framework, or build
-step. The application remains fully readable and operable if the script fails
-to load.
-Existing Intersection Observer logic may trigger viewport entrances; the
-ScrollTrigger plugin and scroll-smoothing libraries are not required.
+The current phase uses CSS transitions and small vanilla-JavaScript helpers
+only. No GSAP, Three.js, animation framework, package manager, or build step is
+introduced. The application remains fully readable and operable when motion
+is unavailable.
+
+The approved ambient halo is a single low-opacity sage/mineral radial field
+behind page content. Pointer coordinates update CSS custom properties through
+one requestAnimationFrame loop. The halo is disabled for coarse pointers and
+reduced motion, never changes card colors, and never intercepts interaction.
 
 Motion vocabulary:
 
 - Route content: 180 to 240 milliseconds, opacity plus an 8-pixel rise
 - Hero: one hierarchy-based entrance, not an animation on every child
-- Today rhythm rail: draws once when the screen opens
-- Charts: goal line first, then bars over approximately 420 milliseconds
-- Blog list: a restrained entrance stagger on first viewport entry
 - Anatomy hover: outline response at approximately 120 milliseconds
 - Anatomy selection: muscle fill and detail transition over 180 to 240
   milliseconds
@@ -648,20 +707,22 @@ Motion vocabulary:
 
 No motion may hijack scrolling, trail the pointer, make buttons magnetic, loop
 dashboard decoration, or move essential content indefinitely. Hash-route
-cleanup reverts each route's GSAP context and cancels outstanding animation
-before new markup is mounted. Repeated navigation may not accumulate timelines,
-observers, or event listeners.
+cleanup cancels outstanding animation frames and observers before new markup
+is mounted. Repeated navigation may not accumulate observers or event
+listeners.
 
 `prefers-reduced-motion: reduce` removes spatial movement, chart drawing, and
 stagger. State changes remain visible with near-instant opacity or color updates.
 
-### 12.5 Optional Three.js anatomy enhancement
+### 12.5 Future Three.js and GSAP anatomy replacement
 
 The inline SVG and HTML anatomy explorer is the canonical, accessible
-experience. A Three.js view may be added later only when a suitable local or
+prototype for the current phase. After its interaction design is approved, a
+Three.js view may replace the visual renderer only when a suitable local or
 properly licensed GLB model exists with stable, named muscle meshes that map to
-the same muscle IDs as the SVG. It is not part of the baseline implementation
-without that approved asset.
+the same muscle IDs as the SVG. GSAP may then coordinate body rotation,
+selection highlighting, and the information-panel transition. Neither library
+is part of the current implementation.
 
 Three.js is not loaded on routes outside Anatomy. The enhancement must preserve
 the searchable text list, keyboard selection, deep links, front/back control,
@@ -722,7 +783,7 @@ code changes. No credential value belongs in browser JavaScript.
 ## 16. Expected File Impact
 
 - `prototype/index.html`: English default language, font loading, metadata, and
-  pinned GSAP core script
+  anatomy module loading
 - `prototype/css/tokens.css`: final tokens
 - `prototype/css/base.css`: typography, focus, overflow, and utilities
 - `prototype/css/components.css`: shared controls and states
@@ -733,14 +794,16 @@ code changes. No credential value belongs in browser JavaScript.
 - `prototype/js/charts.js`: chart accessibility and lifecycle
 - `prototype/js/crud.js`: validation and responsive records
 - `prototype/js/screens-public.js`: landing, auth, onboarding
-- `prototype/js/screens-app.js`: application and anatomy screens
+- `prototype/js/screens-app.js`: redesigned application screens
+- `prototype/js/anatomy-data.js`: bilingual stable muscle records
+- `prototype/js/anatomy.js`: isolated SVG renderer and anatomy interaction
 - `prototype/js/screens-records.js`: record and blog screens
 - `prototype/js/data.js`: bilingual muscles and relationships
 - `prototype/js/i18n.js`: new labels and messages
 - `prototype/js/records.js`: measurement and persistence integration where
   required
-- `prototype/js/motion.js`: GSAP context creation, reduced-motion behavior, and
-  route cleanup
+- `prototype/js/motion.js`: ambient halo, restrained vanilla motion, and route
+  cleanup
 - `prototype/js/shader.js`: removed from the runtime after the CSS fallback is
   replaced by the new static hero treatment
 - `.gitignore`, `.env.local`, and `README.md`: security and project hygiene
