@@ -406,13 +406,7 @@ const AppScreens = {
           <span class="text-xs text-muted">${esc(t("coverage.subtitle"))}</span>
         </div>
         <div class="card training-coverage">
-          <a class="coverage-figure" href="#/anatomy?view=front" aria-label="${esc(t("coverage.title"))}">
-            <svg viewBox="0 0 160 260" aria-hidden="true">
-              <circle cx="80" cy="27" r="20"/><path d="M58 54 Q80 44 102 54 L112 126 Q104 148 92 157 L98 238 Q91 252 80 238 Q69 252 62 238 L68 157 Q56 148 48 126Z"/>
-              <path d="M56 62 Q30 74 25 115 L34 164 Q42 170 49 158 L45 116 L62 87Z"/><path d="M104 62 Q130 74 135 115 L126 164 Q118 170 111 158 L115 116 L98 87Z"/>
-            </svg>
-            <span>${esc(t("nav.anatomy"))} ${icon("arrowRight", "icon icon-sm")}</span>
-          </a>
+          ${AnatomyPreview.render()}
           <div class="coverage-list section-stack">
             ${Store.coverage.map((item) => `<a href="#/anatomy?muscle=${encodeURIComponent(coverageIds[item.key] || "pectorals")}&view=${item.key === "muscle.hamstrings" || item.key === "muscle.rearDelt" ? "back" : "front"}" class="metric-row">
               <span>${esc(t(item.key))}</span><strong class="num">${esc(t("coverage.sets", { n: item.sets }))}</strong>
@@ -787,7 +781,7 @@ const AppScreens = {
       body: `
       <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" id="read-fill"></div></div>
 
-      <article class="article stack stack-5">
+      <article class="article article-reading">
         <header class="stack stack-3">
           <span class="badge badge-brand">${esc(t("learn.cat." + a.cat))}</span>
           <h1>${esc(L(a.title))}</h1>
@@ -800,14 +794,13 @@ const AppScreens = {
         </header>
 
         <div class="article-body">
-          <p style="font-family:var(--font-display);font-size:var(--text-lg);color:var(--ink)">${esc(L(a.excerpt))}</p>
-          ${L(a.body).map((p) => `<p>${esc(p)}</p>`).join("")}
+          ${ArticleContent.render(a)}
         </div>
 
         <p class="notice notice-info">${icon("info")} <span>${esc(t("learn.disclaimer"))}</span></p>
 
-        <section>
-          <h2 style="font-size:var(--text-base);margin-bottom:var(--sp-3)">${esc(t("learn.related"))}</h2>
+        <section class="article-related">
+          <h2>${esc(t("learn.related"))}</h2>
           <div class="card card-flush">
             ${related.map((r) => `
               <a class="list-row" href="#/article?id=${r.id}">

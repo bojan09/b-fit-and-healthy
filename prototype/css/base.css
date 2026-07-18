@@ -13,7 +13,9 @@ html {
 
 body {
   min-height: 100dvh;
-  background: var(--bg);
+  background: var(--page-gradient);
+  background-color: var(--bg);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: var(--text-base);
@@ -30,7 +32,7 @@ body::before {
   content: "";
   position: fixed;
   z-index: -1;
-  width: clamp(35rem, 52vw, 45rem);
+  width: clamp(30rem, 46vw, 40rem);
   aspect-ratio: 1;
   left: var(--halo-x, 72vw);
   top: var(--halo-y, 18vh);
@@ -38,11 +40,19 @@ body::before {
   border-radius: 50%;
   pointer-events: none;
   background: radial-gradient(circle,
-    color-mix(in srgb, var(--brand) 10%, transparent) 0%,
-    color-mix(in srgb, var(--mineral) 5%, transparent) 38%,
+    color-mix(in srgb, var(--brand) 5%, transparent) 0%,
+    color-mix(in srgb, var(--mineral) 3%, transparent) 42%,
+    transparent 74%);
+  filter: blur(24px);
+  opacity: 0.42;
+}
+
+:root[data-theme="dark"] body::before {
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--mineral) 16%, transparent) 0%,
+    color-mix(in srgb, var(--brand) 9%, transparent) 38%,
     transparent 72%);
-  filter: blur(18px);
-  opacity: 0.72;
+  opacity: 0.6;
 }
 
 #root { position: relative; z-index: 0; min-width: 0; }

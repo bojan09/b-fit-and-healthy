@@ -250,7 +250,7 @@ const RecordScreens = {
       body: `
       <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" id="read-fill"></div></div>
 
-      <article class="article stack stack-5">
+      <article class="article article-reading">
         <header class="stack stack-3">
           <span class="badge badge-brand">${esc(t("learn.cat." + a.cat))}</span>
           <h1>${esc(L(a.title))}</h1>
@@ -263,14 +263,13 @@ const RecordScreens = {
         </header>
 
         <div class="article-body">
-          <p style="font-family:var(--font-display);font-size:var(--text-lg);color:var(--ink)">${esc(L(a.excerpt))}</p>
-          ${L(a.body).map((p) => `<p>${esc(p)}</p>`).join("")}
+          ${ArticleContent.render(a)}
         </div>
 
         <p class="notice notice-info">${icon("info")} <span>${esc(t("learn.disclaimer"))}</span></p>
 
-        <section>
-          <h2 style="font-size:var(--text-base);margin-bottom:var(--sp-3)">${esc(t("learn.related"))}</h2>
+        <section class="article-related">
+          <h2>${esc(t("learn.related"))}</h2>
           <div class="card card-flush">
             ${(related.length ? related : fallback).map((r) => `
               <a class="list-row" href="#/post?id=${r.id}">

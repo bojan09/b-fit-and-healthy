@@ -14,7 +14,6 @@ test('the document and first visit are English-first', () => {
   assert.match(html, /localStorage\.getItem\("bfit\.lang"\) \|\| "en"/);
   assert.match(i18n, /const DEFAULT_LANG = "en"/);
 });
-
 test('current runtime is framework-free and loads the anatomy modules', () => {
   const html = read('prototype/index.html');
   assert.doesNotMatch(html, /shader\.js|gsap|three(?:\.min)?\.js/i);
@@ -22,13 +21,13 @@ test('current runtime is framework-free and loads the anatomy modules', () => {
   assert.match(html, /js\/anatomy\.js/);
 });
 
-test('Warm Sage and reusable spacing contracts are defined', () => {
+test('Warm Sage light, Sage Dusk dark, and reusable spacing contracts are defined', () => {
   const tokens = read('prototype/css/tokens.css');
   const base = read('prototype/css/base.css');
   assert.match(tokens, /--bg:\s*#F4F4EE/i);
   assert.match(tokens, /--surface:\s*#FCFCF8/i);
   assert.match(tokens, /--brand:\s*#397458/i);
-  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--bg:\s*#18201C/i);
+  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--bg:\s*#14211C/i);
   assert.match(tokens, /--space-1:\s*0\.25rem/);
   assert.match(tokens, /--space-16:\s*4rem/);
   for (const selector of ['.flow', '.cluster', '.page-stack', '.section-stack']) {
@@ -73,4 +72,34 @@ test('assistant render keeps the page at its heading instead of scrolling the ch
   const app = read('prototype/js/app.js');
   assert.doesNotMatch(app, /log\.scrollIntoView/);
   assert.match(app, /log\.scrollTop\s*=\s*log\.scrollHeight/);
+});
+
+test('Sage Dusk differentiates dark feature surfaces without muddy light blooms', () => {
+  const tokens = read('prototype/css/tokens.css');
+  const base = read('prototype/css/base.css');
+  const components = read('prototype/css/components.css');
+  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--bg:\s*#14211C/i);
+  assert.match(tokens, /--page-gradient:[^;]*radial-gradient[\s\S]*linear-gradient/i);
+  for (const role of ['training', 'nutrition', 'blog', 'assistant']) {
+    assert.match(tokens, new RegExp(`--feature-${role}-surface:`));
+  }
+  assert.match(base, /background:\s*var\(--page-gradient\)/);
+  assert.match(components, /:root:not\(\[data-theme="dark"\]\) \.hero-card::after\s*\{\s*display:\s*none/);
+  assert.doesNotMatch(`${components}\n${read('prototype/css/layout.css')}`, /#4ADE80/i);
+});
+
+test('Sage Dusk shares hue families and semantic button contrast across modes', () => {
+  const tokens = read('prototype/css/tokens.css');
+  const components = read('prototype/css/components.css');
+  const layout = read('prototype/css/layout.css');
+  const ui = read('prototype/js/ui.js');
+  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--bg:\s*#14211C/i);
+  assert.match(tokens, /--feature-training-surface:\s*#DCEBE1/i);
+  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--feature-training-surface:\s*#254438/i);
+  assert.match(tokens, /--logo-body:\s*#397458/i);
+  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--logo-body:\s*#88C69D/i);
+  assert.match(ui, /function brandmark\(size = 38\)/);
+  assert.doesNotMatch(layout, /brandmark \.logo path:first-of-type/);
+  assert.match(components, /\.hero-card \.btn-primary\s*\{[^}]*color:\s*var\(--on-brand\)/);
+  assert.match(layout, /\.cta-block \.btn-primary\s*\{[^}]*color:\s*var\(--on-brand\)/);
 });

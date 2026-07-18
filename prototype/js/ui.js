@@ -74,7 +74,7 @@ const ICON_PATHS = {
  * NOTE: traced by eye from the 48px raster. If the original vector turns up,
  * swap this path data for it.
  */
-function brandmark(size = 30) {
+function brandmark(size = 38) {
   return `<svg class="logo" width="${size}" height="${size}" viewBox="0 0 48 48" role="img"
     aria-label="${esc(t("app.name"))}">
     <!-- apple/heart body -->
@@ -86,7 +86,6 @@ function brandmark(size = 30) {
       font-family="Manrope, Inter, Helvetica, Arial, sans-serif" font-size="17" font-weight="800">B</text>
   </svg>`;
 }
-
 function icon(name, cls = "icon") {
   const path = ICON_PATHS[name] || ICON_PATHS.info;
   return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor"

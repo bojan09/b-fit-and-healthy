@@ -16,7 +16,7 @@
           (pref === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
         document.querySelector('meta[name="theme-color"]')
-          .setAttribute("content", dark ? "#18201C" : "#F4F4EE");
+          .setAttribute("content", dark ? "#14211C" : "#F4F4EE");
         var lang = localStorage.getItem("bfit.lang") || "en";
         document.documentElement.lang = lang;
         if (localStorage.getItem("bfit.reducedMotion") === "1") {
@@ -55,9 +55,11 @@
   <script src="js/charts.js"></script>
   <script src="js/motion.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/article-content.js"></script>
   <script src="js/records.js"></script>
   <script src="js/crud.js"></script>
   <script src="js/screens-public.js"></script>
+  <script src="js/anatomy-preview.js"></script>
   <script src="js/screens-app.js"></script>
   <script src="js/screens-records.js"></script>
   <script src="js/anatomy-data.js"></script>
