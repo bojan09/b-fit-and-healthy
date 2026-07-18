@@ -76,49 +76,44 @@ const AppScreens = {
       { key: "today.tl.evening", time: "19:00 – 22:00", done: loggedSlots.has("dinner"), body: mealRow("dinner") }
     ];
 
+    const metric = (label, value, goal, unit, tone = "brand") => `
+      <div class="metric-row metric-${tone}">
+        <div class="metric-copy"><span>${esc(label)}</span><strong class="num">${esc(value)} / ${esc(goal)} ${esc(unit)}</strong></div>
+        <span class="bar" aria-hidden="true"><span class="bar-fill" style="width:${Math.min(100, pct(Number(value.replace?.(/[^0-9.]/g, "") || value), Number(goal.replace?.(/[^0-9.]/g, "") || goal)))}%"></span></span>
+      </div>`;
+
     const aside = `
-      <div class="card-invert">
-        <p class="stat-label">${esc(t("today.remaining"))}</p>
-        <p class="num-hero">
-          ${I18n.num(tg.energy - d.energy)} <small>${esc(t("common.of"))} ${I18n.num(tg.energy)} ${esc(t("common.kcal"))}</small>
-        </p>
-        <span class="bar" style="margin-top:var(--sp-4)">
-          <span class="bar-fill" style="width:${Math.min(100, pct(d.energy, tg.energy))}%;background:var(--invert-accent)"></span>
-        </span>
-      </div>
-
-      <div class="card stack stack-4">
-        <h2 style="font-size:var(--text-base)">${esc(t("today.rings.title"))}</h2>
-        <div class="row" style="justify-content:space-around">
-          ${ring(pct(d.energy, tg.energy), { value: I18n.num(d.energy), label: t("today.ring.energy") })}
-          ${ring(pct(d.protein, tg.protein), { value: I18n.num(d.protein) + t("common.g"), label: t("today.ring.protein"), color: "var(--data-2)" })}
-          ${ring(pct(d.moveMinutes, d.moveGoal), { value: I18n.num(d.moveMinutes) + t("common.min"), label: t("today.ring.move"), color: "var(--data-3)" })}
+      <section class="card daily-balance section-stack" aria-labelledby="balance-title">
+        <div class="row-between">
+          <div class="flow" style="--flow-space:var(--space-1)">
+            <p class="eyebrow">${esc(t("today.remaining"))}</p>
+            <h2 id="balance-title">${esc(t("today.rings.title"))}</h2>
+          </div>
+          <span class="badge badge-brand">${icon("flame", "icon icon-sm")} ${esc(t("today.streak", { n: Store.user.streak }))}</span>
         </div>
-      </div>
+        <p class="balance-total"><strong class="num">${I18n.num(tg.energy - d.energy)}</strong> ${esc(t("common.kcal"))} ${esc(t("today.remaining").toLowerCase())}</p>
+        <div class="balance-metrics section-stack">
+          ${metric(t("today.ring.energy"), String(d.energy), String(tg.energy), t("common.kcal"))}
+          ${metric(t("today.ring.protein"), String(d.protein), String(tg.protein), t("common.g"), "mineral")}
+          ${metric(t("today.ring.move"), String(d.moveMinutes), String(d.moveGoal), t("common.min"), "ochre")}
+          ${metric(t("today.water"), String(d.water), String(tg.water), t("common.ml"), "mineral")}
+        </div>
+      </section>
 
-      <div class="card row">
-        <span style="color:var(--accent)">${icon("flame", "icon icon-lg")}</span>
-        <span class="grow">
-          <span style="display:block;font-weight:600" class="num">${esc(t("today.streak", { n: Store.user.streak }))}</span>
-          <span class="text-xs text-muted">${esc(t("today.streak.keep"))}</span>
-        </span>
-      </div>
-
-      <a class="card card-link row" href="#/assistant">
-        <span style="color:var(--brand)">${icon("sparkles")}</span>
-        <span class="grow">
-          <span style="display:block;font-weight:600">${esc(t("ai.title"))}</span>
-          <span class="text-xs text-muted">${esc(t("ai.suggest1"))}</span>
-        </span>
-        ${icon("chevronRight", "icon icon-sm")}
-      </a>`;
+      <aside class="card coach-panel flow" aria-labelledby="coach-title">
+        <span class="coach-icon" aria-hidden="true">${icon("sparkles")}</span>
+        <p class="eyebrow">${esc(t("ai.title"))}</p>
+        <h2 id="coach-title">${esc(t("ai.suggest1"))}</h2>
+        <p class="text-muted">${esc(t("ai.subtitle"))}</p>
+        <a class="btn btn-secondary" href="#/assistant">${esc(t("ai.title"))} ${icon("arrowRight", "icon icon-sm")}</a>
+      </aside>`;
 
     return {
       chrome: "app",
       title: t("nav.today"),
       body: `
-      <div class="today-grid">
-        <div>
+      <div class="today-grid daily-canvas">
+        <div class="page-stack">
           <header class="page-head">
             <h1>${esc(t(greetKey, { name: L(Store.user.name) }))}</h1>
             <p>${esc(t("today.subtitle"))}</p>
@@ -136,7 +131,7 @@ const AppScreens = {
             </div>
           </section>
 
-          <section aria-labelledby="tl-h">
+          <section class="daily-timeline" aria-labelledby="tl-h">
             <div class="section-head"><h2 id="tl-h">${esc(t("today.timeline"))}</h2></div>
             <ol class="timeline">
               ${timeline.map((item) => `
@@ -149,7 +144,7 @@ const AppScreens = {
           </section>
         </div>
 
-        <aside class="today-aside stack stack-4" aria-label="${esc(t("today.rings.title"))}">${aside}</aside>
+        <div class="today-aside section-stack">${aside}</div>
       </div>`
     };
   },
@@ -191,7 +186,7 @@ const AppScreens = {
         <p>${esc(t("nutrition.subtitle"))}</p>
       </header>
 
-      <div class="card stack stack-5">
+      <section class="card nutrition-summary section-stack">
         <div class="row-between">
           <h2 style="font-size:var(--text-base)">${esc(t("nutrition.today"))}</h2>
           <button class="btn btn-primary btn-sm" data-action="add-food">
@@ -199,18 +194,19 @@ const AppScreens = {
           </button>
         </div>
 
-        <div class="row" style="gap:var(--sp-5);align-items:center">
-          ${ring(pct(d.energy, tg.energy), { size: 96, stroke: 10, value: I18n.num(d.energy), label: t("common.kcal") })}
-          <div class="grow stack stack-3">
+        <div class="nutrition-overview">
+          <div class="nutrition-energy flow" style="--flow-space:var(--space-1)">
+            <span class="eyebrow">${esc(t("today.remaining"))}</span>
+            <strong class="num">${I18n.num(tg.energy - d.energy)}</strong>
+            <span class="text-muted">${esc(t("common.kcal"))}</span>
+          </div>
+          <div class="grow section-stack">
             ${macroRow("nutrition.protein", d.protein, tg.protein, 1)}
             ${macroRow("nutrition.carbs", d.carbs, tg.carbs, 2)}
             ${macroRow("nutrition.fat", d.fat, tg.fat, 3)}
           </div>
         </div>
-
-        <hr class="divider">
-        ${macroBar(macros)}
-      </div>
+      </section>
 
       <section class="section">
         <div class="section-head"><h2>${esc(t("nutrition.meals"))}</h2></div>
@@ -368,6 +364,11 @@ const AppScreens = {
      ====================================================================== */
   train() {
     const p = Store.program;
+    const coverageIds = {
+      "muscle.quads": "quadriceps", "muscle.hamstrings": "hamstrings",
+      "muscle.rearDelt": "deltoids", "muscle.serratus": "serratus",
+      "muscle.core": "abdominals"
+    };
     return {
       chrome: "app",
       title: t("train.title"),
@@ -377,7 +378,7 @@ const AppScreens = {
         <p>${esc(t("train.subtitle"))}</p>
       </header>
 
-      <section class="card stack stack-4">
+      <section class="card program-focus section-stack">
         <div class="row-between">
           <div>
             <p class="eyebrow">${esc(t("train.currentProgram"))}</p>
@@ -399,14 +400,24 @@ const AppScreens = {
         </div>
       </section>
 
-      <section class="section" aria-labelledby="cov-h">
+      <section class="section coverage-anatomy-link" aria-labelledby="cov-h">
         <div class="section-head">
           <h2 id="cov-h">${esc(t("coverage.title"))}</h2>
           <span class="text-xs text-muted">${esc(t("coverage.subtitle"))}</span>
         </div>
-        <div class="card-invert">
-          ${coverageMap(Store.coverage)}
-          <hr class="divider" style="margin:var(--sp-5) 0 var(--sp-4)">
+        <div class="card training-coverage">
+          <a class="coverage-figure" href="#/anatomy?view=front" aria-label="${esc(t("coverage.title"))}">
+            <svg viewBox="0 0 160 260" aria-hidden="true">
+              <circle cx="80" cy="27" r="20"/><path d="M58 54 Q80 44 102 54 L112 126 Q104 148 92 157 L98 238 Q91 252 80 238 Q69 252 62 238 L68 157 Q56 148 48 126Z"/>
+              <path d="M56 62 Q30 74 25 115 L34 164 Q42 170 49 158 L45 116 L62 87Z"/><path d="M104 62 Q130 74 135 115 L126 164 Q118 170 111 158 L115 116 L98 87Z"/>
+            </svg>
+            <span>${esc(t("nav.anatomy"))} ${icon("arrowRight", "icon icon-sm")}</span>
+          </a>
+          <div class="coverage-list section-stack">
+            ${Store.coverage.map((item) => `<a href="#/anatomy?muscle=${encodeURIComponent(coverageIds[item.key] || "pectorals")}&view=${item.key === "muscle.hamstrings" || item.key === "muscle.rearDelt" ? "back" : "front"}" class="metric-row">
+              <span>${esc(t(item.key))}</span><strong class="num">${esc(t("coverage.sets", { n: item.sets }))}</strong>
+            </a>`).join("")}
+          </div>
           <p class="text-xs" style="color:var(--invert-muted);margin-bottom:var(--sp-3)">
             ${esc(t("coverage.session"))}
           </p>
@@ -427,7 +438,7 @@ const AppScreens = {
           <h2>${esc(t("train.thisWeek"))}</h2>
           <a class="text-xs" href="#/exercises">${esc(t("exercises.title"))} →</a>
         </div>
-        <div class="stat-grid">
+        <div class="stat-grid training-summary">
           <div class="stat">
             <p class="stat-label">${esc(t("train.sessions"))}</p>
             <p class="stat-value num">3</p>
@@ -826,16 +837,19 @@ const AppScreens = {
         <p>${esc(t("ai.subtitle"))}</p>
       </header>
 
+      <div class="assistant-workspace">
+        <aside class="assistant-suggestions section-stack" aria-label="${esc(t("ai.subtitle"))}">
+          <div class="card flow"><span class="coach-icon">${icon("sparkles")}</span><h2>${esc(t("ai.title"))}</h2><p class="text-muted">${esc(t("ai.subtitle"))}</p></div>
+          ${["ai.suggest1", "ai.suggest2", "ai.suggest3"].map((k) => `<button class="card card-link assistant-suggestion" data-action="ai-suggest" data-q="${esc(t(k))}"><span>${esc(t(k))}</span>${icon("arrowRight", "icon icon-sm")}</button>`).join("")}
+        </aside>
+        <section class="card assistant-conversation" aria-label="${esc(t("ai.title"))}">
       <div class="chat" id="chat-log" aria-live="polite">
         ${msgs.length === 0 ? `
           <div class="msg msg-ai">
             <span class="avatar" aria-hidden="true">${icon("sparkles", "icon icon-sm")}</span>
             <div class="msg-bubble">${esc(t("ai.subtitle"))}</div>
           </div>
-          <div class="row wrap" style="margin-left:50px">
-            ${["ai.suggest1", "ai.suggest2", "ai.suggest3"].map((k) => `
-              <button class="chip" data-action="ai-suggest" data-q="${esc(t(k))}">${esc(t(k))}</button>`).join("")}
-          </div>` : msgs.map((m) => `
+          ` : msgs.map((m) => `
           <div class="msg msg-${m.role}">
             ${m.role === "ai" ? `<span class="avatar" aria-hidden="true">${icon("sparkles", "icon icon-sm")}</span>` : ""}
             <div class="msg-bubble">${esc(m.text)}</div>
@@ -847,8 +861,9 @@ const AppScreens = {
         <input class="input" id="ai-input" name="q" placeholder="${esc(t("ai.placeholder"))}" autocomplete="off">
         <button class="btn btn-primary" type="submit" aria-label="${esc(t("ai.send"))}">${icon("send")}</button>
       </form>
-
-      <p class="hint" style="text-align:center">${esc(t("ai.disclaimer"))}</p>`
+      <p class="hint assistant-disclaimer">${esc(t("ai.disclaimer"))}</p>
+        </section>
+      </div>`
     };
   },
 

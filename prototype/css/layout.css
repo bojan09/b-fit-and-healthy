@@ -74,13 +74,13 @@
   width: 100%;
   max-width: var(--shell-max);
   margin-inline: auto;
-  padding: var(--sp-5) var(--sp-4);
+  padding: var(--space-8) var(--page-pad);
   padding-bottom: calc(var(--tabbar-h) + var(--sp-10) + env(safe-area-inset-bottom));
 }
 .main-wide { max-width: none; }
 
-.page-head { margin-bottom: var(--sp-5); }
-.page-head h1 { margin-bottom: var(--sp-1); }
+.page-head { display: grid; gap: var(--space-2); margin-bottom: var(--space-8); }
+.page-head h1 { margin-bottom: 0; }
 .page-head p { color: var(--ink-muted); font-size: var(--text-sm); }
 
 .section { margin-top: var(--sp-8); }
@@ -161,7 +161,7 @@
 
 /* Primary nav is desktop-only; mobile uses the tab bar. */
 .primary-nav { display: none; }
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .primary-nav {
     display: flex;
     align-items: center;
@@ -188,7 +188,7 @@
 .primary-link .icon { flex: none; opacity: 0.8; }
 
 .appbar-tools { display: flex; align-items: center; gap: var(--sp-1); margin-left: auto; }
-@media (min-width: 900px) { .appbar-tools { margin-left: 0; } }
+@media (min-width: 1024px) { .appbar-tools { margin-left: 0; } }
 
 .search-trigger { gap: var(--sp-2); color: var(--ink-muted); font-weight: 500; }
 .search-label { display: none; }
@@ -516,11 +516,80 @@
 @media (min-width: 1024px) {
   .today-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
-    gap: var(--sp-8);
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.72fr);
+    gap: var(--space-8);
     align-items: start;
   }
-  .today-aside { position: sticky; top: calc(var(--topbar-h) + var(--sp-6)); display: flex; flex-direction: column; gap: var(--sp-4); }
+  .today-aside { position: sticky; top: calc(var(--topbar-h) + var(--space-6)); }
+}
+
+.daily-balance h2, .coach-panel h2 { font-size: var(--text-lg); }
+.balance-metrics { --card-gap: var(--space-4); }
+.nutrition-overview { display: grid; grid-template-columns: minmax(160px, .36fr) minmax(0, 1fr); gap: var(--space-8); align-items: center; }
+.nutrition-energy { min-height: 9rem; align-content: center; padding: var(--space-6); border-radius: var(--radius-md); background: var(--brand-soft); }
+.nutrition-energy strong { color: var(--brand-ink); font-size: var(--text-2xl); }
+.training-coverage { display: grid; grid-template-columns: minmax(170px, .42fr) minmax(0, 1fr); gap: var(--space-8); align-items: start; }
+.training-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.blog-lead { display: grid; gap: var(--space-3); padding: var(--feature-pad); background: color-mix(in srgb, var(--brand-soft) 52%, var(--surface)); }
+.blog-lead h2 { max-width: 22ch; }
+.blog-story-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
+.blog-story { min-height: 15rem; align-content: start; }
+.blog-story .text-sm { max-width: 55ch; }
+
+.assistant-workspace { display: grid; grid-template-columns: minmax(250px, .7fr) minmax(0, 1.7fr); gap: var(--space-6); align-items: start; }
+.assistant-suggestions { position: sticky; top: calc(var(--topbar-h) + 5rem); }
+
+.anatomy-explorer { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(330px, .9fr); padding: 0; overflow: clip; }
+.anatomy-map-panel, .anatomy-detail-panel { padding: var(--feature-pad); min-width: 0; }
+.anatomy-detail-panel { display: grid; border-left: 1px solid var(--border); background: color-mix(in srgb, var(--surface-raised) 46%, var(--surface)); }
+.anatomy-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); }
+.anatomy-search { flex: 1 1 15rem; max-width: 20rem; }
+.anatomy-prompt { color: var(--ink-muted); font-size: var(--text-sm); }
+.anatomy-map-layout { display: grid; grid-template-columns: minmax(220px, .95fr) minmax(190px, .65fr); gap: var(--space-6); align-items: center; }
+.anatomy-list-panel { max-height: 37rem; overflow-y: auto; padding-right: var(--space-2); }
+
+@media (max-width: 1023px) {
+  .primary-nav { display: none; }
+  .assistant-workspace, .anatomy-explorer { grid-template-columns: 1fr; }
+  .assistant-suggestions { position: static; grid-template-columns: repeat(3, 1fr); }
+  .assistant-suggestions > .card:first-child { grid-column: 1 / -1; }
+  .anatomy-detail-panel { border-left: 0; border-top: 1px solid var(--border); }
+}
+
+@media (max-width: 767px) {
+  .nutrition-overview, .training-coverage, .anatomy-map-layout { grid-template-columns: 1fr; }
+  .nutrition-energy { min-height: auto; }
+  .training-summary, .assistant-suggestions, .blog-story-grid { grid-template-columns: 1fr; }
+  .anatomy-list-panel { max-height: 18rem; }
+  .composer { align-items: stretch; }
+  .composer .btn { flex: none; }
+  .appbar-inner { gap: var(--space-2); }
+  .appbar-tools > [data-action="set-lang"], .appbar-tools > .btn-icon:not(.notif-dot) { display: none; }
+  .appbar .search-trigger { width: 44px; padding: 0; }
+  .program-focus .row-between:last-child { display: grid; grid-template-columns: 1fr; }
+  .program-focus .row-between:last-child .btn { width: 100%; }
+  .nutrition-summary > .row-between .btn { width: 100%; }
+  .tl-body .card { align-items: flex-start; flex-wrap: wrap; }
+  .tl-body .card > .btn { width: 100%; }
+}
+
+@media (max-width: 479px) {
+  .appbar-inner { gap: var(--space-2); }
+  .appbar-tools > [data-action="set-lang"], .appbar-tools > .btn-icon:not(.notif-dot) { display: none; }
+  .appbar .search-trigger { width: 44px; padding: 0; }
+  .page-head { margin-bottom: var(--space-6); }
+  .hero-card { padding: var(--feature-pad); }
+  .hero-card .row { align-items: stretch; }
+  .hero-card .btn { flex: 1 1 100%; }
+  .timeline { padding-left: var(--space-6); }
+  .tl-body .card { align-items: flex-start; flex-wrap: wrap; }
+  .tl-body .card > .btn { width: 100%; }
+  .assistant-conversation { min-height: 27rem; }
+  .composer { position: static; display: grid; grid-template-columns: minmax(0, 1fr) 48px; }
+  .anatomy-map-panel, .anatomy-detail-panel { padding: var(--feature-pad); }
+  .anatomy-controls .segmented, .anatomy-search { width: 100%; max-width: none; }
+  .anatomy-controls .seg-btn { flex: 1; }
 }
 
 /* ==========================================================================
@@ -952,4 +1021,14 @@
 @keyframes view-in {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
+}
+
+/* Final page-composition overrides live after legacy route rules. */
+.blog-story-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
+.blog-lead .badge { justify-self: start; }
+.assistant-conversation .composer { margin-top: auto; background: var(--surface); }
+
+@media (max-width: 767px) {
+  .blog-story-grid { grid-template-columns: 1fr; }
+  .composer { position: static; }
 }

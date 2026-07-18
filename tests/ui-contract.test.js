@@ -51,7 +51,7 @@ test('English and Macedonian dictionaries have exact key parity', () => {
 
 test('Anatomy is a canonical Training route and palette destination', () => {
   const app = read('prototype/js/app.js');
-  assert.match(app, /"\/anatomy":\s*Anatomy\.screen/);
+  assert.match(app, /"\/anatomy":\s*Anatomy\.screen(?:\.bind\(Anatomy\))?/);
   assert.match(app, /\["#\/anatomy",\s*"nav\.anatomy"/);
   assert.match(app, /"\/anatomy":\s*"train"/);
 });
@@ -69,3 +69,8 @@ test('flagged screens expose the approved layout contracts', () => {
   assert.doesNotMatch(appScreens, /coverageMap\(/);
 });
 
+test('assistant render keeps the page at its heading instead of scrolling the chat into view', () => {
+  const app = read('prototype/js/app.js');
+  assert.doesNotMatch(app, /log\.scrollIntoView/);
+  assert.match(app, /log\.scrollTop\s*=\s*log\.scrollHeight/);
+});

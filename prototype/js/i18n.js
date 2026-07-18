@@ -1,5 +1,5 @@
 /* ==========================================================================
-   i18n — Macedonian is the default. English is the secondary language.
+   i18n — English is the first-visit default. Macedonian remains complete.
    Flat dot-keys so production (react-i18next) can consume the same shape.
    No user-facing string is ever written inline in a screen file.
    ========================================================================== */
@@ -25,6 +25,7 @@ const DICT = {
     "nav.habits": "Навики",
     "nav.recipes": "Рецепти",
     "nav.exercises": "Вежби",
+    "nav.anatomy": "Анатомија",
     "nav.articles": "Статии",
     "nav.assistant": "АИ помошник",
     "nav.settings": "Поставки",
@@ -511,6 +512,7 @@ const DICT = {
     "nav.habits": "Habits",
     "nav.recipes": "Recipes",
     "nav.exercises": "Exercises",
+    "nav.anatomy": "Anatomy",
     "nav.articles": "Articles",
     "nav.assistant": "AI assistant",
     "nav.settings": "Settings",
@@ -958,7 +960,7 @@ const DICT = {
 };
 
 const LANG_KEY = "bfit.lang";
-const DEFAULT_LANG = "mk";
+const DEFAULT_LANG = "en";
 
 const I18n = {
   lang: DEFAULT_LANG,

@@ -64,9 +64,82 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: var(--sp-5);
+  padding: var(--card-pad);
   box-shadow: var(--shadow-sm);
 }
+
+/* Guided metrics --------------------------------------------------------- */
+.metric-row {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.metric-copy { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.metric-copy span { color: var(--ink-muted); font-size: var(--text-sm); }
+.metric-copy strong { font-size: var(--text-sm); text-align: right; }
+.metric-mineral .bar-fill { background: var(--mineral); }
+.metric-ochre .bar-fill { background: var(--accent); }
+.balance-total { color: var(--ink-muted); }
+.balance-total strong { color: var(--brand); font-size: var(--text-2xl); letter-spacing: -0.05em; }
+.coach-icon, .anatomy-detail-icon {
+  display: grid; place-items: center; width: 44px; height: 44px;
+  border-radius: var(--radius-full); background: var(--brand-soft); color: var(--brand-ink);
+}
+
+/* Training body preview -------------------------------------------------- */
+.coverage-figure {
+  display: grid; justify-items: center; gap: var(--space-3); padding: var(--space-4);
+  color: var(--brand-ink); text-decoration: none; background: var(--brand-soft);
+  border: 1px solid color-mix(in srgb, var(--brand) 25%, var(--border)); border-radius: var(--radius-md);
+}
+.coverage-figure svg { width: 110px; height: 180px; fill: color-mix(in srgb, var(--brand) 52%, var(--surface)); stroke: var(--brand); stroke-width: 2; }
+.coverage-figure span { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 700; }
+.coverage-list .metric-row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: var(--space-3) 0; border-bottom: 1px solid var(--border); }
+
+/* Assistant -------------------------------------------------------------- */
+.assistant-suggestion { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); text-align: left; }
+.assistant-conversation { display: flex; min-height: 32rem; flex-direction: column; gap: var(--space-6); }
+.assistant-conversation .chat { flex: 1 1 auto; }
+.assistant-conversation .composer { margin-top: auto; background: var(--surface); }
+.assistant-disclaimer { text-align: center; }
+
+/* Anatomy --------------------------------------------------------------- */
+.segmented .seg-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 40px;
+  padding: 0 var(--space-4); border-radius: var(--radius-xs); color: var(--ink-muted);
+  font-size: var(--text-sm); font-weight: 700; text-decoration: none;
+}
+.segmented .seg-btn[aria-current="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
+.anatomy-figure { width: min(100%, 320px); max-height: 590px; margin-inline: auto; overflow: visible; }
+.anatomy-silhouette { fill: var(--surface-raised); stroke: var(--border-strong); stroke-width: 2; }
+.anatomy-muscle { fill: color-mix(in srgb, var(--brand) 18%, var(--surface-raised)); stroke: var(--surface); stroke-width: 2.4; cursor: pointer; }
+.anatomy-region-link:hover .anatomy-muscle, .anatomy-region-link:focus .anatomy-muscle { fill: color-mix(in srgb, var(--anatomy) 55%, var(--surface)); stroke: var(--anatomy); stroke-width: 4; }
+.anatomy-muscle.is-selected { fill: var(--anatomy); stroke: var(--ink); stroke-width: 4; }
+.anatomy-midline { fill: none; stroke: color-mix(in srgb, var(--border-strong) 72%, transparent); stroke-width: 1; stroke-dasharray: 3 6; }
+.anatomy-muscle-list { display: grid; gap: var(--space-2); }
+.anatomy-list-button {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+  min-height: 56px; padding: var(--space-2) var(--space-3); color: var(--ink);
+  text-decoration: none; border: 1px solid transparent; border-radius: var(--radius-sm);
+}
+.anatomy-list-button:hover { background: var(--surface-hover); border-color: var(--border); }
+.anatomy-list-button.is-selected { background: var(--anatomy-soft); border-color: var(--anatomy); }
+.anatomy-list-button span { display: grid; min-width: 0; }
+.anatomy-list-button small, .anatomical-name { color: var(--ink-muted); font-size: var(--text-xs); }
+.anatomy-overview { color: var(--ink-secondary); font-size: var(--text-md); line-height: var(--leading-relaxed); }
+.anatomy-copy-section { padding-top: var(--space-4); border-top: 1px solid var(--border); }
+.anatomy-copy-section h3 { font-size: var(--text-base); }
+.anatomy-copy-section p { color: var(--ink-secondary); }
+.anatomy-exercises { display: grid; }
+.anatomy-exercise {
+  display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; align-items: center; gap: var(--space-3);
+  min-height: 52px; color: var(--ink); text-decoration: none; border-top: 1px solid var(--border);
+}
+.anatomy-exercise .num { color: var(--anatomy); font-size: var(--text-xs); }
+.anatomy-detail-empty { align-self: center; max-width: 34ch; text-align: center; }
+.anatomy-detail-empty .anatomy-detail-icon { margin-inline: auto; }
 .card-flush { padding: 0; overflow: hidden; }
 .card-quiet { background: transparent; box-shadow: none; }
 
@@ -676,15 +749,14 @@ td.num, th.num { text-align: right; }
 /* ---- tabs / filter chips ------------------------------------------------- */
 .chips {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--sp-2);
-  overflow-x: auto;
   padding-bottom: var(--sp-1);
-  scrollbar-width: none;
 }
 .chips::-webkit-scrollbar { display: none; }
 .chip {
   flex: none;
-  min-height: 38px;
+  min-height: 44px;
   padding: 0 var(--sp-4);
   border: 1px solid var(--border-control);
   border-radius: var(--radius-full);

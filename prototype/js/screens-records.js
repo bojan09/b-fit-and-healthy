@@ -206,7 +206,7 @@ const RecordScreens = {
           `<button class="btn btn-secondary" data-action="blog-cat" data-id="all">${esc(t("common.all"))}</button>`)
       : `
         ${featured ? `
-        <a class="card card-link blog-featured spotlight" href="#/post?id=${featured.id}"
+        <a class="card card-link blog-featured blog-lead" href="#/post?id=${featured.id}"
           style="margin-top:var(--sp-5)">
           <span class="badge badge-accent">${esc(t("blog.latest"))}</span>
           <h2 style="font-size:var(--text-xl);margin:var(--sp-3) 0">${esc(L(featured.title))}</h2>
@@ -220,9 +220,9 @@ const RecordScreens = {
         ${rest.length ? `
         <section class="section">
           <div class="section-head"><h2>${esc(t("blog.allPosts"))}</h2></div>
-          <div class="tile-grid">
+          <div class="tile-grid blog-story-grid">
             ${rest.map((a) => `
-              <a class="card card-link stack stack-2 spotlight" href="#/post?id=${a.id}">
+              <a class="card card-link stack stack-3 blog-story" href="#/post?id=${a.id}">
                 <span class="badge">${esc(t("learn.cat." + a.cat))}</span>
                 <h3 class="tile-title" style="font-size:var(--text-base)">${esc(L(a.title))}</h3>
                 <p class="text-sm text-muted">${esc(L(a.excerpt))}</p>

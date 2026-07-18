@@ -1,217 +1,206 @@
-/* ==========================================================================
-   B FIT & HEALTHY — design tokens  (v3 — derived from the brand mark)
-
-   The logo carries three colours and the system is built from exactly those:
-     #0F172A  slate    — the apple body   → ink in light, surface in dark
-     #2ECC71  emerald  — the "B"          → the brand, in both modes
-     #84CC16  lime     — the leaf         → highlight only, never data
-
-   TWO LAWS, both measured rather than assumed:
-
-   1. Same hue in both modes. Light and dark differ in LIGHTNESS only, never
-      in hue. A chart, a button or a badge is the same colour idea in both
-      themes — that is what makes the modes feel like one product.
-
-   2. Emerald #2ECC71 measures 2.10:1 on white — it cannot carry text or take
-      white text in light mode. Light mode therefore uses #047857 (5.48:1);
-      #2ECC71 appears at full strength only on dark surfaces and in the logo.
-      Lime measures 1.98:1 on white: it is a fill and a highlight, never text
-      on a light surface, and never a data series.
-   ========================================================================== */
-
+/* B-Fit & Healthy — Warm Sage design tokens */
 :root {
-  /* ---- type ------------------------------------------------------------ */
+  color-scheme: light;
+
   --font-display: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-num: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
 
-  --text-2xs: 0.6875rem;
-  --text-xs: 0.75rem;
-  --text-sm: 0.8125rem;
-  --text-base: 0.9375rem;
+  --text-2xs: 0.75rem;
+  --text-xs: 0.78125rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
   --text-md: 1.0625rem;
-  --text-lg: 1.25rem;
-  --text-xl: clamp(1.5rem, 1.2rem + 1.2vw, 1.875rem);
-  --text-2xl: clamp(1.875rem, 1.3rem + 2.4vw, 2.75rem);
-  --text-3xl: clamp(2.5rem, 1.4rem + 4.6vw, 4.5rem);
-
-  --leading-tight: 1.05;
+  --text-lg: 1.375rem;
+  --text-xl: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --text-2xl: clamp(1.75rem, 1.35rem + 1.8vw, 2.5rem);
+  --text-3xl: clamp(2.5rem, 1.8rem + 3vw, 3.75rem);
+  --leading-tight: 1.12;
   --leading-snug: 1.3;
   --leading-normal: 1.55;
-  --leading-relaxed: 1.7;
-
-  --tracking-tight: -0.03em;
+  --leading-relaxed: 1.68;
+  --tracking-tight: -0.025em;
   --tracking-normal: 0;
-  --tracking-wide: 0.08em;
+  --tracking-wide: 0.075em;
 
-  /* ---- space ----------------------------------------------------------- */
-  --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;  --sp-4: 1rem;
-  --sp-5: 1.25rem;  --sp-6: 1.5rem;   --sp-8: 2rem;     --sp-10: 2.5rem;
-  --sp-12: 3rem;    --sp-16: 4rem;    --sp-20: 5rem;    --sp-24: 6rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --sp-1: var(--space-1);
+  --sp-2: var(--space-2);
+  --sp-3: var(--space-3);
+  --sp-4: var(--space-4);
+  --sp-5: 1.25rem;
+  --sp-6: var(--space-6);
+  --sp-8: var(--space-8);
+  --sp-10: 2.5rem;
+  --sp-12: var(--space-12);
+  --sp-16: var(--space-16);
+  --control-gap: var(--space-3);
+  --content-gap: var(--space-4);
+  --card-gap: var(--space-6);
+  --card-pad: var(--space-6);
+  --feature-pad: var(--space-8);
+  --section-gap: var(--space-12);
+  --page-pad: var(--space-8);
 
-  /* ---- radii ----------------------------------------------------------- */
   --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
   --radius-full: 999px;
-
-  /* ---- layout ---------------------------------------------------------- */
-  --shell-max: 1360px;
+  --shell-max: 1240px;
   --content-max: 68ch;
-  --sidebar-w: 244px;
-  --tabbar-h: 62px;
-  --topbar-h: 60px;
+  --tabbar-h: 66px;
+  --topbar-h: 64px;
 
-  /* ---- motion ---------------------------------------------------------- */
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ease-spring: cubic-bezier(0.2, 0.8, 0.2, 1);
   --dur-instant: 90ms;
   --dur-fast: 160ms;
   --dur-base: 240ms;
   --dur-slow: 420ms;
+  --z-sticky: 20;
+  --z-nav: 40;
+  --z-modal: 70;
+  --z-toast: 80;
 
-  --z-sticky: 20; --z-nav: 40; --z-drawer: 60; --z-modal: 70; --z-toast: 80;
+  --logo-body: #1C2922;
+  --logo-mark: #397458;
+  --logo-leaf: #A8783C;
 
-  /* ---- brand constants (identical in every theme) ---------------------- */
-  --logo-body: #0F172A;
-  --logo-mark: #2ECC71;
-  --logo-leaf: #84CC16;
+  --bg: #F4F4EE;
+  --bg-sunken: #ECEFE8;
+  --surface: #FCFCF8;
+  --surface-raised: #ECEFE8;
+  --surface-hover: #E5EAE3;
+  --ink: #1C2922;
+  --ink-secondary: #3F4E45;
+  --ink-muted: #627068;
+  --ink-inverse: #F8FBF8;
+  --border: #D8DED6;
+  --border-strong: #BEC8C0;
+  --border-control: #7D8B82;
+  --border-focus: #397458;
+  --brand: #397458;
+  --brand-hover: #2D6048;
+  --brand-soft: #DCEBE1;
+  --brand-ink: #2D6048;
+  --on-brand: #F8FBF8;
+  --accent: #A8783C;
+  --accent-hover: #8B602E;
+  --accent-soft: #F0E5D5;
+  --accent-ink: #795327;
+  --on-accent: #FCFCF8;
+  --mineral: #587987;
+  --mineral-soft: #DDE8EB;
+  --anatomy: #A95F55;
+  --anatomy-soft: #F1DEDA;
+
+  /* Compatibility roles retained while old screens are progressively unified. */
+  --invert-bg: var(--surface-raised);
+  --invert-ink: var(--ink);
+  --invert-muted: var(--ink-muted);
+  --invert-accent: var(--brand);
+  --invert-border: var(--border);
+  --ok: #397458;
+  --ok-soft: #DCEBE1;
+  --ok-ink: #2D6048;
+  --warn: #A8783C;
+  --warn-soft: #F0E5D5;
+  --warn-ink: #795327;
+  --danger: #A34E45;
+  --danger-soft: #F3DEDA;
+  --danger-ink: #7F3932;
+  --info: #587987;
+  --info-soft: #DDE8EB;
+  --info-ink: #3F626F;
+  --data-1: var(--brand);
+  --data-2: var(--mineral);
+  --data-3: var(--accent);
+  --data-4: #7E8D82;
+  --data-5: #6F8D86;
+  --data-6: var(--anatomy);
+  --data-grid: var(--border);
+  --data-track: var(--surface-raised);
+  --data-neutral: #A8B2AB;
+  --shadow-sm: 0 1px 2px rgba(28, 41, 34, 0.06);
+  --shadow-md: 0 8px 24px -18px rgba(28, 41, 34, 0.28);
+  --shadow-lg: 0 20px 48px -28px rgba(28, 41, 34, 0.34);
+  --shadow-hero: 0 24px 60px -34px rgba(45, 96, 72, 0.42);
+  --overlay: rgba(28, 41, 34, 0.56);
+  --skeleton: linear-gradient(90deg, var(--surface-raised) 25%, var(--surface-hover) 50%, var(--surface-raised) 75%);
 }
 
-/* ==========================================================================
-   LIGHT
-   ========================================================================== */
-:root,
-:root[data-theme="light"] {
-  color-scheme: light;
-
-  --bg: #F4F7FA;
-  --bg-sunken: #E6ECF2;
-  --surface: #FFFFFF;
-  --surface-raised: #FFFFFF;
-  --surface-hover: #EFF4F9;
-
-  --ink: #0F172A;            /* the logo's body colour, doing duty as text */
-  --ink-secondary: #334155;
-  --ink-muted: #5B6A7D;      /* 5.14:1 on --bg */
-  --ink-inverse: #F1F5F9;
-
-  --border: #E2E8F0;          /* decorative dividers — no contrast floor */
-  --border-strong: #CBD5E1;   /* emphasis dividers */
-  /* Control outlines (inputs, selects, secondary buttons) are meaningful
-     boundaries: WCAG 1.4.11 wants 3:1. #CBD5E1 measured 1.48 and failed. */
-  --border-control: #7C8A9C;  /* 3.52:1 on white, 3.27:1 on --bg */
-  --border-focus: #047857;
-
-  /* Emerald, darkened until white text clears AA (5.48:1). */
-  --brand: #047857;
-  --brand-hover: #03624A;
-  --brand-soft: #D1FAE5;
-  --brand-ink: #047857;
-  --on-brand: #FFFFFF;
-
-  /* Lime: fills and highlights only. --accent-ink is the one lime that may
-     carry text on a light surface (4.99:1). */
-  --accent: #84CC16;
-  --accent-hover: #74B814;
-  --accent-soft: #ECFCCB;
-  --accent-ink: #4D7C0F;
-  --on-accent: #0F172A;
-
-  /* Inverted cards: the logo body, with the logo's own emerald on top. */
-  --invert-bg: #0F172A;
-  --invert-ink: #F1F5F9;
-  --invert-muted: #94A3B8;
-  --invert-accent: #2ECC71;
-  --invert-border: rgba(255, 255, 255, 0.10);
-
-  --ok: #047857;      --ok-soft: #D1FAE5;   --ok-ink: #065F46;
-  --warn: #B45309;    --warn-soft: #FEF3C7; --warn-ink: #92400E;
-  --danger: #DC2626;  --danger-soft: #FEE2E2; --danger-ink: #B91C1C;
-  --info: #2563EB;    --info-soft: #DBEAFE; --info-ink: #1D4ED8;
-
-  /* Data — six hues. Dark mode uses the same hues, lighter. */
-  --data-1: #059669;
-  --data-2: #2563EB;
-  --data-3: #7C3AED;
-  --data-4: #B45309;
-  --data-5: #0E7490;
-  --data-6: #BE185D;
-  --data-grid: #E2E8F0;
-  --data-track: #E9EEF4;
-  --data-neutral: #CBD5E1;
-
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 4px 14px -4px rgba(15, 23, 42, 0.12);
-  --shadow-lg: 0 18px 40px -12px rgba(15, 23, 42, 0.22);
-  --shadow-hero: 0 20px 44px -16px rgba(15, 23, 42, 0.40);
-
-  --overlay: rgba(15, 23, 42, 0.55);
-  --skeleton: linear-gradient(90deg, var(--bg-sunken) 25%, var(--surface-hover) 50%, var(--bg-sunken) 75%);
-}
-
-/* ==========================================================================
-   DARK — same hues, lifted. Surface is literally the logo's body colour.
-   ========================================================================== */
 :root[data-theme="dark"] {
   color-scheme: dark;
+  --logo-body: #EFF1EC;
+  --logo-mark: #7FB08F;
+  --logo-leaf: #C7A063;
+  --bg: #18201C;
+  --bg-sunken: #151C18;
+  --surface: #202A25;
+  --surface-raised: #29342E;
+  --surface-hover: #303D36;
+  --ink: #EFF1EC;
+  --ink-secondary: #CED6D0;
+  --ink-muted: #AAB5AD;
+  --ink-inverse: #142019;
+  --border: #34423A;
+  --border-strong: #4A5B51;
+  --border-control: #718279;
+  --border-focus: #7FB08F;
+  --brand: #7FB08F;
+  --brand-hover: #96C29F;
+  --brand-soft: #263B30;
+  --brand-ink: #A7CEB0;
+  --on-brand: #142019;
+  --accent: #C7A063;
+  --accent-hover: #D4B27B;
+  --accent-soft: #3B3222;
+  --accent-ink: #E0C291;
+  --on-accent: #18201C;
+  --mineral: #83A2AD;
+  --mineral-soft: #26363C;
+  --anatomy: #D48779;
+  --anatomy-soft: #442D2A;
+  --ok: var(--brand);
+  --ok-soft: var(--brand-soft);
+  --ok-ink: #A7CEB0;
+  --warn: var(--accent);
+  --warn-soft: var(--accent-soft);
+  --warn-ink: #E0C291;
+  --danger: #D7867B;
+  --danger-soft: #442D2A;
+  --danger-ink: #F0AAA0;
+  --info: var(--mineral);
+  --info-soft: var(--mineral-soft);
+  --info-ink: #AFC6CE;
+  --data-1: var(--brand);
+  --data-2: var(--mineral);
+  --data-3: var(--accent);
+  --data-4: #91A297;
+  --data-5: #8AA9A1;
+  --data-6: var(--anatomy);
+  --data-grid: var(--border);
+  --data-track: var(--surface-raised);
+  --data-neutral: #617168;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 10px 28px -18px rgba(0, 0, 0, 0.72);
+  --shadow-lg: 0 22px 52px -28px rgba(0, 0, 0, 0.8);
+  --shadow-hero: 0 26px 64px -34px rgba(0, 0, 0, 0.82);
+  --overlay: rgba(10, 14, 12, 0.72);
+}
 
-  --bg: #0B1220;
-  --bg-sunken: #070C16;
-  --surface: #0F172A;        /* the logo's body colour, doing duty as a card */
-  --surface-raised: #16213A;
-  --surface-hover: #1A2740;
+@media (max-width: 1023px) {
+  :root { --page-pad: var(--space-6); --section-gap: 2.5rem; --feature-pad: var(--space-6); }
+}
 
-  --ink: #F1F5F9;
-  --ink-secondary: #CBD5E1;
-  --ink-muted: #94A3B8;
-  --ink-inverse: #0F172A;
-
-  --border: #1E293B;
-  --border-strong: #334155;
-  --border-control: #64748B;  /* 3.75:1 on --surface, 3.36:1 on --invert-bg */
-  --border-focus: #2ECC71;
-
-  /* Emerald at full strength — this is where the logo colour belongs. */
-  --brand: #2ECC71;
-  --brand-hover: #4ADE80;
-  --brand-soft: #052E1F;
-  --brand-ink: #6EE7B7;
-  --on-brand: #052E1F;
-
-  --accent: #A3E635;
-  --accent-hover: #BEF264;
-  --accent-soft: #1A2E05;
-  --accent-ink: #BEF264;
-  --on-accent: #0B1220;
-
-  --invert-bg: #16213A;      /* lifts, rather than darkens, on a dark page */
-  --invert-ink: #F1F5F9;
-  --invert-muted: #94A3B8;
-  --invert-accent: #2ECC71;
-  --invert-border: rgba(255, 255, 255, 0.08);
-
-  --ok: #34D399;      --ok-soft: #052E1F;   --ok-ink: #6EE7B7;
-  --warn: #FBBF24;    --warn-soft: #2E1F05; --warn-ink: #FCD34D;
-  --danger: #F87171;  --danger-soft: #2E0A0A; --danger-ink: #FCA5A5;
-  --info: #60A5FA;    --info-soft: #0A1B33; --info-ink: #93C5FD;
-
-  --data-1: #34D399;
-  --data-2: #60A5FA;
-  --data-3: #A78BFA;
-  --data-4: #FBBF24;
-  --data-5: #22D3EE;
-  --data-6: #F472B6;
-  --data-grid: #1E293B;
-  --data-track: #16213A;
-  --data-neutral: #475569;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
-  --shadow-md: 0 4px 16px -4px rgba(0, 0, 0, 0.65);
-  --shadow-lg: 0 18px 44px -12px rgba(0, 0, 0, 0.8);
-  --shadow-hero: 0 20px 44px -16px rgba(0, 0, 0, 0.85);
-
-  --overlay: rgba(3, 7, 18, 0.72);
-  --skeleton: linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%);
+@media (max-width: 479px) {
+  :root { --page-pad: var(--space-4); --section-gap: var(--space-8); --card-pad: var(--space-4); --feature-pad: 1.25rem; }
 }

@@ -19,7 +19,8 @@ test('every muscle has complete bilingual educational content', () => {
     for (const field of fields) {
       for (const lang of ['en', 'mk']) {
         assert.equal(typeof muscle[field][lang], 'string', `${muscle.id}.${field}.${lang}`);
-        assert.ok(muscle[field][lang].trim().length > 12, `${muscle.id}.${field}.${lang} is too short`);
+        const minimum = field === 'name' ? 2 : 12;
+        assert.ok(muscle[field][lang].trim().length > minimum, `${muscle.id}.${field}.${lang} is too short`);
       }
     }
   }
@@ -42,4 +43,3 @@ test('the prototype covers the whole body on front and back views', () => {
     assert.ok(anatomy.muscles.some((muscle) => muscle.bodyGroup === group), `missing ${group}`);
   }
 });
-

@@ -20,11 +20,32 @@ body {
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  overflow-wrap: anywhere;
   /* Theme swap is a deliberate, calm transition — never a flash. */
   transition: background-color var(--dur-base) var(--ease-out),
               color var(--dur-base) var(--ease-out);
 }
+
+body::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  width: clamp(35rem, 52vw, 45rem);
+  aspect-ratio: 1;
+  left: var(--halo-x, 72vw);
+  top: var(--halo-y, 18vh);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--brand) 10%, transparent) 0%,
+    color-mix(in srgb, var(--mineral) 5%, transparent) 38%,
+    transparent 72%);
+  filter: blur(18px);
+  opacity: 0.72;
+}
+
+#root { position: relative; z-index: 0; min-width: 0; }
 
 img, svg, video, canvas { display: block; max-width: 100%; }
 
@@ -155,6 +176,25 @@ a.text-xs, a.text-sm {
 .wrap { flex-wrap: wrap; }
 .grow { flex: 1 1 auto; min-width: 0; }
 
+.flow > * + * { margin-block-start: var(--flow-space, var(--content-gap)); }
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cluster-row-gap, var(--control-gap)) var(--cluster-column-gap, var(--control-gap));
+}
+.page-stack { display: grid; gap: var(--section-gap); min-width: 0; }
+.section-stack { display: grid; gap: var(--card-gap); min-width: 0; }
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
+  gap: var(--card-gap);
+}
+
+@media (max-width: 767px) {
+  .row-between { align-items: flex-start; flex-wrap: wrap; }
+}
+
 /* ==========================================================================
    Motion preference — respected globally, not per-component
    ========================================================================== */
@@ -165,4 +205,7 @@ a.text-xs, a.text-sm {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  body::before { display: none; }
 }
+
+@media (pointer: coarse) { body::before { display: none; } }

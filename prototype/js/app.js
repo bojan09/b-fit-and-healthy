@@ -25,6 +25,7 @@ const ROUTES = {
   "/session": AppScreens.session,
   "/exercises": AppScreens.exercises,
   "/exercise": AppScreens.exercise,
+  "/anatomy": Anatomy.screen.bind(Anatomy),
 
   "/blog": RecordScreens.blog,
   "/post": RecordScreens.post,
@@ -49,7 +50,7 @@ const SECTIONS = {
   },
   train: {
     label: "nav.train", icon: "dumbbell", href: "#/train",
-    sub: [["#/train", "train.title"], ["#/workouts", "nav.workouts"], ["#/exercises", "nav.exercises"]]
+    sub: [["#/train", "train.title"], ["#/workouts", "nav.workouts"], ["#/exercises", "nav.exercises"], ["#/anatomy", "nav.anatomy"]]
   },
   blog: {
     label: "nav.blog", icon: "book", href: "#/blog",
@@ -66,7 +67,7 @@ const SECTIONS = {
 const SECTION_OF = {
   "/today": "today",
   "/nutrition": "nutrition", "/meals": "nutrition", "/recipes": "nutrition", "/recipe": "nutrition",
-  "/train": "train", "/workouts": "train", "/session": "train", "/exercises": "train", "/exercise": "train",
+  "/train": "train", "/workouts": "train", "/session": "train", "/exercises": "train", "/exercise": "train", "/anatomy": "train",
   "/blog": "blog", "/post": "blog", "/learn": "blog", "/article": "blog", "/assistant": "blog",
   "/me": "me", "/progress": "me", "/habits": "me", "/settings": "me", "/notifications": "me"
 };
@@ -80,6 +81,7 @@ const PALETTE_PAGES = [
   ["#/workouts", "nav.workouts", "dumbbell"],
   ["#/train", "train.title", "target"],
   ["#/exercises", "nav.exercises", "dumbbell"],
+  ["#/anatomy", "nav.anatomy", "target"],
   ["#/blog", "nav.blog", "book"],
   ["#/assistant", "nav.assistant", "sparkles"],
   ["#/progress", "nav.progress", "chart"],
@@ -330,7 +332,7 @@ const Actions = {
       onScroll();
     }
     const log = document.getElementById("chat-log");
-    if (log) log.scrollIntoView({ block: "end", behavior: "auto" });
+    if (log) log.scrollTop = log.scrollHeight;
 
     // Charts measure their host, so they must draw after the tree is in place.
     Charts.mountAll();
@@ -355,7 +357,8 @@ const Actions = {
       const box = document.getElementById("blog-q");
       if (box) { box.focus(); box.setSelectionRange(box.value.length, box.value.length); }
       Motion.init();
-    }
+    },
+    "anatomy-search": (el) => Anatomy.filter(el.value)
   },
 
   handlers: {
