@@ -20,9 +20,11 @@ how to train it, and which existing exercises target it.
 
 ## 2. Product and Audience
 
-The subject is a bilingual healthy-living companion for Macedonian and English
-speakers who want one approachable place to track meals, training, habits, and
-progress and to learn enough anatomy to train with confidence.
+The subject is an English-first, bilingual healthy-living companion for English
+and Macedonian speakers who want one approachable place to track meals,
+training, habits, and progress and to learn enough anatomy to train with
+confidence. English is the default language on a first visit. Macedonian remains
+a complete secondary locale rather than a partial translation.
 
 The product is not an elite bodybuilding console, a medical application, or a
 generic wellness landing page. It should feel credible to a regular gym user
@@ -34,7 +36,8 @@ without intimidating a beginner.
 - Make the user's next useful action obvious on every screen.
 - Reduce decorative motion and visual noise.
 - Preserve light, dark, and system themes.
-- Preserve Macedonian and English localization.
+- Make English the primary and first-visit language while preserving complete
+  Macedonian localization.
 - Standardize navigation, typography, spacing, cards, forms, buttons, status
   treatments, and responsive behavior.
 - Fix misleading controls and data flows discovered during the audit.
@@ -50,7 +53,9 @@ without intimidating a beginner.
 - No backend, authentication service, AI service, or synchronization service.
 - No medical diagnosis or individualized medical advice.
 - No random stock photography.
-- No 3D anatomy engine, WebGL anatomy model, or external anatomy library.
+- No mandatory WebGL experience, general-purpose 3D decoration, or external
+  anatomy data library. A Three.js anatomy view is permitted only as the
+  progressive enhancement defined in Section 12.5.
 - No unrelated product features beyond the approved redesign and anatomy
   explorer.
 
@@ -68,10 +73,14 @@ without intimidating a beginner.
 Targeted refactoring may improve these boundaries, but the renderer and hash
 router remain intact.
 
-## 6. Visual Direction: Measured Vitality
+## 6. Visual Direction: Measured Vitality / Warm Sage
 
-The visual direction is a calm coaching ledger: friendly enough for daily
-healthy-living habits and precise enough for nutrition and training data.
+The visual direction is a calm coaching ledger expressed through the approved
+Warm Sage theme: friendly enough for daily healthy-living habits and precise
+enough for nutrition and training data. Warm natural neutrals replace the
+previous blue-black, pure-white, neon-green contrast. Light and dark modes use
+the same hue families and component hierarchy; they differ primarily in
+lightness.
 
 The signature element is the daily rhythm rail, a time-based vertical ledger
 that connects meals, hydration, movement, habits, and training. It is used on
@@ -102,45 +111,67 @@ limited to functional feedback, overlays, and state changes.
 
 ## 7. Design Tokens
 
-### 7.1 Core light palette
+### 7.1 Warm Sage theme pair
 
-| Role | Name | Value |
+| Role | Light mode | Dark mode |
 | --- | --- | --- |
-| Primary text / deep panels | Pine Ink | `#12231A` |
-| Primary action | Evergreen | `#176B45` |
-| Primary hover | Deep Evergreen | `#0F5336` |
-| Restrained highlight | Fresh Leaf | `#A7CF50` |
-| Secondary data | Mineral Blue | `#3D6F7A` |
-| Page background | Morning Mist | `#F2F7F4` |
-| Surface | Clean White | `#FFFFFF` |
-| Secondary text | Field Gray | `#586A60` |
-| Border | Soft Sage | `#D6E2DA` |
+| Page background | `#F4F4EE` | `#18201C` |
+| Primary surface | `#FCFCF8` | `#202A25` |
+| Raised surface | `#ECEFE8` | `#29342E` |
+| Primary text | `#1C2922` | `#EFF1EC` |
+| Secondary text | `#627068` | `#AAB5AD` |
+| Border | `#D8DED6` | `#34423A` |
+| Meaningful control border | `#7D8B82` | `#718279` |
+| Brand green | `#397458` | `#7FB08F` |
+| Soft brand surface | `#DCEBE1` | `#263B30` |
+| Mineral blue | `#587987` | `#83A2AD` |
+| Goal ochre | `#A8783C` | `#C7A063` |
+| Anatomy clay | `#A95F55` | `#D48779` |
+| On-brand text | `#F8FBF8` | `#142019` |
 
-Semantic colors are separate from decorative and data colors:
+The measured contrast of primary, secondary, and brand text combinations ranges
+from 4.71:1 to 14.63:1. This clears WCAG AA for their intended text sizes. The
+meaningful control-border tokens measure at least 3.23:1 against their expected
+adjacent surfaces. Control boundaries and non-text indicators must still be
+tested against their actual rendered surfaces.
 
-- Success: `#1B7A4D`
-- Warning: `#A96212`
-- Danger: `#B9363E`
-- Information: `#3269A8`
+### 7.2 Semantic colors
 
-### 7.2 Dark palette
+Decorative, data, and semantic meanings remain separate:
 
-Dark mode retains the same hue families and changes lightness:
+| Meaning | Light text/mark | Dark text/mark | Use |
+| --- | --- | --- | --- |
+| Success | `#397458` | `#7FB08F` | Completed or healthy-range state |
+| Warning text | `#79572E` | `#D6B476` | Text requiring attention |
+| Goal mark | `#A8783C` | `#C7A063` | Streaks, targets, and above-range chart marks |
+| Danger | `#964E48` | `#E09990` | Error, destructive action, serious attention |
+| Information | `#466B7A` | `#91ADBA` | Neutral education and informational status |
 
-- Background: `#0C1510`
-- Surface: `#142019`
-- Raised surface: `#1B2A21`
-- Primary text: `#F0F6F2`
-- Secondary text: `#A7B7AD`
-- Border: `#304337`
-- Primary: `#55C68B`
-- Accent: `#C2DF6A`
-
-Every text/background combination and every meaningful control boundary must
-meet WCAG AA. Danger buttons require separate on-danger tokens in each theme;
+Goal ochre is not used as light-mode body text because it measures 3.77:1 on
+the primary light surface. Warning copy uses the darker warning-text token.
+Danger buttons use `#FCFCF8` text in light mode and `#201C1B` text in dark mode;
 hardcoded white text is not assumed to pass.
 
-### 7.3 Typography
+### 7.3 Color application rules
+
+- Light mode contains no dark inverted cards. Emphasis comes from layout,
+  typography, soft fills, and borders.
+- Dark mode uses lifted charcoal-moss surfaces rather than near-black navy.
+- Neon emerald and acid lime are removed from interface states.
+- The logo uses the theme's primary text for the body, brand green for the `B`,
+  and goal ochre for the leaf.
+- Brand green represents primary actions, progress, and successful completion.
+- Mineral blue represents neutral data such as protein or informational series.
+- Goal ochre represents streaks, targets, and above-range values.
+- Anatomy clay represents the selected muscle and serious health attention.
+- Standard cards use solid surfaces. Color-tinted surfaces are limited to
+  selected states and semantic notices.
+- The main hero is the only application component permitted to use a gradient:
+  light `#DCEBE1` to `#E1EBE6`; dark `#263B30` to `#2B3B38`.
+- Light shadows are shallow and warm. Dark-mode hierarchy relies on borders and
+  tonal separation rather than black shadows.
+
+### 7.4 Typography
 
 - Manrope: headings, body, navigation, buttons, labels, and controls
 - JetBrains Mono: measurements, times, chart axes, and aligned numeric data
@@ -162,7 +193,7 @@ No essential text is smaller than approximately 12.5 pixels. Heading levels
 are semantic; CSS classes control presentation without demoting headings to
 body size through inline styles.
 
-### 7.4 Spacing and shape
+### 7.5 Spacing and shape
 
 Spacing scale: 4, 8, 12, 16, 24, 32, 48, and 64 pixels.
 
@@ -223,6 +254,16 @@ overflow menu, but they do not compete with primary actions at 320px.
 - Unknown routes present a useful not-found state instead of silently showing
   the homepage.
 
+### 8.4 Language behavior
+
+- English is the default on a first visit and the initial document language is
+  `en`.
+- A stored explicit language choice overrides the first-visit default.
+- Switching languages updates the document `lang` attribute, visible copy,
+  accessible names, titles, validation messages, and route metadata.
+- English is the source language for information hierarchy and content design.
+  Macedonian maintains key parity and is used as the longer-label stress test.
+
 ## 9. Shared Component System
 
 ### 9.1 Buttons
@@ -234,6 +275,9 @@ Variants: primary, secondary, quiet, danger, and icon-only.
 - Hover, focus, active, loading, and disabled states
 - No magnetic motion or decorative sheen
 - Destructive actions include both icon and text where space permits
+- Primary buttons use brand green and the theme-specific on-brand token.
+- Secondary buttons use the standard surface and control border. Quiet actions
+  use text treatment rather than floating unbounded labels.
 
 ### 9.2 Cards
 
@@ -247,6 +291,11 @@ Only four structural variants:
 Cards do not nest without an information-hierarchy reason. Card headings,
 padding, border, and interactive states are consistent across routes.
 
+Light cards use warm primary or raised surfaces and never switch to a dark
+inverted surface. Dark cards preserve the same hierarchy using small tonal
+steps. A featured article is distinguished by layout and content prominence,
+not a randomly colored card.
+
 ### 9.3 Forms
 
 - Visible labels
@@ -258,6 +307,8 @@ padding, border, and interactive states are consistent across routes.
 - Errors set `aria-invalid` and connect with `aria-describedby`
 - Modal actions wrap or stack on narrow screens
 - Successful record mutations use a concise status message
+- Fields use neutral surfaces and visible control borders. Focus uses a
+  restrained brand-colored ring; fields do not become green-filled.
 
 ### 9.4 Lists and records
 
@@ -272,6 +323,13 @@ to a second aligned row so content does not compress or clip.
 - Missing data is labelled, not represented only by an outline.
 - Habit dots and muscle coverage expose status text in the DOM.
 - Color supports status but never carries it alone.
+- Energy and healthy-range progress use brand green; protein and neutral data
+  use mineral blue; movement, targets, and above-range values use goal ochre.
+- Unfilled tracks and missing values use neutral raised-surface and border
+  tokens. Charts use flat fills with no gradients or glow.
+- Streak indicators use goal ochre instead of lime.
+- Anatomy figures remain neutral; the selected muscle uses anatomy clay plus a
+  visible outline and text state.
 
 ### 9.6 Modals and notifications
 
@@ -316,6 +374,10 @@ Today is the main expression of the daily coaching ledger. It contains:
 
 Nested card density is reduced. Desktop uses a primary ledger column and a
 narrow summary rail. Mobile places the summary before the full timeline.
+The next-workout hero uses the permitted low-contrast sage gradient. In light
+mode the remaining-energy summary stays on the standard warm surface rather
+than becoming a dark inverted panel. Energy, protein, movement, and streak use
+the roles defined in Section 9.5 instead of repeating one saturated green.
 
 ### 10.4 Nutrition and meals
 
@@ -563,6 +625,51 @@ be handled consistently:
 - Otherwise label it as a demo or disabled action before interaction.
 - Do not show a normal success message for an action that changed nothing.
 
+### 12.4 GSAP motion layer
+
+GSAP core 3.13.0 is the approved shared motion engine. It is loaded as a pinned
+browser script and requires no package manager, bundler, framework, or build
+step. The application remains fully readable and operable if the script fails
+to load.
+Existing Intersection Observer logic may trigger viewport entrances; the
+ScrollTrigger plugin and scroll-smoothing libraries are not required.
+
+Motion vocabulary:
+
+- Route content: 180 to 240 milliseconds, opacity plus an 8-pixel rise
+- Hero: one hierarchy-based entrance, not an animation on every child
+- Today rhythm rail: draws once when the screen opens
+- Charts: goal line first, then bars over approximately 420 milliseconds
+- Blog list: a restrained entrance stagger on first viewport entry
+- Anatomy hover: outline response at approximately 120 milliseconds
+- Anatomy selection: muscle fill and detail transition over 180 to 240
+  milliseconds
+- Theme switch: short token-color transition with no animated gradient sweep
+
+No motion may hijack scrolling, trail the pointer, make buttons magnetic, loop
+dashboard decoration, or move essential content indefinitely. Hash-route
+cleanup reverts each route's GSAP context and cancels outstanding animation
+before new markup is mounted. Repeated navigation may not accumulate timelines,
+observers, or event listeners.
+
+`prefers-reduced-motion: reduce` removes spatial movement, chart drawing, and
+stagger. State changes remain visible with near-instant opacity or color updates.
+
+### 12.5 Optional Three.js anatomy enhancement
+
+The inline SVG and HTML anatomy explorer is the canonical, accessible
+experience. A Three.js view may be added later only when a suitable local or
+properly licensed GLB model exists with stable, named muscle meshes that map to
+the same muscle IDs as the SVG. It is not part of the baseline implementation
+without that approved asset.
+
+Three.js is not loaded on routes outside Anatomy. The enhancement must preserve
+the searchable text list, keyboard selection, deep links, front/back control,
+and detail panel. It pauses when hidden or offscreen, caps device pixel ratio,
+honors reduced motion, and falls back to SVG when WebGL, performance, or the
+model is unsuitable. Decorative 3D on dashboards, cards, or marketing sections
+is out of scope.
+
 ## 13. Responsive Strategy
 
 The CSS is mobile-first. Component-level scrolling is allowed for tables,
@@ -614,7 +721,8 @@ code changes. No credential value belongs in browser JavaScript.
 
 ## 16. Expected File Impact
 
-- `prototype/index.html`: font loading, metadata, and script list
+- `prototype/index.html`: English default language, font loading, metadata, and
+  pinned GSAP core script
 - `prototype/css/tokens.css`: final tokens
 - `prototype/css/base.css`: typography, focus, overflow, and utilities
 - `prototype/css/components.css`: shared controls and states
@@ -631,7 +739,8 @@ code changes. No credential value belongs in browser JavaScript.
 - `prototype/js/i18n.js`: new labels and messages
 - `prototype/js/records.js`: measurement and persistence integration where
   required
-- `prototype/js/motion.js`: simplified motion lifecycle
+- `prototype/js/motion.js`: GSAP context creation, reduced-motion behavior, and
+  route cleanup
 - `prototype/js/shader.js`: removed from the runtime after the CSS fallback is
   replaced by the new static hero treatment
 - `.gitignore`, `.env.local`, and `README.md`: security and project hygiene
@@ -659,6 +768,10 @@ behavior, responsive validation, and unresolved issues.
 ## 18. Definition of Done
 
 - All routes use the same token, typography, spacing, and component systems.
+- Light and dark modes preserve the same hierarchy without inverted light-mode
+  panels, neon states, or near-black/pure-white tonal jumps.
+- English is the first-visit language and Macedonian retains complete key
+  parity.
 - Navigation has one active mode at every width and exposes a clear current
   route.
 - No essential content clips or depends on global overflow hiding.
