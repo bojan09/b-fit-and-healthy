@@ -1,0 +1,116 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const matter = require('gray-matter');
+
+const root = path.resolve(__dirname, '..');
+const exists = (file) => fs.existsSync(path.join(root, file));
+const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
+
+test('Phase 2 exposes the complete approved public route foundation', () => {
+  for (const file of [
+    'src/app/(marketing)/features/page.tsx',
+    'src/app/(marketing)/features/nutrition/page.tsx',
+    'src/app/(marketing)/features/training/page.tsx',
+    'src/app/(marketing)/blog/page.tsx',
+    'src/app/(marketing)/blog/[slug]/page.tsx',
+    'src/app/(marketing)/anatomy/page.tsx',
+    'src/app/(marketing)/anatomy/[muscle]/page.tsx',
+    'src/app/(marketing)/about/page.tsx',
+    'src/app/(marketing)/contact/page.tsx',
+    'src/app/(marketing)/privacy/page.tsx',
+    'src/app/(marketing)/terms/page.tsx'
+  ]) assert.ok(exists(file), `missing ${file}`);
+});
+
+test('six approved articles have paired English and Macedonian Markdown sources', () => {
+  const locales = ['en', 'mk'];
+  const slugs = [
+    'protein-without-the-myths',
+    'why-sleep-is-part-of-training',
+    'small-habits-beat-motivation',
+    'progressive-overload-for-beginners',
+    'muscle-soreness-normal-or-warning',
+    'muscles-of-the-back-made-simple'
+  ];
+  for (const locale of locales) {
+    for (const slug of slugs) {
+      const file = `content/articles/${locale}/${slug}.md`;
+      assert.ok(exists(file), `missing ${file}`);
+      const source = read(file);
+      for (const field of ['id', 'title', 'excerpt', 'category', 'publishedAt', 'readingTime', 'seoTitle', 'seoDescription']) {
+        assert.match(source, new RegExp(`^${field}:`, 'm'), `${file} missing ${field}`);
+      }
+    }
+  }
+  assert.ok(exists('src/lib/content/articles.ts'));
+});
+
+test('every paired article has parseable YAML frontmatter', () => {
+  for (const locale of ['en', 'mk']) {
+    const directory = path.join(root, 'content', 'articles', locale);
+    for (const file of fs.readdirSync(directory).filter((name) => name.endsWith('.md'))) {
+      assert.doesNotThrow(() => matter(read(`content/articles/${locale}/${file}`)), `${locale}/${file} has invalid frontmatter`);
+    }
+  }
+});
+
+test('Blog routes use the validated repository, readable composition, and JSON-LD', () => {
+  const index = read('src/app/(marketing)/blog/page.tsx');
+  const detail = read('src/app/(marketing)/blog/[slug]/page.tsx');
+  assert.match(index, /getArticles/);
+  assert.match(detail, /getArticle/);
+  assert.match(detail, /ArticleJsonLd/);
+  assert.match(detail, /article-body/);
+  assert.match(detail, /notFound\(\)/);
+});
+
+test('Anatomy uses stable muscle records and an accessible front/back SVG explorer', () => {
+  for (const file of [
+    'src/features/anatomy/data.ts',
+    'src/features/anatomy/anatomy-explorer.tsx',
+    'src/features/anatomy/anatomy-figure.tsx'
+  ]) assert.ok(exists(file), `missing ${file}`);
+  const explorer = read('src/features/anatomy/anatomy-explorer.tsx');
+  const figure = read('src/features/anatomy/anatomy-figure.tsx');
+  assert.match(explorer, /aria-pressed/);
+  assert.match(explorer, /front/);
+  assert.match(explorer, /back/);
+  assert.match(figure, /<svg/);
+  assert.match(figure, /role="group"/);
+  assert.match(read('src/features/anatomy/data.ts'), /getMuscle/);
+});
+
+test('public discoverability includes sitemap, robots, RSS, and structured data', () => {
+  for (const file of [
+    'src/app/sitemap.ts',
+    'src/app/robots.ts',
+    'src/app/feed.xml/route.ts',
+    'src/components/seo/json-ld.tsx',
+    'content/editorial/topic-plan.md'
+  ]) assert.ok(exists(file), `missing ${file}`);
+  assert.match(read('src/app/robots.ts'), /\/today/);
+  assert.match(read('src/app/sitemap.ts'), /getArticleSlugs/);
+  assert.match(read('src/app/feed.xml/route.ts'), /application\/rss\+xml/);
+});
+
+test('public navigation points only to implemented routes', () => {
+  const header = read('src/components/shell/public-header.tsx');
+  const footer = read('src/components/shell/public-footer.tsx');
+  const navigation = read('src/components/shell/public-navigation.tsx');
+  for (const destination of ['/features', '/anatomy', '/blog']) {
+    assert.match(`${header}\n${footer}`, new RegExp(`href=["']${destination}["']`));
+  }
+  assert.doesNotMatch(`${header}\n${footer}`, /href=["']\/(today|nutrition|train|assistant)["']/);
+  assert.match(navigation, /aria-current/);
+  assert.match(navigation, /mobile-nav/);
+});
+
+test('shared public compositions keep Macedonian parity instead of hardcoded English controls', () => {
+  assert.match(read('src/app/(marketing)/features/nutrition/page.tsx'), /getLocale/);
+  assert.match(read('src/app/(marketing)/features/training/page.tsx'), /getLocale/);
+  assert.match(read('src/components/content/article-card.tsx'), /readLabel/);
+  assert.match(read('src/components/content/feature-page.tsx'), /labels/);
+  assert.match(read('src/components/shell/public-footer.tsx'), /c\.nav\.contact/);
+});

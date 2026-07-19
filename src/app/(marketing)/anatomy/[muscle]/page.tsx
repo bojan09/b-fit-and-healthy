@@ -1,0 +1,11 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft, Dumbbell, ShieldCheck } from "lucide-react";
+import { notFound } from "next/navigation";
+import { getMuscle, muscles } from "@/features/anatomy/data";
+import { getLocale } from "@/lib/i18n/server";
+
+type Props = { params: Promise<{ muscle: string }> };
+export function generateStaticParams() { return muscles.map((muscle) => ({ muscle: muscle.id })); }
+export async function generateMetadata({params}:Props):Promise<Metadata>{const locale=await getLocale();const {muscle:id}=await params;const muscle=getMuscle(id);if(!muscle)return{};return{title:`${muscle.name[locale]} anatomy`,description:muscle.summary[locale],alternates:{canonical:`/anatomy/${id}`}};}
+export default async function MusclePage({params}:Props){const locale=await getLocale();const {muscle:id}=await params;const muscle=getMuscle(id);if(!muscle)notFound();return <main id="main-content" tabIndex={-1}><article className="shell muscle-guide"><Link className="back-link" href="/anatomy"><ArrowLeft aria-hidden="true" size={17}/>{locale==="en"?"Anatomy explorer":"Анатомски преглед"}</Link><header><p className="eyebrow">{muscle.region}</p><h1>{muscle.name[locale]}</h1><p className="scientific-name">{muscle.scientific}</p><p className="article-deck">{muscle.summary[locale]}</p></header><div className="muscle-guide-grid"><section><h2>{locale==="en"?"What it does":"Што прави"}</h2><p>{muscle.function[locale]}</p></section><section><h2>{locale==="en"?"Why train it":"Зошто да го тренираш"}</h2><p>{muscle.benefit[locale]}</p></section><section><h2><Dumbbell aria-hidden="true"/>{locale==="en"?"How to train it":"Како да го тренираш"}</h2><p>{muscle.training[locale]}</p><strong>{muscle.exercises[locale]}</strong></section><section><h2><ShieldCheck aria-hidden="true"/>{locale==="en"?"Common mistake":"Честа грешка"}</h2><p>{muscle.mistake[locale]}</p></section></div><aside className="health-disclaimer"><strong>{locale==="en"?"Move within your context":"Движи се според твојот контекст"}</strong><p>{locale==="en"?"General education only. New or persistent pain deserves assessment from a qualified professional.":"Само општа едукација. Нова или постојана болка заслужува проценка од стручно лице."}</p></aside></article></main>;}

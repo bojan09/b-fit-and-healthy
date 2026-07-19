@@ -1,0 +1,27 @@
+.env
+.env.*
+!.env.example
+.env.local
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.idea/
+.vscode/
+*.swp
+*.tmp
+*.log
+
+coverage/
+dist/
+out/
+.next/
+node_modules/
+.superpowers/
+.worktrees/
+
+# Serwist generates these from src/app/sw.ts during production builds.
+public/sw.js
+public/sw.js.map
+public/swe-worker-*.js

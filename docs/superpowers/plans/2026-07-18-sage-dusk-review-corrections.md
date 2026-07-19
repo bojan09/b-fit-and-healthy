@@ -2,71 +2,111 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Correct button contrast, brand prominence, theme cohesion, Blog reading rhythm, and the compact Training anatomy illustration using the approved Sage Dusk and Athletic Anatomy directions.
+**Goal:** Replace the mismatched Active Dusk correction with the approved Sage Dusk pairing, repair button/logo contrast, improve Blog reading rhythm, and rebuild the compact Training figure as Athletic Anatomy.
 
-**Architecture:** Retune existing semantic CSS variables so both themes share hue families, then correct component rules that bypass those roles. Keep Blog rhythm in a dedicated reading composition and keep the Athletic Anatomy SVG isolated in `anatomy-preview.js` so no route or full-explorer logic changes.
+**Execution status (18 July 2026):** Implemented and verified without committing. The full 21-test suite passes, all JavaScript sources parse, all bilingual article variants and the Athletic Anatomy preview render, `git diff --check` is clean, and primary-button contrast measures 5.51:1 in light mode and 8.31:1 in dark mode.
+
+**Architecture:** Keep the existing token-driven CSS system and focused vanilla-JavaScript preview module. Extend source-contract tests first, then change one visual subsystem at a time while preserving the current routes and full Anatomy explorer.
 
 **Tech Stack:** HTML, CSS, vanilla JavaScript, Node.js built-in test runner.
 
 ## Global Constraints
 
-- Preserve the current HTML, CSS, and vanilla JavaScript architecture.
+- Preserve the existing HTML, CSS, and vanilla JavaScript architecture.
 - Do not add Three.js, GSAP, frameworks, packages, or build tooling.
-- Preserve routes, filters, bookmarks, forms, navigation, English default, and Macedonian content.
-- Do not redesign page compositions beyond the reviewed corrections.
+- Keep English as the default and preserve Macedonian content.
+- Preserve routes, filters, search, bookmarks, form behavior, navigation, and full Anatomy explorer interactions.
 - Keep all changes uncommitted for user review.
 
 ---
 
-### Task 1: Sage Dusk tokens, button contrast, and logo sizing
+### Task 1: Sage Dusk theme, button contrast, and logo scale
 
 **Files:**
 - Modify: `tests/ui-contract.test.js`
 - Modify: `prototype/css/tokens.css`
+- Modify: `prototype/css/base.css`
 - Modify: `prototype/css/components.css`
 - Modify: `prototype/css/layout.css`
 - Modify: `prototype/js/ui.js`
 - Modify: `prototype/index.html`
 
 **Interfaces:**
-- Consumes: existing semantic roles `--brand`, `--brand-hover`, `--on-brand`, `--logo-body`, `--logo-leaf`, `--logo-mark`.
-- Produces: paired Sage Dusk light/dark values; a 38-pixel default `brandmark()` with a 34-pixel narrow-screen CSS size; primary buttons that always use `--on-brand`.
+- Consumes: existing semantic roles `--brand`, `--brand-hover`, `--on-brand`, `--feature-*-surface`, and `brandmark(size)`.
+- Produces: paired Sage Dusk tokens, semantic hero-button foregrounds, and a 38-pixel default brand mark with a 34-pixel mobile override.
 
-- [ ] **Step 1: Add failing UI contracts**
+- [ ] **Step 1: Replace the Active Dusk contract with failing Sage Dusk contracts**
 
-Extend `tests/ui-contract.test.js` with assertions for dark `--bg: #14211C`, paired feature surfaces, `brandmark(size = 38)`, the absence of the hard-coded dark logo path override, light/dark logo tokens, and hero/CTA button text using `var(--on-brand)`.
+Update `tests/ui-contract.test.js` so the theme test requires:
 
 ```js
-test('Sage Dusk shares hue families and semantic button contrast across modes', () => {
-  const tokens = read('prototype/css/tokens.css');
-  const components = read('prototype/css/components.css');
-  const layout = read('prototype/css/layout.css');
-  const ui = read('prototype/js/ui.js');
-  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--bg:\s*#14211C/i);
-  assert.match(tokens, /--feature-training-surface:\s*#DCEBE1/i);
-  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--feature-training-surface:\s*#254438/i);
-  assert.match(tokens, /--logo-body:\s*#397458/i);
-  assert.match(tokens, /\[data-theme="dark"\][\s\S]*--logo-body:\s*#88C69D/i);
-  assert.match(ui, /function brandmark\(size = 38\)/);
-  assert.doesNotMatch(layout, /brandmark \.logo path:first-of-type/);
-  assert.match(components, /\.hero-card \.btn-primary\s*\{[^}]*color:\s*var\(--on-brand\)/);
-  assert.match(layout, /\.cta-block \.btn-primary\s*\{[^}]*color:\s*var\(--on-brand\)/);
-});
+assert.match(tokens, /\[data-theme="dark"\][\s\S]*--bg:\s*#14211C/i);
+assert.match(tokens, /--feature-training-surface:\s*#DCEBE1/i);
+assert.match(tokens, /--feature-blog-surface:\s*#E8E3ED/i);
+assert.match(tokens, /\[data-theme="dark"\][\s\S]*--feature-training-surface:\s*#254438/i);
+assert.match(tokens, /\[data-theme="dark"\][\s\S]*--feature-blog-surface:\s*#373142/i);
+assert.match(components, /\.hero-card \.btn-primary\s*\{[^}]*color:\s*var\(--on-brand\)/);
+assert.doesNotMatch(layout, /brandmark \.logo path:first-of-type/);
+assert.match(ui, /function brandmark\(size = 38\)/);
 ```
 
-- [ ] **Step 2: Run focused test and confirm RED**
+- [ ] **Step 2: Run the focused test and verify RED**
 
 Run: `node --test --test-name-pattern="Sage Dusk" tests/ui-contract.test.js`
 
-Expected: FAIL on the current Active Dusk dark background and 30-pixel logo.
+Expected: FAIL because the current dark background is `#0D1830`, light feature roles are neutral, the hero uses `--logo-body`, and the mark defaults to 30 pixels.
 
-- [ ] **Step 3: Implement Sage Dusk and semantic contrast**
+- [ ] **Step 3: Implement paired tokens and contrast roles**
 
-Update `prototype/css/tokens.css` to the exact spec values, including light feature surfaces `#DCEBE1`, `#F0E5D5`, `#E8E3ED`, `#DDE8EB` and dark counterparts `#254438`, `#433726`, `#373142`, `#263A40`. Use white `--on-brand` in light and deep forest `#10231A` in dark. Replace the dark page gradient with forest, mineral, and ochre fields.
+In `prototype/css/tokens.css`, retain the approved Warm Sage light roles and set:
 
-In `prototype/css/components.css` and `prototype/css/layout.css`, replace logo-derived button foregrounds with `var(--on-brand)`. Delete the dark logo path override. Change `brandmark(size = 30)` to `brandmark(size = 38)` in `prototype/js/ui.js`, then cap `.appbar .brandmark .logo` at 34 by 34 pixels below 479 pixels. Update the dark theme-color meta value in `prototype/index.html` to `#14211C`.
+```css
+--feature-training-surface: #DCEBE1;
+--feature-nutrition-surface: #F0E5D5;
+--feature-blog-surface: #E8E3ED;
+--feature-assistant-surface: #DDE8EB;
 
-- [ ] **Step 4: Run focused and full tests**
+:root[data-theme="dark"] {
+  --logo-body: #73B98B;
+  --logo-mark: #10231A;
+  --logo-leaf: #D6AA68;
+  --bg: #14211C;
+  --bg-sunken: #101A16;
+  --surface: #202E27;
+  --surface-raised: #2A3A31;
+  --surface-hover: #33463A;
+  --ink: #F0F3EF;
+  --ink-secondary: #D0D8D2;
+  --ink-muted: #ACB8B0;
+  --border: #3B4C42;
+  --border-strong: #53675B;
+  --brand: #88C69D;
+  --brand-hover: #A0D5AF;
+  --brand-soft: #254438;
+  --brand-ink: #A9D9B8;
+  --on-brand: #10231A;
+  --accent: #D6AA68;
+  --accent-soft: #433726;
+  --mineral: #82AEB9;
+  --mineral-soft: #263A40;
+  --anatomy: #D98B7D;
+  --anatomy-soft: #49312E;
+  --feature-training-surface: #254438;
+  --feature-nutrition-surface: #433726;
+  --feature-blog-surface: #373142;
+  --feature-assistant-surface: #263A40;
+  --page-gradient:
+    radial-gradient(circle at 84% 8%, rgba(82, 132, 112, 0.26), transparent 34%),
+    radial-gradient(circle at 9% 88%, rgba(168, 120, 60, 0.12), transparent 36%),
+    linear-gradient(145deg, #14211C 0%, #202A25 100%);
+}
+```
+
+Use a pale sage hero gradient in light mode and the Training surface family in dark mode. Change hero and CTA primary-button text to `var(--on-brand)`. Update the initial dark `<meta name="theme-color">` value to `#14211C`.
+
+In `prototype/js/ui.js`, change the default to `brandmark(size = 38)`. In `prototype/css/layout.css`, remove the hard-coded dark logo-path fill and set the app-bar logo to 34 pixels at widths below 480 pixels.
+
+- [ ] **Step 4: Verify GREEN and full regression safety**
 
 Run: `node --test --test-name-pattern="Sage Dusk" tests/ui-contract.test.js`
 
@@ -78,7 +118,7 @@ Expected: all tests PASS.
 
 ---
 
-### Task 2: Dedicated Blog reading rhythm
+### Task 2: Blog reading rhythm
 
 **Files:**
 - Modify: `tests/article-content.test.js`
@@ -87,40 +127,62 @@ Expected: all tests PASS.
 - Modify: `prototype/css/layout.css`
 
 **Interfaces:**
-- Consumes: existing `.article`, `.article-body`, disclaimer, related-post section, and return button markup.
-- Produces: `.article-reading` composition and `.article-related` section with explicit section-aware gaps.
+- Consumes: `ArticleContent.render(a)` and the existing `.article` reading column.
+- Produces: `.article-reading`, `.article-related`, and explicit section-aware spacing rules.
 
 - [ ] **Step 1: Add failing reading-rhythm contracts**
 
+Add to `tests/article-content.test.js`:
+
 ```js
-test('Blog posts use a dedicated section-aware reading composition', () => {
+test('Blog posts use dedicated reading rhythm instead of a generic tight stack', () => {
   const records = read('prototype/js/screens-records.js');
   const legacy = read('prototype/js/screens-app.js');
   const layout = read('prototype/css/layout.css');
-  assert.match(records, /article article-reading/);
-  assert.match(legacy, /article article-reading/);
+  assert.match(records, /class="article article-reading"/);
+  assert.match(legacy, /class="article article-reading"/);
   assert.match(records, /class="article-related"/);
-  assert.match(layout, /\.article-reading\s*>\s*\.article-body\s*\+\s*\.notice/);
+  assert.match(layout, /\.article-reading\s*>\s*\*\s*\+\s*\*/);
   assert.match(layout, /\.article-section\s*\+\s*\.article-section/);
   assert.match(layout, /\.article-section p\s*\+\s*p/);
 });
 ```
 
-- [ ] **Step 2: Run focused test and confirm RED**
+- [ ] **Step 2: Run the focused test and verify RED**
 
-Run: `node --test --test-name-pattern="section-aware" tests/article-content.test.js`
+Run: `node --test --test-name-pattern="reading rhythm" tests/article-content.test.js`
 
-Expected: FAIL because the dedicated composition classes do not exist.
+Expected: FAIL because posts still use `class="article stack stack-5"` and the related section has no dedicated class.
 
-- [ ] **Step 3: Implement explicit Blog rhythm**
+- [ ] **Step 3: Implement section-aware article spacing**
 
-Add `article-reading` to both post-route `<article>` elements and `article-related` to their related-content sections. In `prototype/css/layout.css`, set 40-pixel body-to-notice and notice-to-related gaps, a 24-pixel related-card-to-return gap, 48-pixel editorial section gaps, 20-pixel paragraph gaps, and 16-pixel heading-to-copy gaps. Reduce only the external section gaps at the existing mobile breakpoint.
+Change both post renderers to:
 
-- [ ] **Step 4: Run focused and full tests**
+```html
+<article class="article article-reading">
+```
 
-Run: `node --test tests/article-content.test.js`
+Add `class="article-related"` to the related-post section. Define:
 
-Expected: all article tests PASS.
+```css
+.article-reading { display: grid; gap: var(--space-8); }
+.article-reading > header { margin-bottom: var(--space-2); }
+.article-body { display: grid; gap: var(--space-8); }
+.article-section { padding-top: 0; }
+.article-section + .article-section { margin-top: var(--space-4); }
+.article-section > * + * { margin-top: var(--space-4); }
+.article-section p + p { margin-top: 1.375rem; }
+.article-related { display: grid; gap: var(--space-4); margin-top: var(--space-2); }
+.article-related + .btn { margin-top: calc(-1 * var(--space-2)); }
+```
+
+At widths below 768 pixels, reduce `.article-reading` and `.article-body` gaps to `var(--space-6)` while keeping paragraph separation at least `var(--space-4)`.
+
+- [ ] **Step 4: Verify GREEN and full regression safety**
+
+Run: `node --test --test-name-pattern="reading rhythm" tests/article-content.test.js`
+
+Expected: PASS.
 
 Run: `node --test tests/*.test.js`
 
@@ -136,38 +198,61 @@ Expected: all tests PASS.
 - Modify: `prototype/css/components.css`
 
 **Interfaces:**
-- Consumes: `AnatomyPreview.render()`, the existing Training gateway link, and Sage Dusk anatomy tokens.
-- Produces: one decorative `viewBox="0 0 220 430"` SVG marked `data-figure="athletic"`, with a continuous `.preview-athletic-outline`, shaped hands and feet, and separate muscle overlays.
+- Consumes: `AnatomyPreview.render()`, shared helpers `t()`, `esc()`, `icon()`, and the `#/anatomy?view=front` route.
+- Produces: a continuous `.preview-body-outline` plus `.preview-muscles` and `.preview-landmarks` layers in a `240 × 460` view box.
 
 - [ ] **Step 1: Add failing Athletic Anatomy contracts**
 
+Update `tests/anatomy-preview.test.js` to require:
+
 ```js
-test('Athletic Anatomy uses a continuous human outline and shaped extremities', () => {
-  const source = read('prototype/js/anatomy-preview.js');
-  assert.match(source, /data-figure="athletic"/);
-  assert.match(source, /viewBox="0 0 220 430"/);
-  assert.match(source, /class="preview-athletic-outline"/);
-  for (const region of ['hand-left', 'hand-right', 'foot-left', 'foot-right']) {
-    assert.ok(source.includes(`data-region="${region}"`), `missing ${region}`);
-  }
-});
+assert.match(source, /viewBox="0 0 240 460"/);
+assert.match(source, /class="preview-body-outline"/);
+assert.match(source, /data-region="body-outline"/);
+assert.match(source, /data-region="hand-left"/);
+assert.match(source, /data-region="hand-right"/);
+assert.match(source, /data-region="foot-left"/);
+assert.match(source, /data-region="foot-right"/);
+assert.match(source, /class="preview-muscles"/);
+assert.match(source, /class="preview-landmarks"/);
 ```
 
-- [ ] **Step 2: Run focused test and confirm RED**
-
-Run: `node --test --test-name-pattern="Athletic Anatomy" tests/anatomy-preview.test.js`
-
-Expected: FAIL because the current preview uses the older 240 by 440 segmented schematic.
-
-- [ ] **Step 3: Implement the approved athletic figure**
-
-Replace the compact SVG with the selected Athletic Anatomy geometry: 7–7.5-head proportions, broader shoulders, tapered ribcage, narrow waist, defined pelvis, mid-thigh hands, shaped feet, and continuous outer silhouette. Keep deltoid, pectoral, abdominal, quadriceps, and calf overlays in `.preview-muscles`; keep landmarks in `.preview-landmarks`. Update CSS selectors for the new outline and retain the whole SVG as one accessible link.
-
-- [ ] **Step 4: Run focused and full tests**
+- [ ] **Step 2: Run the focused test and verify RED**
 
 Run: `node --test tests/anatomy-preview.test.js`
 
-Expected: all anatomy preview tests PASS.
+Expected: FAIL because the current preview uses a `240 × 440` view box and disconnected `.preview-structure` paths without a continuous body outline.
+
+- [ ] **Step 3: Implement the approved Athletic Anatomy geometry**
+
+Replace the current robotic base paths with one smooth `data-region="body-outline"` path that establishes the head-to-body ratio, shoulder taper, waist, pelvis, arms, thighs, calves, hands, and feet. Keep the named muscle overlays for deltoids, pectorals, abdominals, quadriceps, and calves. Use Sage Dusk roles:
+
+```css
+.training-anatomy-svg .preview-body-outline {
+  fill: color-mix(in srgb, var(--surface) 78%, var(--brand-soft));
+  stroke: color-mix(in srgb, var(--brand) 58%, var(--border-strong));
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+.training-anatomy-svg .preview-muscles {
+  fill: color-mix(in srgb, var(--brand) 62%, var(--surface));
+  stroke: color-mix(in srgb, var(--brand) 78%, var(--ink));
+  stroke-width: 1.35;
+}
+.training-anatomy-svg .preview-landmarks {
+  fill: none;
+  stroke: color-mix(in srgb, var(--border-strong) 72%, transparent);
+  stroke-width: 1;
+}
+```
+
+Keep the whole SVG decorative and retain the accessible link label on the enclosing anchor.
+
+- [ ] **Step 4: Verify GREEN and full regression safety**
+
+Run: `node --test tests/anatomy-preview.test.js`
+
+Expected: all anatomy-preview tests PASS.
 
 Run: `node --test tests/*.test.js`
 
@@ -175,34 +260,47 @@ Expected: all tests PASS.
 
 ---
 
-### Task 4: Verification and uncommitted handoff
+### Task 4: Final uncommitted quality gate
 
 **Files:**
-- Modify only files already listed if verification exposes a defect.
+- Modify only files already named above if verification reveals a defect.
 
-- [ ] **Step 1: Run the complete test suite**
+**Interfaces:**
+- Consumes: completed Sage Dusk, Blog rhythm, and Athletic Anatomy units.
+- Produces: test, syntax, contrast, and repository-hygiene evidence.
+
+- [ ] **Step 1: Run the full test suite**
 
 Run: `node --test tests/*.test.js`
 
 Expected: zero failures.
 
-- [ ] **Step 2: Parse all JavaScript**
+- [ ] **Step 2: Parse every JavaScript file**
+
+Run:
 
 ```powershell
-Get-ChildItem prototype/js,tests -Recurse -Filter *.js | ForEach-Object { node --check $_.FullName }
+Get-ChildItem prototype\js,tests -Recurse -Filter *.js | ForEach-Object { node --check $_.FullName }
 ```
 
 Expected: exit code 0.
 
-- [ ] **Step 3: Check repository hygiene**
+- [ ] **Step 3: Verify source hygiene and uncommitted state**
 
 Run: `git diff --check`
 
 Expected: no whitespace errors.
 
-- [ ] **Step 4: Confirm no commit was created**
+Run: `git status --short`
 
-Run: `git rev-parse --short HEAD` and `git status --short`
+Expected: the implementation and documentation remain modified or untracked, with no new commit.
 
-Expected: HEAD remains `8236bec`; all correction files remain modified or untracked for user review.
+- [ ] **Step 4: Verify contrast mathematically**
 
+Calculate WCAG ratios for `#FFFFFF` on `#397458` and `#10231A` on `#88C69D`.
+
+Expected: both pairings are at least 4.5:1.
+
+- [ ] **Step 5: Hand off rendered review**
+
+Serve the isolated worktree locally and provide Today, Training, Blog, and Blog-post URLs. If no controllable browser is exposed, report the limitation instead of claiming multi-viewport visual completion.

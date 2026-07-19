@@ -114,4 +114,3 @@ The article renderer receives a dedicated reading-layout class instead of relyin
 - Verify primary button color pairs meet WCAG AA contrast.
 - Review Today, Training, Blog, and a full Blog post in both modes at 320, 375, 480, 768, 1024, 1280, and 1440 pixels when a controllable browser is available.
 - Keep all implementation changes uncommitted for user review.
-
