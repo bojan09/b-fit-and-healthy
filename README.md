@@ -21,7 +21,7 @@ npm.cmd run dev
 
 Open `http://localhost:53271/`. Supporting foundation routes are available at `/states` and `/~offline`.
 
-Copy `.env.example` to `.env.local` and enter the browser-safe Supabase project URL and publishable key. Never expose the service-role key or server integration credentials in `NEXT_PUBLIC_*` variables.
+Keep local environment values in an untracked `.env.local` file. Configure deployment values in the hosting provider's environment settings. Never expose the service-role key or server integration credentials in `NEXT_PUBLIC_*` variables.
 
 ## Quality gates
 

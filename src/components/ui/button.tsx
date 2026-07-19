@@ -8,8 +8,8 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-[var(--brand)] text-[var(--on-brand)] hover:bg-[var(--brand-hover)]",
-        secondary: "border border-[var(--control-border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-raised)]",
+        primary: "border border-transparent bg-[var(--button-primary)] text-[var(--button-primary-text)] shadow-[0_7px_18px_color-mix(in_srgb,var(--brand)_18%,transparent)] hover:-translate-y-0.5 hover:bg-[var(--button-primary-hover)] hover:shadow-[0_10px_24px_color-mix(in_srgb,var(--brand)_24%,transparent)] active:translate-y-px",
+        secondary: "border border-[var(--control-border)] bg-[var(--button-secondary)] text-[var(--foreground)] shadow-[0_3px_10px_color-mix(in_srgb,var(--foreground)_7%,transparent)] hover:-translate-y-0.5 hover:bg-[var(--button-secondary-hover)] active:translate-y-px",
         quiet: "text-[var(--foreground-secondary)] hover:bg-[var(--surface-raised)] hover:text-[var(--foreground)]",
         danger: "bg-[var(--danger)] text-[var(--on-danger)] hover:brightness-95"
       },

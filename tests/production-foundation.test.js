@@ -58,14 +58,21 @@ test('Supabase SSR boundaries validate environment and never expose service role
     'src/lib/supabase/client.ts',
     'src/lib/supabase/server.ts',
     'src/lib/supabase/proxy.ts',
-    'src/proxy.ts',
-    '.env.example'
+    'src/proxy.ts'
   ]) assert.ok(exists(file), `missing ${file}`);
 
   const client = read('src/lib/supabase/client.ts');
   const publicEnv = read('src/lib/env/public.ts');
   assert.doesNotMatch(`${client}\n${publicEnv}`, /SERVICE_ROLE|GROQ_API_KEY|USDA_FDC_API_KEY/);
   assert.match(read('src/lib/supabase/server.ts'), /createServerClient/);
+});
+
+test('Vercel uses the Next.js adapter instead of a stale static dist directory', () => {
+  assert.ok(exists('vercel.json'), 'missing vercel.json');
+  const config = JSON.parse(read('vercel.json'));
+  assert.equal(config.framework, 'nextjs');
+  assert.equal(config.outputDirectory, null);
+  assert.equal(exists('.env.example'), false, 'do not ship a local environment template');
 });
 
 test('initial database migration enables RLS and ownership policies', () => {

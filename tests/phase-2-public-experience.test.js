@@ -80,6 +80,12 @@ test('Anatomy uses stable muscle records and an accessible front/back SVG explor
   assert.match(figure, /<svg/);
   assert.match(figure, /role="group"/);
   assert.match(read('src/features/anatomy/data.ts'), /getMuscle/);
+  assert.ok(exists('src/features/anatomy/atlas-paths.ts'));
+  const atlas = read('src/features/anatomy/atlas-paths.ts');
+  assert.match(atlas, /front:/);
+  assert.match(atlas, /back:/);
+  assert.match(atlas, /landmarks/);
+  assert.match(figure, /atlasViews/);
 });
 
 test('public discoverability includes sitemap, robots, RSS, and structured data', () => {
@@ -113,4 +119,20 @@ test('shared public compositions keep Macedonian parity instead of hardcoded Eng
   assert.match(read('src/components/content/article-card.tsx'), /readLabel/);
   assert.match(read('src/components/content/feature-page.tsx'), /labels/);
   assert.match(read('src/components/shell/public-footer.tsx'), /c\.nav\.contact/);
+});
+
+test('shared buttons use coordinated semantic tokens in both themes', () => {
+  const css = read('src/app/globals.css');
+  const button = read('src/components/ui/button.tsx');
+  for (const token of ['--button-primary', '--button-primary-hover', '--button-primary-text', '--button-secondary', '--button-secondary-hover']) {
+    assert.ok(css.split(token).length >= 3, `${token} must be defined for light and dark themes`);
+  }
+  assert.match(button, /--button-primary/);
+  assert.match(button, /--button-secondary/);
+});
+
+test('ambient halo sits above the page paint and below interactive content', () => {
+  const css = read('src/app/globals.css');
+  assert.match(css, /\.ambient-pointer\s*\{[^}]*z-index:\s*0;/s);
+  assert.match(css, /body\s*>\s*:not\(\.ambient-pointer\)\s*\{[^}]*z-index:\s*1;/s);
 });

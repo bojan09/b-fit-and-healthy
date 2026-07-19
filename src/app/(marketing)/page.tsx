@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, Apple, ArrowRight, BookOpen, Brain, Dumbbell, HeartPulse, MoveRight } from "lucide-react";
+import { Activity, Apple, ArrowRight, BookOpen, Dumbbell, HeartPulse, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SectionIntro } from "@/components/content/section-intro";
@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { getLocale } from "@/lib/i18n/server";
 import { getPublicContent } from "@/lib/i18n/public-content";
 import { publicMetadata, siteUrl } from "@/lib/seo/metadata";
+import { SystemConstellation } from "@/features/landing/system-constellation";
 
 export const metadata = publicMetadata("Health and fitness, connected", "Understand nutrition, training, anatomy, habits, and health knowledge in one calm system.", "/");
 
@@ -32,12 +33,7 @@ export default async function HomePage() {
         <div className="action-row"><Button asChild size="lg"><Link href="/features">{c.home.primary}<ArrowRight aria-hidden="true" size={18} /></Link></Button><Button asChild size="lg" variant="secondary"><Link href="/blog">{c.home.secondary}</Link></Button></div>
         <p className="supporting-note">{c.common.educational}</p>
       </div>
-      <div className="system-orbit" aria-label={c.home.signal}>
-        <div className="orbit-core"><Brain aria-hidden="true" /><strong>B</strong><span>{locale === "en" ? "Your daily context" : "Твојот дневен контекст"}</span></div>
-        <span className="orbit-node orbit-one"><Apple aria-hidden="true" />{locale === "en" ? "Fuel" : "Гориво"}</span>
-        <span className="orbit-node orbit-two"><Dumbbell aria-hidden="true" />{locale === "en" ? "Move" : "Движење"}</span>
-        <span className="orbit-node orbit-three"><BookOpen aria-hidden="true" />{locale === "en" ? "Learn" : "Знаење"}</span>
-      </div>
+      <SystemConstellation locale={locale} />
     </section>
 
     <section className="public-section shell" aria-labelledby="modules-title">
