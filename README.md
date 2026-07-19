@@ -4,9 +4,9 @@ B Fit & Healthy is an English-first, bilingual health and fitness product built 
 
 ## Current delivery status
 
-Phase 1 established the production foundation. Phase 2 adds the public landing and feature experience, six paired English/Macedonian Markdown articles, an accessible SVG Anatomy explorer, public muscle guides, sitemap, robots rules, RSS, structured data, and honest legal/information foundations.
+Phase 1 established the production foundation. Phase 2 adds the public landing and feature experience, six paired English/Macedonian Markdown articles, an accessible SVG Anatomy explorer, public muscle guides, sitemap, robots rules, RSS, structured data, and honest legal/information foundations. Phase 3 adds Supabase authentication and required bilingual onboarding. Phase 4 adds the real-data Guided Daily Canvas, goals, water, weight measurements, daily habits, accessible progress summaries, notifications, and focused responsive product navigation.
 
-Personal nutrition tracking, workout planning and logging, the full Anatomy encyclopedia, coaching, authentication screens, and dashboard workflows are not yet production-complete. The archived `.worktrees/active-dusk-refinement/prototype/` directory remains a visual reference and interaction specification; it is not the production runtime.
+Nutrition and meal tracking, workout planning and logging, the full Anatomy encyclopedia, and AI coaching are not yet production-complete. Phase 4 intentionally shows no fabricated calorie, workout, notification, or streak data. Provider-backed authentication requires `docs/supabase-auth-configuration.md`; core tracking storage requires `docs/supabase-core-tracking.md`.
 
 Three.js and GSAP are intentionally not loaded in the current production phases. They are reserved for the approved anatomy and motion phase after the accessible non-3D experience is established.
 
@@ -19,7 +19,7 @@ npm.cmd install
 npm.cmd run dev
 ```
 
-Open `http://localhost:53271/`. Supporting foundation routes are available at `/states` and `/~offline`.
+Open `http://localhost:3000/`. Authentication begins at `/sign-in`; supporting foundation routes are available at `/states` and `/~offline`.
 
 Keep local environment values in an untracked `.env.local` file. Configure deployment values in the hosting provider's environment settings. Never expose the service-role key or server integration credentials in `NEXT_PUBLIC_*` variables.
 

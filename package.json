@@ -6,9 +6,9 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "dev": "next dev --port 53271",
+    "dev": "next dev --webpack --port 3000",
     "build": "next build --webpack",
-    "start": "next start --port 53271",
+    "start": "next start --port 3000",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:contracts": "node --test tests/*.test.js",

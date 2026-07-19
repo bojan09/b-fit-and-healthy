@@ -2,7 +2,7 @@ import type { Locale } from "@/lib/i18n/config";
 
 export const publicContent = {
   en: {
-    nav: { home: "Home", features: "Features", nutrition: "Nutrition", training: "Training", anatomy: "Anatomy", blog: "Knowledge", about: "About", contact: "Contact", privacy: "Privacy", terms: "Terms", information: "Information", menu: "Open menu" },
+    nav: { home: "Home", features: "Features", nutrition: "Nutrition", training: "Training", anatomy: "Anatomy", blog: "Knowledge", about: "About", contact: "Contact", privacy: "Privacy", terms: "Terms", information: "Information", account: "Account", signIn: "Sign in", getStarted: "Get started", menu: "Open menu" },
     common: { explore: "Explore the system", learnMore: "Learn more", readArticle: "Read article", minutes: "min read", educational: "Educational guidance only — not medical advice." },
     home: {
       eyebrow: "One connected health system",
@@ -35,7 +35,7 @@ export const publicContent = {
     }
   },
   mk: {
-    nav: { home: "Почетна", features: "Можности", nutrition: "Исхрана", training: "Тренинг", anatomy: "Анатомија", blog: "Знаење", about: "За нас", contact: "Контакт", privacy: "Приватност", terms: "Услови", information: "Информации", menu: "Отвори мени" },
+    nav: { home: "Почетна", features: "Можности", nutrition: "Исхрана", training: "Тренинг", anatomy: "Анатомија", blog: "Знаење", about: "За нас", contact: "Контакт", privacy: "Приватност", terms: "Услови", information: "Информации", account: "Сметка", signIn: "Најави се", getStarted: "Започни", menu: "Отвори мени" },
     common: { explore: "Истражи го системот", learnMore: "Дознај повеќе", readArticle: "Прочитај ја статијата", minutes: "мин читање", educational: "Само едукативни насоки — не медицински совет." },
     home: {
       eyebrow: "Еден поврзан здравствен систем",

@@ -1,0 +1,2 @@
+import Link from "next/link"; import { ArrowRight, Sparkles } from "lucide-react";
+export function GuidancePanel({ eyebrow, title, body, href, action }: { eyebrow: string; title: string; body: string; href: string; action: string }) { return <aside className="guidance-panel"><Sparkles aria-hidden="true" /><p className="eyebrow">{eyebrow}</p><h2>{title}</h2><p>{body}</p><Link className="text-link" href={href}>{action}<ArrowRight aria-hidden="true" /></Link></aside>; }

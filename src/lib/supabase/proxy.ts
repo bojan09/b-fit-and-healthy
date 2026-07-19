@@ -2,12 +2,14 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getPublicEnv } from "@/lib/env/public";
 import type { Database } from "@/types/database";
+import { getAccountDestination, sanitizeNextPath } from "@/features/auth/redirects";
 
 const protectedPrefixes = [
   "/today", "/nutrition", "/meals", "/meal-planner", "/recipes",
   "/grocery-list", "/train", "/workouts", "/session", "/exercises",
-  "/progress", "/habits", "/assistant", "/me", "/settings", "/notifications"
+  "/progress", "/habits", "/goals", "/assistant", "/me", "/settings", "/notifications", "/onboarding", "/reset-password"
 ];
+const ordinaryAuthRoutes = ["/sign-in", "/sign-up", "/magic-link", "/forgot-password"];
 
 function isProtected(pathname: string) {
   return protectedPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
@@ -40,8 +42,12 @@ export async function updateSession(request: NextRequest) {
     if ((!data?.claims || error) && isProtected(pathname)) {
       const signIn = request.nextUrl.clone();
       signIn.pathname = "/sign-in";
-      signIn.searchParams.set("next", pathname);
+      signIn.searchParams.set("next", sanitizeNextPath(`${pathname}${request.nextUrl.search}`));
       return NextResponse.redirect(signIn);
+    }
+    if (data?.claims && ordinaryAuthRoutes.includes(pathname)) {
+      const { data: profile } = await supabase.from("profiles").select("onboarding_complete").eq("user_id", String(data.claims.sub)).maybeSingle();
+      return NextResponse.redirect(new URL(getAccountDestination(Boolean(profile?.onboarding_complete), request.nextUrl.searchParams.get("next")), request.url));
     }
   } catch {
     // Public foundation pages remain reviewable while configuration is repaired.

@@ -11,7 +11,7 @@ test('production package pins the approved Phase 1 stack and quality commands', 
   assert.ok(exists('package.json'), 'missing production package.json');
   const pkg = JSON.parse(read('package.json'));
 
-  assert.equal(pkg.scripts.dev, 'next dev --port 53271');
+  assert.equal(pkg.scripts.dev, 'next dev --webpack --port 3000');
   for (const script of ['build', 'start', 'lint', 'typecheck', 'test']) {
     assert.ok(pkg.scripts[script], `missing ${script} script`);
   }

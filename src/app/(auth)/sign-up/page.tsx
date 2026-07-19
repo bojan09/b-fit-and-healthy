@@ -1,0 +1,2 @@
+import { AuthForm } from "@/features/auth/auth-form"; import { sanitizeNextPath } from "@/features/auth/redirects"; import { getLocale } from "@/lib/i18n/server";
+export default async function Page({ searchParams }: { searchParams: Promise<{ next?: string }> }) { const locale = await getLocale(); return <AuthForm mode="sign-up" locale={locale} next={sanitizeNextPath((await searchParams).next)} />; }

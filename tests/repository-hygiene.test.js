@@ -19,7 +19,7 @@ test('local credentials are ignored and browser code contains no server-only sec
 test('README documents the production workflow and keeps the prototype boundary explicit', () => {
   const readme = read('README.md');
   assert.match(readme, /npm(?:\.cmd)? run dev/);
-  assert.match(readme, /http:\/\/localhost:53271/);
+  assert.match(readme, /http:\/\/localhost:3000/);
   assert.match(readme, /prototype.+visual reference/is);
   assert.match(readme, /Phase 1.+foundation/is);
   assert.match(readme, /Three\.js and GSAP.+not loaded/is);

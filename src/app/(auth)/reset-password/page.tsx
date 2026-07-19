@@ -1,0 +1,2 @@
+import { redirect } from "next/navigation"; import { ResetForm } from "@/features/auth/reset-form"; import { requireUser } from "@/features/auth/session"; import { sanitizeNextPath } from "@/features/auth/redirects"; import { getLocale } from "@/lib/i18n/server";
+export default async function Page({ searchParams }: { searchParams: Promise<{ next?: string }> }) { const user = await requireUser(); if (!user) redirect("/forgot-password"); return <ResetForm locale={await getLocale()} next={sanitizeNextPath((await searchParams).next)} />; }

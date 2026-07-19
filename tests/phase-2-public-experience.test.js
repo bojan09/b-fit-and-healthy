@@ -113,6 +113,21 @@ test('public navigation points only to implemented routes', () => {
   assert.match(navigation, /mobile-nav/);
 });
 
+test('public visitors can always find sign-in and registration', () => {
+  const header = read('src/components/shell/public-header.tsx');
+  const navigation = read('src/components/shell/public-navigation.tsx');
+  const home = read('src/app/(marketing)/page.tsx');
+  const footer = read('src/components/shell/public-footer.tsx');
+  assert.match(header, /href="\/sign-in"/);
+  assert.match(header, /href="\/sign-up"/);
+  assert.match(navigation, /\/sign-in/);
+  assert.match(navigation, /\/sign-up/);
+  assert.match(home, /href="\/sign-in"/);
+  assert.match(home, /href="\/sign-up"/);
+  assert.match(footer, /href="\/sign-in"/);
+  assert.match(footer, /href="\/sign-up"/);
+});
+
 test('shared public compositions keep Macedonian parity instead of hardcoded English controls', () => {
   assert.match(read('src/app/(marketing)/features/nutrition/page.tsx'), /getLocale/);
   assert.match(read('src/app/(marketing)/features/training/page.tsx'), /getLocale/);
@@ -129,10 +144,16 @@ test('shared buttons use coordinated semantic tokens in both themes', () => {
   }
   assert.match(button, /--button-primary/);
   assert.match(button, /--button-secondary/);
+  assert.match(button, /ui-button-primary/);
+  assert.match(button, /ui-button-secondary/);
+  assert.match(css, /--button-primary:\s*#176b61/i);
+  assert.match(css, /--button-secondary:\s*#f1e5cf/i);
+  assert.match(css, /\.ui-button-primary\s*\{[^}]*color:\s*var\(--button-primary-text\)/s);
 });
 
 test('ambient halo sits above the page paint and below interactive content', () => {
   const css = read('src/app/globals.css');
   assert.match(css, /\.ambient-pointer\s*\{[^}]*z-index:\s*0;/s);
-  assert.match(css, /body\s*>\s*:not\(\.ambient-pointer\)\s*\{[^}]*z-index:\s*1;/s);
+  assert.match(css, /body\s*>\s*:not\(\.ambient-pointer\):not\(\.skip-link\)\s*\{[^}]*z-index:\s*1;/s);
+  assert.match(css, /\.skip-link\s*\{[^}]*position:\s*fixed;/s);
 });

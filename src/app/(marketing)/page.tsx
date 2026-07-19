@@ -30,7 +30,7 @@ export default async function HomePage() {
         <p className="eyebrow"><HeartPulse aria-hidden="true" size={17} />{c.home.eyebrow}</p>
         <h1 id="hero-title">{c.home.title}</h1>
         <p className="lede">{c.home.body}</p>
-        <div className="action-row"><Button asChild size="lg"><Link href="/features">{c.home.primary}<ArrowRight aria-hidden="true" size={18} /></Link></Button><Button asChild size="lg" variant="secondary"><Link href="/blog">{c.home.secondary}</Link></Button></div>
+        <div className="action-row hero-account-actions"><Button asChild size="lg"><Link href="/sign-up">{c.nav.getStarted}<ArrowRight aria-hidden="true" size={18} /></Link></Button><Button asChild size="lg" variant="secondary"><Link href="/sign-in">{c.nav.signIn}</Link></Button><Link className="text-link" href="/features">{c.common.explore}<MoveRight aria-hidden="true" size={18} /></Link></div>
         <p className="supporting-note">{c.common.educational}</p>
       </div>
       <SystemConstellation locale={locale} />
@@ -53,6 +53,6 @@ export default async function HomePage() {
 
     <section className="public-section split-callouts shell"><Card className="callout anatomy-callout"><Activity aria-hidden="true" /><div><p className="eyebrow">{c.nav.anatomy}</p><h2>{c.home.anatomyTitle}</h2><p>{c.home.anatomyBody}</p><Link className="text-link" href="/anatomy">{c.common.explore}<ArrowRight aria-hidden="true" size={18} /></Link></div></Card><Card className="callout knowledge-callout"><BookOpen aria-hidden="true" /><div><p className="eyebrow">{c.nav.blog}</p><h2>{c.home.knowledgeTitle}</h2><p>{c.home.knowledgeBody}</p><Link className="text-link" href="/blog">{c.common.explore}<ArrowRight aria-hidden="true" size={18} /></Link></div></Card></section>
 
-    <section className="public-section shell"><div className="final-cta"><div><p className="eyebrow">B Fit & Healthy</p><h2>{c.home.finalTitle}</h2><p>{c.home.finalBody}</p></div><Button asChild size="lg"><Link href="/features">{c.common.explore}<ArrowRight aria-hidden="true" size={18} /></Link></Button></div></section>
+    <section className="public-section shell"><div className="final-cta"><div><p className="eyebrow">B Fit & Healthy</p><h2>{c.home.finalTitle}</h2><p>{c.home.finalBody}</p></div><div className="final-account-actions"><Button asChild size="lg"><Link href="/sign-up">{c.nav.getStarted}<ArrowRight aria-hidden="true" size={18} /></Link></Button><Link className="text-link" href="/sign-in">{c.nav.signIn}</Link></div></div></section>
   </main>;
 }
