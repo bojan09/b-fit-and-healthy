@@ -136,7 +136,7 @@ test('shared public compositions keep Macedonian parity instead of hardcoded Eng
   assert.match(read('src/components/shell/public-footer.tsx'), /c\.nav\.contact/);
 });
 
-test('shared buttons use coordinated semantic tokens in both themes', () => {
+test('shared buttons use the coordinated Sky Dusk tokens in both themes', () => {
   const css = read('src/app/globals.css');
   const button = read('src/components/ui/button.tsx');
   for (const token of ['--button-primary', '--button-primary-hover', '--button-primary-text', '--button-secondary', '--button-secondary-hover']) {
@@ -146,8 +146,10 @@ test('shared buttons use coordinated semantic tokens in both themes', () => {
   assert.match(button, /--button-secondary/);
   assert.match(button, /ui-button-primary/);
   assert.match(button, /ui-button-secondary/);
-  assert.match(css, /--button-primary:\s*#176b61/i);
-  assert.match(css, /--button-secondary:\s*#f1e5cf/i);
+  for (const value of ['#287eac', '#176b95', '#e5eef3', '#75c5e9', '#2a424f']) {
+    assert.match(css, new RegExp(value, 'i'), `missing approved Sky Dusk token ${value}`);
+  }
+  assert.doesNotMatch(css, /--button-secondary:\s*#(?:f1e5cf|3d3424)/i);
   assert.match(css, /\.ui-button-primary\s*\{[^}]*color:\s*var\(--button-primary-text\)/s);
 });
 

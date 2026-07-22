@@ -40,11 +40,11 @@ test('App Router exposes accessible foundation, state, and offline routes', () =
   assert.match(layout, /ThemeProvider/);
 });
 
-test('Sage Dusk tokens and customized UI primitives are production-owned', () => {
+test('Sky Dusk tokens and customized UI primitives are production-owned', () => {
   const css = read('src/app/globals.css');
-  assert.match(css, /--background:\s*#f4f4ee/i);
-  assert.match(css, /\.dark[\s\S]*--background:\s*#14211c/i);
-  assert.match(css, /--brand:\s*#397458/i);
+  assert.match(css, /--background:\s*#f3f6f8/i);
+  assert.match(css, /\.dark[\s\S]*--background:\s*#13232d/i);
+  assert.match(css, /--brand:\s*#287eac/i);
   assert.match(css, /--space-16:\s*4rem/i);
   assert.ok(exists('components.json'));
   assert.ok(exists('src/components/ui/button.tsx'));
