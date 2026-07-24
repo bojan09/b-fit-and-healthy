@@ -9,5 +9,14 @@ export default defineConfig([
     files: ["tests/**/*.js"],
     rules: { "@typescript-eslint/no-require-imports": "off" }
   },
-  globalIgnores([".next/**", ".worktrees/**", "node_modules/**", "prototype/**", "public/sw.js"])
+  globalIgnores([
+    ".next/**",
+    ".worktrees/**",
+    "node_modules/**",
+    "prototype/**",
+    "playwright-report/**",
+    "test-results/**",
+    ".auth/**",
+    "public/sw.js"
+  ])
 ]);

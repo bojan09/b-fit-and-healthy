@@ -21,6 +21,9 @@ out/
 node_modules/
 .superpowers/
 .worktrees/
+playwright-report/
+test-results/
+.auth/
 
 # Serwist generates these from src/app/sw.ts during production builds.
 public/sw.js
