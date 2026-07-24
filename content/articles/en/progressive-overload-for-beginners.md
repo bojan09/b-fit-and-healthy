@@ -13,6 +13,10 @@ readingTime: 7
 seoTitle: Progressive overload for beginners
 seoDescription: Learn how to progress reps, load, range, and technique without rushing your training.
 related: protein-without-the-myths, muscle-soreness-normal-or-warning
+relatedMuscles: quadriceps, glutes, pectorals
+relatedExercises: bodyweight-squat, push-up
+references: WHO physical activity|https://www.who.int/news-room/fact-sheets/detail/physical-activity
+featuredImage: ""
 ---
 
 The body adapts when a familiar movement becomes gradually more demanding. More weight is one option, but it is not the only form of progress.

@@ -4,6 +4,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import type { Locale } from "@/lib/i18n/config";
 import { parseArticleSource, type Article } from "@/lib/content/article-schema";
+export { resolveArticleRelationships } from "@/lib/content/article-relationships";
 
 const contentRoot = path.join(process.cwd(), "content", "articles");
 
@@ -29,3 +30,7 @@ export const getArticles = cache(async (locale: Locale): Promise<Article[]> => {
   return articles.filter((article): article is Article => Boolean(article))
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 });
+
+export async function getArticleCategories(locale: Locale) {
+  return [...new Set((await getArticles(locale)).map((article) => article.category))].sort();
+}

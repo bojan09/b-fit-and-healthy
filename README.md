@@ -1,14 +1,14 @@
 # B Fit & Healthy
 
-B Fit & Healthy is an English-first, bilingual health and fitness product built with Next.js App Router, TypeScript, Tailwind CSS, customized shadcn/ui primitives, Supabase, and Serwist. The approved Sage Dusk visual system remains the design foundation.
+B Fit & Healthy is an English-first, bilingual health and fitness product built with Next.js App Router, TypeScript, Tailwind CSS, customized shadcn/ui primitives, Supabase, and Serwist. The approved Sky Dusk visual system remains the design foundation.
 
 ## Current delivery status
 
-Phase 1 established the production foundation. Phase 2 adds the public landing and feature experience, six paired English/Macedonian Markdown articles, an accessible SVG Anatomy explorer, public muscle guides, sitemap, robots rules, RSS, structured data, and honest legal/information foundations. Phase 3 adds Supabase authentication and required bilingual onboarding. Phase 4 adds the real-data Guided Daily Canvas, goals, water, weight measurements, daily habits, accessible progress summaries, notifications, and focused responsive product navigation.
+Phase 1 established the production foundation; Phases 2–4 added the public experience, authentication/onboarding, and real-data Guided Daily Canvas. Phase 5 adds private nutrition logging, recipes, meal planning, groceries, and USDA-backed search. Phase 6 adds the exercise library, workout planning, active sessions, history, and personal records. Phase 7 adds the Anatomy encyclopedia, richer SVG atlas, content relationships, and bilingual knowledge depth. Phase 8 adds the private Groq AI Coach with minimized context, 30-day history, safety boundaries, and reviewable drafts.
 
-Nutrition and meal tracking, workout planning and logging, the full Anatomy encyclopedia, and AI coaching are not yet production-complete. Phase 4 intentionally shows no fabricated calorie, workout, notification, or streak data. Provider-backed authentication requires `docs/supabase-auth-configuration.md`; core tracking storage requires `docs/supabase-core-tracking.md`.
+Phase 9 adds progressive GSAP motion and a licensed-asset-gated Three.js integration boundary. The accessible SVG atlas remains the active renderer; a live clinical 3D model is not claimed or enabled. Provider-backed features require their documented Supabase migrations and valid server credentials.
 
-Three.js and GSAP are intentionally not loaded in the current production phases. They are reserved for the approved anatomy and motion phase after the accessible non-3D experience is established.
+See `docs/motion-and-three-operations.md` for capability gates, reduced-motion behavior, model licensing requirements, and renderer cleanup.
 
 ## Local development
 

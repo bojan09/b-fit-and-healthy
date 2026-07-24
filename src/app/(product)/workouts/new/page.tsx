@@ -1,0 +1,2 @@
+import{WorkoutBuilder}from"@/features/fitness/workout-builder";import{createTemplateAction}from"@/features/fitness/actions";
+export default function NewWorkoutPage(){return <main className="product-page fitness-page"><header className="product-page-heading"><div><p className="eyebrow">Workout builder</p><h1>Create a workout</h1><p>Choose a clear sequence now so training feels simpler later.</p></div></header><WorkoutBuilder action={createTemplateAction}/></main>}

@@ -13,6 +13,10 @@ readingTime: 5
 seoTitle: Post-workout soreness versus warning pain
 seoDescription: Understand common soreness patterns, sensible recovery, and signs that warrant professional care.
 related: why-sleep-is-part-of-training, progressive-overload-for-beginners
+relatedMuscles: quadriceps, hamstrings, calves
+relatedExercises: bodyweight-squat, romanian-deadlift
+references: NHS sprains and strains|https://www.nhs.uk/conditions/sprains-and-strains/
+featuredImage: ""
 ---
 
 Delayed muscle soreness often appears several hours after unfamiliar or demanding exercise and can peak over the next day or two. It is not required for an effective workout.

@@ -4,9 +4,10 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { addWaterAction, createGoalAction, createHabitAction, saveWeightAction } from "@/features/tracking/actions";
 import { initialAuthState } from "@/features/auth/types";
+import { ActionFeedback } from "@/features/motion/action-feedback";
 
 type Labels = { addWater: string; amount: string; saveWeight: string; weight: string; date: string; note: string; addHabit: string; habitName: string; addGoal: string; goalName: string; target: string; unit: string; endDate: string; saving: string };
-function Notice({ state }: { state: typeof initialAuthState }) { return state.message ? <p className={`form-notice ${state.status}`} role="status" aria-live="polite">{state.message}</p> : null; }
+function Notice({ state }: { state: typeof initialAuthState }) { return state.message ? <ActionFeedback className="form-notice" status={state.status} message={state.message} /> : null; }
 
 export function WaterForm({ labels, units }: { labels: Labels; units: "metric" | "imperial" }) { const [state, action, pending] = useActionState(addWaterAction, initialAuthState); return <form action={action} className="tracking-inline-form" id="water"><input type="hidden" name="units" value={units} /><label>{labels.amount}<span><input name="amount" type="number" min="1" step="1" required /><small>{units === "metric" ? "ml" : "fl oz"}</small></span></label><Button type="submit" disabled={pending}>{pending ? labels.saving : labels.addWater}</Button><Notice state={state} /></form>; }
 export function WeightForm({ labels, units, date }: { labels: Labels; units: "metric" | "imperial"; date: string }) { const [state, action, pending] = useActionState(saveWeightAction, initialAuthState); return <form action={action} className="tracking-form"><input type="hidden" name="units" value={units} /><label>{labels.weight}<span><input name="weight" type="number" min="1" max="1500" step="0.1" required /><small>{units === "metric" ? "kg" : "lb"}</small></span></label><label>{labels.date}<input name="recordedOn" type="date" defaultValue={date} required /></label><label>{labels.note}<input name="note" maxLength={240} /></label><Button type="submit" disabled={pending}>{pending ? labels.saving : labels.saveWeight}</Button><Notice state={state} /></form>; }

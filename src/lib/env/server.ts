@@ -6,6 +6,7 @@ export { parseServerEnv, type ServerEnv };
 export function getServerEnv(): ServerEnv {
   return parseServerEnv({
     GROQ_API_KEY: process.env.GROQ_API_KEY,
+    GROQ_MODEL: process.env.GROQ_MODEL,
     USDA_FDC_API_KEY: process.env.USDA_FDC_API_KEY
   });
 }

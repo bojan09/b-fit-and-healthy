@@ -1,0 +1,4 @@
+export const fitnessContent = {
+  en: { training: "Training", trainingIntro: "Plan clearly, train with focus, and keep a record you can trust.", exercises: "Exercise library", workouts: "My workouts", planner: "Weekly planner", history: "Workout history", records: "Personal records", create: "Create workout", start: "Start workout", resume: "Resume session", unavailable: "Fitness storage is not available yet. Apply the Phase 6 migration to enable saving." },
+  mk: { training: "Тренинг", trainingIntro: "Планирајте јасно, тренирајте фокусирано и чувајте сигурна евиденција.", exercises: "Библиотека на вежби", workouts: "Мои тренинзи", planner: "Неделен планер", history: "Историја на тренинзи", records: "Лични рекорди", create: "Создај тренинг", start: "Започни тренинг", resume: "Продолжи сесија", unavailable: "Складиштето за тренинг сè уште не е достапно. Применете ја Phase 6 миграцијата." },
+} as const;

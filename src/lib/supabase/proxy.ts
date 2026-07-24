@@ -6,7 +6,7 @@ import { getAccountDestination, sanitizeNextPath } from "@/features/auth/redirec
 
 const protectedPrefixes = [
   "/today", "/nutrition", "/meals", "/meal-planner", "/recipes",
-  "/grocery-list", "/train", "/workouts", "/session", "/exercises",
+  "/grocery-list", "/train", "/training", "/workouts", "/session", "/exercises", "/workout-history", "/personal-records",
   "/progress", "/habits", "/goals", "/assistant", "/me", "/settings", "/notifications", "/onboarding", "/reset-password"
 ];
 const ordinaryAuthRoutes = ["/sign-in", "/sign-up", "/magic-link", "/forgot-password"];

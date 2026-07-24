@@ -13,6 +13,10 @@ readingTime: 6
 seoTitle: Основи на протеинот за активни возрасни
 seoDescription: Разбери ги реалните цели, изворите, времето и опоравувањето без фитнес митови.
 related: progressive-overload-for-beginners, why-sleep-is-part-of-training
+relatedMuscles: ""
+relatedExercises: ""
+references: EFSA референтни вредности за протеини|https://www.efsa.europa.eu/en/efsajournal/pub/2557
+featuredImage: ""
 ---
 
 Протеинот обезбедува аминокиселини за обновување на ткивата по тренинг. Тој ги поддржува и ензимите, хормоните, кожата и имунитетот. Тоа е корисна храна, а не специјална кратенка.

@@ -13,6 +13,10 @@ readingTime: 8
 seoTitle: Мускулите на грбот објаснети едноставно
 seoDescription: Научи ги улогите на широкиот грбен мускул, трапезот и стабилизаторите.
 related: progressive-overload-for-beginners, muscle-soreness-normal-or-warning
+relatedMuscles: trapezius, latissimus
+relatedExercises: one-arm-row, lat-pulldown
+references: NCBI преглед на анатомијата на грбот|https://www.ncbi.nlm.nih.gov/books/NBK537074/
+featuredImage: ""
 ---
 
 Грбот не е еден мускул. Повеќе слоеви ги координираат лопатките, рацете, ’рбетот и карлицата. Разбирањето на нивните задачи го олеснува изборот на вежби.

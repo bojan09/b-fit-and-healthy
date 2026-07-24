@@ -13,6 +13,10 @@ readingTime: 8
 seoTitle: Back muscles explained simply
 seoDescription: Learn the roles of the lats, trapezius, spinal erectors, and shoulder-blade muscles.
 related: progressive-overload-for-beginners, muscle-soreness-normal-or-warning
+relatedMuscles: trapezius, latissimus
+relatedExercises: one-arm-row, lat-pulldown
+references: NCBI back anatomy overview|https://www.ncbi.nlm.nih.gov/books/NBK537074/
+featuredImage: ""
 ---
 
 The back is not one muscle. Several layers coordinate the shoulder blades, upper arms, spine, and pelvis. Understanding their jobs makes exercise selection clearer.

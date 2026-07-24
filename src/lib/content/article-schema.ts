@@ -4,8 +4,12 @@ import sanitizeHtml from "sanitize-html";
 import { z } from "zod";
 import { locales, type Locale } from "@/lib/i18n/config";
 
-const csv = z.string().transform((value) => value.split(",").map((item) => item.trim()).filter(Boolean));
+const csv = z.string().default("").transform((value) => value.split(",").map((item) => item.trim()).filter(Boolean));
 const isoDate = z.preprocess((value) => value instanceof Date ? value.toISOString().slice(0, 10) : value, z.string().regex(/^\d{4}-\d{2}-\d{2}$/));
+const referenceItem = z.object({ label: z.string().min(3), url: z.url().refine((value) => value.startsWith("https://"), "References must use HTTPS") });
+const references = z.string().default("").transform((value) => value.split(";").map((item) => item.trim()).filter(Boolean).map((item) => {
+  const separator=item.lastIndexOf("|");return {label:item.slice(0,separator).trim(),url:item.slice(separator+1).trim()};
+})).pipe(z.array(referenceItem).max(12));
 
 const frontmatterSchema = z.object({
   id: z.string().min(2),
@@ -21,7 +25,11 @@ const frontmatterSchema = z.object({
   readingTime: z.coerce.number().int().positive(),
   seoTitle: z.string().min(10).max(70),
   seoDescription: z.string().min(20).max(170),
-  related: csv
+  related: csv,
+  relatedMuscles: csv,
+  relatedExercises: csv,
+  references,
+  featuredImage: z.string().trim().optional()
 });
 
 export type Article = z.infer<typeof frontmatterSchema> & {

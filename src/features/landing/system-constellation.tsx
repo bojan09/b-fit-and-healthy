@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Apple, BookOpen, Brain, Dumbbell, type LucideIcon } from "lucide-react";
 import { useState, type PointerEvent } from "react";
 import type { Locale } from "@/lib/i18n/config";
+import { useMotionProfile } from "@/features/motion/use-motion-profile";
 
 type Module = { id: string; href: string; label: string; detail: string; Icon: LucideIcon };
 const content: Record<Locale, Module[]> = {
@@ -22,8 +23,10 @@ const content: Record<Locale, Module[]> = {
 export function SystemConstellation({ locale }: { locale: Locale }) {
   const modules = content[locale];
   const [active, setActive] = useState<Module | null>(null);
+  const motionProfile = useMotionProfile();
   const ActiveIcon = active?.Icon ?? Brain;
   const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (motionProfile !== "full") return;
     const bounds = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 10;
     const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 10;

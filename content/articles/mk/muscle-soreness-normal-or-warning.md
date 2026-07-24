@@ -13,6 +13,10 @@ readingTime: 5
 seoTitle: Болка по тренинг и предупредувачки знаци
 seoDescription: Разбери ги вообичаените реакции, разумното опоравување и знаците за стручна помош.
 related: why-sleep-is-part-of-training, progressive-overload-for-beginners
+relatedMuscles: quadriceps, hamstrings, calves
+relatedExercises: bodyweight-squat, romanian-deadlift
+references: NHS истегнувања и повреди|https://www.nhs.uk/conditions/sprains-and-strains/
+featuredImage: ""
 ---
 
 Одложената мускулна болка често се појавува неколку часа по нов или тежок тренинг и може да биде најсилна во следните два дена. Таа не е услов за ефикасен тренинг.

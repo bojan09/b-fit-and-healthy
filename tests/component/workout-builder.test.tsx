@@ -1,0 +1,4 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { WorkoutBuilder } from "@/features/fitness/workout-builder";
+describe("WorkoutBuilder", () => { it("adds, reorders, removes, and validates exercise rows", () => { render(<WorkoutBuilder />); expect(screen.getByText("Add at least one exercise to save this workout.")).toBeInTheDocument(); fireEvent.click(screen.getAllByRole("button", { name: /Add Bodyweight squat/ })[0]); fireEvent.click(screen.getAllByRole("button", { name: /Add Push-up/ })[0]); fireEvent.click(screen.getByRole("button", { name: /Move Push-up up/ })); expect(screen.getAllByTestId("builder-row")[0]).toHaveTextContent("Push-up"); fireEvent.click(screen.getByRole("button", { name: /Remove Push-up/ })); expect(screen.queryByTestId("builder-error")).not.toBeInTheDocument(); }); });

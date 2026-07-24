@@ -13,6 +13,10 @@ readingTime: 4
 seoTitle: Изгради здрави навики и кога мотивацијата е ниска
 seoDescription: Користи сигнали, помали активности и едноставен преглед за полесно повторување.
 related: why-sleep-is-part-of-training, progressive-overload-for-beginners
+relatedMuscles: ""
+relatedExercises: ""
+references: NIH методи за промена на однесувањето|https://www.nih.gov/about-nih/what-we-do/nih-turning-discovery-into-health/our-biggest-moments-behavioral-health
+featuredImage: ""
 ---
 
 Мотивацијата е корисна, но се менува со стресот, спиењето и животот. Системот за навики го намалува бројот на одлуки пред да започнеш.

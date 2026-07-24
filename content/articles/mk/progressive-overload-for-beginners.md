@@ -13,6 +13,10 @@ readingTime: 7
 seoTitle: Прогресивно оптоварување за почетници
 seoDescription: Научи како да напредуваш со повторувања, тежина, опсег и техника без брзање.
 related: protein-without-the-myths, muscle-soreness-normal-or-warning
+relatedMuscles: quadriceps, glutes, pectorals
+relatedExercises: bodyweight-squat, push-up
+references: СЗО физичка активност|https://www.who.int/news-room/fact-sheets/detail/physical-activity
+featuredImage: ""
 ---
 
 Телото се приспособува кога познатото движење постепено станува потешко. Поголема тежина е една можност, но не е единствениот вид напредок.

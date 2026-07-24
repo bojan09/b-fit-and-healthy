@@ -13,6 +13,10 @@ readingTime: 5
 seoTitle: Зошто спиењето е важно за опоравување
 seoDescription: Научи како спиењето ја поддржува адаптацијата и изгради реална минимална рутина.
 related: small-habits-beat-motivation, muscle-soreness-normal-or-warning
+relatedMuscles: ""
+relatedExercises: ""
+references: CDC спиење и нарушувања на спиењето|https://www.cdc.gov/sleep/about/index.html
+featuredImage: ""
 ---
 
 Тренингот му дава причина на телото да се приспособи. Спиењето обезбедува време за опоравување и помага да се вратиш со подобро внимание, координација и напор.

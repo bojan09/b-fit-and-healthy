@@ -1,0 +1,3 @@
+import { ExerciseLibrary } from "@/features/fitness/exercise-library";
+import { getLocale } from "@/lib/i18n/server";
+export default async function ExercisesPage(){const locale=await getLocale();return <main className="product-page fitness-page"><header className="product-page-heading"><div><p className="eyebrow">Movement catalogue</p><h1>{locale==="mk"?"Библиотека на вежби":"Exercise library"}</h1><p>{locale==="mk"?"Јасни упатства, целни мускули и практична опрема.":"Clear instructions, target muscles, and practical equipment guidance."}</p></div></header><ExerciseLibrary locale={locale}/></main>}

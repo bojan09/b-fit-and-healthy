@@ -7,6 +7,7 @@ const optionalSecret = z.preprocess(
 
 const serverEnvSchema = z.object({
   GROQ_API_KEY: optionalSecret,
+  GROQ_MODEL: optionalSecret,
   USDA_FDC_API_KEY: optionalSecret
 });
 

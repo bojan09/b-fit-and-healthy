@@ -1,6 +1,6 @@
 # B Fit & Healthy editorial roadmap
 
-The six Phase 2 starter articles validate the content system. The following 36 paired English/Macedonian topics form the proposed future corpus; drafting requires a separate editorial approval and source review.
+The six published starter guides validate the bilingual content system. These 36 paired topics form the proposed corpus; every draft still requires evidence review, Macedonian language review, and editorial approval before publication.
 
 ## Nutrition
 
@@ -17,7 +17,7 @@ The six Phase 2 starter articles validate the content system. The following 36 p
 8. How often should a beginner train? / Колку често треба да тренира почетник?
 9. Strength versus muscle growth / Сила наспроти мускулен раст
 10. Rest periods that match the goal / Одмор меѓу серии според целта
-11. Deloads and easier training weeks / Полесни недели и намалување товар
+11. Deloads and easier training weeks / Полесни недели и намалување на товар
 12. Technique: stable, not identical / Техника: стабилна, не идентична
 
 ## Recovery and sleep
@@ -41,17 +41,27 @@ The six Phase 2 starter articles validate the content system. The following 36 p
 ## Anatomy and movement
 
 25. The shoulder blade during pressing / Лопатката при потиснување
-26. Hip muscles and single-leg control / Мускули на колкот и контрола на една нога
+26. Hip muscles and single-leg control / Мускулите на колкот и контрола на една нога
 27. Knees, feet, and squat variation / Колена, стапала и варијации на чучнување
 28. Core training beyond crunches / Тренинг за трупот надвор од стомачни
 29. Calf muscles in walking and running / Листовите при одење и трчање
-30. Arms: elbow flexors and extensors / Раце: свиткувачи и исправувачи на лактот
+30. Arms: elbow flexors and extensors / Раце: свиткувачи и исправачи на лактот
 
 ## General health literacy
 
-31. What a health metric can and cannot say / Што може и не може да каже една здравствена мерка
+31. What a health metric can and cannot say / Што може и не може да каже здравствена мерка
 32. Finding qualified professional help / Како да најдеш квалификувана стручна помош
 33. Supplements: questions before buying / Суплементи: прашања пред купување
 34. Spotting exaggerated fitness claims / Препознавање претерани фитнес тврдења
 35. Pain language and responsible education / Јазикот на болката и одговорна едукација
-36. Building a personal health information checklist / Лична листа за проверка на здравствени информации
+36. A personal health-information checklist / Лична листа за проверка на здравствени информации
+
+## Publication gates
+
+Each topic moves through: `planned → sourced → drafted-en → reviewed-en → translated-mk → reviewed-mk → approved → published`.
+
+- Evidence review records primary or authoritative sources and the date accessed.
+- Health claims require qualified editorial review and cautious, non-diagnostic language.
+- English and Macedonian versions publish together and retain the same relationships.
+- Images must be owned, commissioned, public domain, or used under a documented compatible license.
+- Article metadata and relationships must pass automated validation before review.

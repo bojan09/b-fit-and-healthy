@@ -13,6 +13,10 @@ readingTime: 4
 seoTitle: Build health habits that survive low motivation
 seoDescription: Use cues, smaller actions, and simple review to make healthy routines easier to repeat.
 related: why-sleep-is-part-of-training, progressive-overload-for-beginners
+relatedMuscles: ""
+relatedExercises: ""
+references: NIH behavior change methods|https://www.nih.gov/about-nih/what-we-do/nih-turning-discovery-into-health/our-biggest-moments-behavioral-health
+featuredImage: ""
 ---
 
 Motivation is useful, but it changes with stress, sleep, and the rest of life. A habit system reduces how many decisions you must make before starting.

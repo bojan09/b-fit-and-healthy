@@ -13,6 +13,10 @@ readingTime: 5
 seoTitle: Why sleep matters for fitness recovery
 seoDescription: Learn how sleep supports training adaptation and build a realistic minimum sleep routine.
 related: small-habits-beat-motivation, muscle-soreness-normal-or-warning
+relatedMuscles: ""
+relatedExercises: ""
+references: CDC sleep and sleep disorders|https://www.cdc.gov/sleep/about/index.html
+featuredImage: ""
 ---
 
 Training creates a reason for the body to adapt. Sleep provides time for many recovery processes and helps you return with better attention, coordination, and effort.

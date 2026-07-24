@@ -6,12 +6,13 @@ import { addGroceryItemAction, addMealEntryAction, addPlanItemAction, createCust
 import type { AuthActionState } from "@/features/auth/types";
 import type { CatalogueRecipe } from "@/features/nutrition/catalogue";
 import type { Locale } from "@/lib/i18n/config";
+import { ActionFeedback } from "@/features/motion/action-feedback";
 
 const initial: AuthActionState = { status: "idle" };
 type FoodResult = { id: string; name: string; brand: string | null; servingGrams: number; energyKcal: number; proteinG: number; carbohydrateG: number; fatG: number; fibreG: number; isFavourite?: boolean };
 const formText = { en: { searching: "Searching…", meal: "Meal", name: "Name", serving: "Serving (g)", saveFood: "Save custom food", saving: "Saving…", manual: "Manual meal", add: "Add", item: "Add item", quantity: "Quantity", unit: "Unit", category: "Category", favourite: "Favourite", yourFoods: "Your foods" }, mk: { searching: "Се пребарува…", meal: "Оброк", name: "Име", serving: "Порција (g)", saveFood: "Зачувај храна", saving: "Се зачувува…", manual: "Рачен оброк", add: "Додај", item: "Додај ставка", quantity: "Количина", unit: "Единица", category: "Категорија", favourite: "Омилено", yourFoods: "Ваша храна" } } as const;
 
-function Status({ state }: { state: AuthActionState }) { return state.message ? <p className={`form-status ${state.status}`} role="status">{state.message}</p> : null; }
+function Status({ state }: { state: AuthActionState }) { return state.message ? <ActionFeedback className="form-status" status={state.status} message={state.message} /> : null; }
 
 export function FoodSearchForm({ date, labels, locale, savedFoods = [] }: { date: string; labels: { search: string; add: string; source: string }; locale: Locale; savedFoods?: FoodResult[] }) {
   const t = formText[locale]; const [query, setQuery] = useState(""); const [results, setResults] = useState<FoodResult[]>(savedFoods); const [notice, setNotice] = useState(savedFoods.length ? t.yourFoods : ""); const [loading, setLoading] = useState(false); const [state, action, pending] = useActionState(addMealEntryAction, initial);

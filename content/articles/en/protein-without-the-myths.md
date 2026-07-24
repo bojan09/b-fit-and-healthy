@@ -13,6 +13,10 @@ readingTime: 6
 seoTitle: Protein basics for active adults
 seoDescription: Understand realistic protein targets, food sources, timing, and recovery without gym myths.
 related: progressive-overload-for-beginners, why-sleep-is-part-of-training
+relatedMuscles: ""
+relatedExercises: ""
+references: EFSA dietary reference values for protein|https://www.efsa.europa.eu/en/efsajournal/pub/2557
+featuredImage: ""
 ---
 
 Protein supplies amino acids used to repair tissue after training. It also supports enzymes, hormones, skin, and immune function. It is useful food—not a specialist shortcut.
