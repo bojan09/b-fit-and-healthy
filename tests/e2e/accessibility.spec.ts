@@ -3,8 +3,9 @@ import {
   analyzeAccessibility,
   formatAxeViolations,
 } from "./support/accessibility";
+import { publicHumanRoutes } from "./route-inventory";
 
-const routes = ["/", "/features", "/anatomy", "/blog", "/sign-in", "/~offline"];
+const routes = publicHumanRoutes;
 
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -16,6 +17,8 @@ for (const route of routes) {
     testInfo,
   ) => {
     await page.goto(route, { waitUntil: "networkidle" });
+    await expect(page.locator("main#main-content")).toHaveCount(1);
+    await expect(page.locator("h1")).toHaveCount(1);
     const violations = await analyzeAccessibility(page, testInfo);
     expect(violations.length, formatAxeViolations(violations)).toBe(0);
     runtimeMonitor.assertClean();

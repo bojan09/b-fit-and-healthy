@@ -1,0 +1,31 @@
+.product-content {
+  padding-block: clamp(1.75rem, 4vw, 3rem);
+}
+
+.product-page {
+  width: min(calc(100% - 2rem), var(--shell));
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.product-page-heading {
+  gap: 1rem;
+}
+
+.product-page-heading h1,
+.tracking-page-header h1 {
+  font-size: clamp(1.875rem, 4vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.training-hero h2,
+.next-action-panel h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 500;
+}
+
+.tracking-panel,
+.assistant-panel,
+.training-hero {
+  border-radius: var(--radius-feature);
+}

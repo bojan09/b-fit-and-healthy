@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Source_Sans_3 } from "next/font/google";
 import type { ReactNode } from "react";
 import { LocaleProvider } from "@/components/providers/locale-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -10,7 +10,7 @@ import { getLocale, getMessages } from "@/lib/i18n/server";
 import "./globals.css";
 import { siteUrl } from "@/lib/seo/metadata";
 
-const manrope = Manrope({ subsets: ["latin", "cyrillic"], variable: "--font-sans", display: "swap" });
+const sans = Source_Sans_3({ subsets: ["latin", "cyrillic"], variable: "--font-sans", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin", "cyrillic"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
@@ -33,8 +33,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F4F4EE" },
-    { media: "(prefers-color-scheme: dark)", color: "#14211C" }
+    { media: "(prefers-color-scheme: light)", color: "#F3F4F1" },
+    { media: "(prefers-color-scheme: dark)", color: "#10161A" }
   ]
 };
 
@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${manrope.variable} ${mono.variable}`}>
+      <body className={`${sans.variable} ${mono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LocaleProvider locale={locale}>
             <SkipLink label={messages.skip} />

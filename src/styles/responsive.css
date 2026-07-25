@@ -1,0 +1,49 @@
+@media (max-width: 63.99rem) {
+  .product-page {
+    width: min(calc(100% - 1.5rem), var(--shell));
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .shell,
+  .article-shell,
+  .product-page {
+    width: min(calc(100% - 2rem), var(--shell));
+  }
+
+  .foundation-hero h1,
+  .feature-hero h1,
+  .blog-hero h1,
+  .anatomy-hero h1 {
+    font-size: clamp(2.375rem, 12vw, 2.75rem);
+  }
+
+  .product-page-heading h1,
+  .tracking-page-header h1 {
+    font-size: clamp(1.875rem, 9vw, 2.25rem);
+  }
+
+  .page-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .page-heading-actions,
+  .page-heading-actions > * {
+    width: 100%;
+  }
+
+  .empty-state,
+  .skeleton-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .empty-state-action,
+  .empty-state-action > * {
+    width: 100%;
+  }
+
+  .skeleton-panel-list {
+    grid-column: auto;
+  }
+}

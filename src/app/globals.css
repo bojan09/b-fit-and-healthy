@@ -1,8 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "../styles/tokens.css";
+@import "../styles/base.css";
+@import "../styles/shell.css";
+@import "../styles/components.css";
+@import "../styles/public.css";
+@import "../styles/product.css";
+@import "../styles/anatomy.css";
+@import "../styles/responsive.css";
 
 @custom-variant dark (&:is(.dark *));
 
+@layer legacy {
 :root {
   color-scheme: light;
   --background: #f3f6f8;
@@ -668,3 +677,4 @@ h3 { margin: 0; line-height: 1.2; letter-spacing: -0.025em; }
 .set-row{transition:border-color var(--motion-control) var(--ease-standard),background-color var(--motion-control) var(--ease-standard),transform var(--motion-fast) var(--ease-standard)}
 .set-row[data-action-status="success"]{transform:translateY(-1px)}
 @media(prefers-reduced-motion:reduce){.landing-reveal,[data-anatomy-renderer],.action-feedback,.set-row{transform:none!important;opacity:1!important;will-change:auto!important}}
+}

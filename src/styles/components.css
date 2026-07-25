@@ -1,0 +1,206 @@
+.ui-button,
+.button {
+  min-height: var(--control-height);
+  border-radius: var(--radius-control);
+  padding-inline: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.ui-button-primary,
+.button-primary {
+  border-color: transparent;
+  background: var(--button-primary);
+  color: var(--button-primary-text);
+  box-shadow: 0 7px 18px color-mix(in srgb, var(--button-primary) 16%, transparent);
+}
+
+.ui-button-primary:hover,
+.button-primary:hover {
+  background: var(--button-primary-hover);
+  color: var(--button-primary-text);
+}
+
+.ui-button-secondary,
+.button-secondary {
+  border-color: var(--button-secondary-border);
+  background: var(--button-secondary);
+  color: var(--button-secondary-text);
+  box-shadow: none;
+}
+
+.ui-button-secondary:hover,
+.button-secondary:hover {
+  background: var(--button-secondary-hover);
+}
+
+.product-panel,
+.card {
+  border-radius: var(--radius-card);
+  padding: var(--card-padding);
+}
+
+input,
+select,
+textarea {
+  border-color: var(--control-border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.page-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.page-heading-copy {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 46rem;
+}
+
+.page-heading h1 {
+  max-width: 18ch;
+  font-size: clamp(1.875rem, 4vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.page-heading-description {
+  max-width: 62ch;
+  color: var(--foreground-secondary);
+}
+
+.page-heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.empty-state {
+  min-height: 8rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  padding: var(--space-5);
+}
+
+.empty-state > svg {
+  width: 1.5rem;
+  color: var(--brand);
+}
+
+.empty-state h2 {
+  font-size: 1.125rem;
+}
+
+.empty-state p,
+.field-description {
+  color: var(--foreground-secondary);
+  font-size: 0.875rem;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.field > label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.field-error {
+  color: var(--danger);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.route-skeleton {
+  min-height: min(42rem, calc(100vh - 7rem));
+}
+
+.skeleton-heading,
+.skeleton-panel {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.skeleton-heading {
+  max-width: 38rem;
+}
+
+.skeleton-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.55fr);
+  gap: var(--space-4);
+}
+
+.skeleton-panel {
+  min-height: 10rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  padding: var(--space-5);
+}
+
+.skeleton-panel-primary {
+  min-height: 14rem;
+}
+
+.skeleton-panel-list {
+  grid-column: 1 / -1;
+}
+
+.skeleton-line {
+  display: block;
+  height: 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground-muted) 16%, var(--surface));
+}
+
+.skeleton-line.short {
+  width: 24%;
+}
+
+.skeleton-line.medium {
+  width: 52%;
+}
+
+.skeleton-line.wide {
+  width: 86%;
+}
+
+.skeleton-line.title {
+  width: 64%;
+  height: 2.1rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton-line {
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--brand) 10%, transparent),
+        transparent
+      ),
+      color-mix(in srgb, var(--foreground-muted) 14%, var(--surface));
+    background-size: 220% 100%;
+    animation: editorial-skeleton 1.2s linear infinite;
+  }
+}
+
+@keyframes editorial-skeleton {
+  to {
+    background-position: -220% 0;
+  }
+}

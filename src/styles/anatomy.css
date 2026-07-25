@@ -1,0 +1,21 @@
+.anatomy-explorer {
+  border-radius: var(--radius-feature);
+}
+
+.anatomy-stage {
+  background: color-mix(in srgb, var(--anatomy-ground) 84%, var(--surface));
+}
+
+.muscle-region path {
+  fill: color-mix(in srgb, var(--anatomy-muscle) 68%, var(--anatomy-ground));
+  stroke: var(--anatomy-muscle);
+}
+
+.muscle-region:hover path,
+.muscle-region:focus-visible path {
+  fill: var(--anatomy-muscle-hover);
+}
+
+.muscle-region[aria-pressed="true"] path {
+  fill: var(--anatomy-muscle-selected);
+}

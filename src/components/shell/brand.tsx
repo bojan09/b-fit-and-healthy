@@ -12,8 +12,11 @@ async function getBrandDestination() {
   }
 }
 
-export async function Brand() {
-  const destination = await getBrandDestination();
+export async function Brand({ authenticated }: { authenticated?: boolean }) {
+  const destination =
+    authenticated === undefined
+      ? await getBrandDestination()
+      : resolveBrandDestination(authenticated);
   return (
     <Link className="brand" href={destination} aria-label="B Fit & Healthy home">
       <svg width="38" height="38" viewBox="0 0 48 48" aria-hidden="true">
