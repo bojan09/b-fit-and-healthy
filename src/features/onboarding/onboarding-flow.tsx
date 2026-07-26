@@ -3,6 +3,7 @@
 import { useActionState, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import { completeOnboardingAction } from "@/features/onboarding/actions";
 import { priorities } from "@/features/onboarding/priorities";
 import { initialAuthState } from "@/features/auth/types";
@@ -18,7 +19,7 @@ export function OnboardingFlow({ locale, email, initialName, next }: { locale: L
 
   return <main id="main-content" className="onboarding-shell"><div className="onboarding-card"><header><p className="eyebrow">Step {step} of 2</p><div className="step-track" aria-label="Setup progress"><span aria-current={step === 1 ? "step" : undefined}>1</span><i /><span aria-current={step === 2 ? "step" : undefined}>2</span></div><h1>{copy.title}</h1><p>{copy.intro}</p></header><form action={action}>
     <input type="hidden" name="next" value={next} /><input type="hidden" name="locale" value={locale} />
-    <section hidden={step !== 1} aria-labelledby="profile-step"><h2 id="profile-step">{copy.profile}</h2><div className="auth-fields"><label>{copy.name}<input name="displayName" defaultValue={initialName} autoComplete="name" required minLength={2} /></label><label>Email<input value={email} readOnly disabled /></label><label>{copy.units}<select name="units" defaultValue="metric"><option value="metric">Metric (kg, cm)</option><option value="imperial">Imperial (lb, in)</option></select></label><label>{copy.timezone}<input name="timezone" defaultValue={timezone} required /></label></div></section>
+    <section hidden={step !== 1} aria-labelledby="profile-step"><h2 id="profile-step">{copy.profile}</h2><div className="auth-fields"><Field label={copy.name}><input name="displayName" defaultValue={initialName} autoComplete="name" required minLength={2} /></Field><Field label="Email"><input value={email} readOnly disabled /></Field><Field label={copy.units}><select name="units" defaultValue="metric"><option value="metric">Metric (kg, cm)</option><option value="imperial">Imperial (lb, in)</option></select></Field><Field label={copy.timezone}><input name="timezone" defaultValue={timezone} required /></Field></div></section>
     <section hidden={step !== 2} aria-labelledby="priority-step"><h2 id="priority-step">{copy.priorities}</h2><p className="selection-hint">Choose one to three. You can change these later.</p><div className="priority-grid">{priorities.map(({ id, label, icon: Icon }) => <label key={id} className={selected.includes(id) ? "priority-card selected" : "priority-card"}><input type="checkbox" name="priorities" value={id} checked={selected.includes(id)} onChange={() => toggle(id)} /><Icon aria-hidden="true" /><span>{label[locale]}</span></label>)}</div></section>
     {state.message && <p className="form-notice error" role="alert">{state.message}</p>}
     <div className="onboarding-actions">{step === 2 && <Button type="button" variant="secondary" onClick={() => setStep(1)}><ArrowLeft />{copy.back}</Button>}{step === 1 ? <Button type="button" onClick={() => setStep(2)}>{copy.next}<ArrowRight /></Button> : <Button type="submit" disabled={pending || selected.length < 1}>{pending ? "Saving…" : copy.finish}<ArrowRight /></Button>}</div>

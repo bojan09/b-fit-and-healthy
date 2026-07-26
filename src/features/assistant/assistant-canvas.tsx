@@ -101,7 +101,7 @@ export function AssistantCanvas({ locale, conversations, initialConversation, co
     <ConversationList locale={locale} conversations={conversations} selectedId={conversationId} />
     <section className="assistant-workspace">
       <header className="assistant-page-header"><div className="assistant-orb"><Bot /></div><div><p className="eyebrow">{c.eyebrow}</p><h1>{messages.length ? initialConversation?.title ?? c.title : c.title}</h1><p>{c.subtitle}</p></div></header>
-      {messages.length === 0 && <div className="assistant-prompt-row">{c.prompts.map((prompt) => <button key={prompt} type="button" onClick={() => { setValue(prompt); composer.current?.focus(); }}>{prompt}</button>)}</div>}
+      {messages.length === 0 && <div className="assistant-prompt-row" role="group" aria-label={locale === "mk" ? "Почетни прашања" : "Starter questions"}>{c.prompts.map((prompt) => <button key={prompt} type="button" onClick={() => { setValue(prompt); composer.current?.focus(); }}>{prompt}</button>)}</div>}
       <MessageList locale={locale} messages={messages} pending={pending} onRequestChanges={requestChanges} />
       {error && <p className="assistant-error" role="alert">{error}</p>}
       <form className="assistant-composer" onSubmit={submit}>
@@ -112,7 +112,7 @@ export function AssistantCanvas({ locale, conversations, initialConversation, co
       </form>
       <p className="assistant-limitation"><ShieldCheck />{c.limitations}</p>
     </section>
-    <aside className="assistant-context-rail">
+    <aside className="assistant-context-rail" aria-label={c.context}>
       <section><p className="eyebrow">{c.context}</p><h2>{c.today}</h2>{context ? <dl><div><dt>Energy</dt><dd>{context.today.energyKcal.toLocaleString()} kcal</dd></div><div><dt>Protein</dt><dd>{context.today.proteinG} g</dd></div><div><dt>Water</dt><dd>{context.today.waterMl.toLocaleString()} ml</dd></div><div><dt>Movement</dt><dd>{context.today.movementMinutes} min</dd></div></dl> : <p>{locale === "mk" ? "Нема достапен контекст." : "No context is available yet."}</p>}</section>
       <section><TrendingUp /><h2>{c.trends}</h2>{context ? <p>{context.trends.workoutsCompleted} {locale === "mk" ? "тренинзи ·" : "workouts ·"} {context.trends.habitCompletionRate ?? 0}% {locale === "mk" ? "навики" : "habits"}</p> : <p>—</p>}</section>
       <section><Target /><h2>{locale === "mk" ? "Активни цели" : "Active goals"}</h2><p>{context?.goals.join(" · ") || (locale === "mk" ? "Нема поставени цели" : "No goals set")}</p></section>
@@ -120,4 +120,3 @@ export function AssistantCanvas({ locale, conversations, initialConversation, co
     </aside>
   </main>;
 }
-

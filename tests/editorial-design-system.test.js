@@ -54,3 +54,14 @@ test("primary product routes expose local loading UI", () => {
     );
   }
 });
+
+test("desktop navigation uses compact controls without shrinking touch targets", () => {
+  const shell = read("src/styles/shell.css");
+
+  assert.match(shell, /--nav-control-height:\s*2\.25rem/);
+  assert.match(shell, /\.product-nav a,[\s\S]*min-height:\s*var\(--nav-control-height\)/);
+  assert.match(shell, /\.product-header-actions[\s\S]*\.ui-button[\s\S]*height:\s*var\(--nav-control-height\)/);
+  assert.match(shell, /\.product-header-actions[\s\S]*border-color:\s*transparent/);
+  assert.match(shell, /\.public-account-actions \.ui-button,[\s\S]*padding-inline:\s*0\.5rem/);
+  assert.match(shell, /@media\s*\(pointer:\s*coarse\)[\s\S]*min-height:\s*var\(--touch-target\)/);
+});

@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const local = localFoods.filter((food) => food.name.toLowerCase().includes(query.toLowerCase()));
   try {
     const external = await searchUsdaFoods(query);
-    return NextResponse.json({ results: [...local, ...external.results], externalAvailable: external.available, attribution: "Food data supplied by USDA FoodData Central." });
+    return NextResponse.json({ results: [...local, ...external.results.map((food) => ({ id: food.id, source: food.provider, name: food.title, brand: food.brand, servingGrams: food.servingAmount, energyKcal: food.energyKcal ?? 0, proteinG: food.proteinG ?? 0, carbohydrateG: food.carbohydrateG ?? 0, fatG: food.fatG ?? 0, fibreG: food.fibreG ?? 0 }))], externalAvailable: external.available, attribution: "Food data supplied by USDA FoodData Central." });
   } catch {
     return NextResponse.json({ results: local, externalAvailable: false, attribution: "Local catalogue results. USDA FoodData Central is temporarily unavailable." });
   }

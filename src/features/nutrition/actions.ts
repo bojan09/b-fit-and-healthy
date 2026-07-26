@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { aggregateGroceryItems, scalePerHundred } from "@/features/nutrition/domain";
 import { customFoodSchema, groceryItemSchema, idSchema, mealEntrySchema, planItemSchema } from "@/features/nutrition/schemas";
 import type { AuthActionState } from "@/features/auth/types";
+import { discoveryFoodLogSchema } from "@/features/discovery/schemas";
 
 const invalid = (message: string): AuthActionState => ({ status: "error", message });
 async function authorized() { const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect("/sign-in"); return { supabase, user }; }
@@ -16,6 +17,54 @@ export async function addMealEntryAction(_: AuthActionState, formData: FormData)
   const { supabase, user } = await authorized(); const food = parsed.data; const grams = food.amountGrams;
   const result = await supabase.from("meal_entries").insert({ user_id: user.id, logged_on: food.loggedOn, meal_slot: food.mealSlot, food_id: food.foodId || null, food_name: food.foodName, amount_grams: grams, energy_kcal: scalePerHundred(food.energyKcal, grams), protein_g: scalePerHundred(food.proteinG, grams), carbohydrate_g: scalePerHundred(food.carbohydrateG, grams), fat_g: scalePerHundred(food.fatG, grams), fibre_g: scalePerHundred(food.fibreG, grams) });
   if (result.error) return invalid("The food could not be logged. Apply the nutrition database migration if this is the first run."); refresh(); return { status: "success", message: "Food logged." };
+}
+
+export async function logDiscoveryFoodAction(
+  _: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const parsed = discoveryFoodLogSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return invalid("Review the serving, date, and meal.");
+  const { item, loggedOn, mealSlot, amountGrams } = parsed.data;
+  const required = [
+    item.energyKcal,
+    item.proteinG,
+    item.carbohydrateG,
+    item.fatG,
+    item.fibreG,
+  ];
+  if (required.some((value) => value === null)) {
+    return invalid("Nutrition is incomplete, so this food cannot be logged yet.");
+  }
+  const { supabase, user } = await authorized();
+  try {
+    const { saveDiscoverySnapshot } = await import(
+      "@/features/discovery/repository"
+    );
+    const snapshotId = await saveDiscoverySnapshot(user.id, item);
+    const factor = item.nutrientBasis === "per-serving"
+      ? amountGrams / item.servingAmount
+      : amountGrams / 100;
+    const result = await supabase.from("meal_entries").insert({
+      user_id: user.id,
+      logged_on: loggedOn,
+      meal_slot: mealSlot,
+      food_id: null,
+      external_snapshot_id: snapshotId,
+      food_name: item.title,
+      amount_grams: amountGrams,
+      energy_kcal: item.energyKcal! * factor,
+      protein_g: item.proteinG! * factor,
+      carbohydrate_g: item.carbohydrateG! * factor,
+      fat_g: item.fatG! * factor,
+      fibre_g: item.fibreG! * factor,
+    });
+    if (result.error) return invalid("The reviewed food could not be logged.");
+    refresh();
+    return { status: "success", message: `${item.title} added to your day.` };
+  } catch {
+    return invalid("The reviewed food could not be saved.");
+  }
 }
 
 export async function deleteMealEntryAction(formData: FormData) { const parsed = idSchema.safeParse(Object.fromEntries(formData)); if (!parsed.success) return; const { supabase, user } = await authorized(); await supabase.from("meal_entries").delete().eq("id", parsed.data.id).eq("user_id", user.id); refresh(); }

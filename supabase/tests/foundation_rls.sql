@@ -1,5 +1,5 @@
 begin;
-select plan(20);
+select plan(23);
 
 select has_table('public', 'profiles', 'profiles exists');
 select has_table('public', 'user_settings', 'user settings exists');
@@ -21,6 +21,9 @@ select policies_are('public', 'body_measurements', array['measurements_own'], 'm
 select policies_are('public', 'habits', array['habits_own'], 'habit ownership is complete');
 select policies_are('public', 'habit_checkins', array['checkins_own'], 'checkin ownership is complete');
 select policies_are('public', 'notifications', array['notifications_select_own', 'notifications_update_own'], 'notification ownership is explicit');
+select has_table('public', 'external_content_snapshots', 'external snapshots exist');
+select policies_are('public', 'external_content_snapshots', array['owners manage external snapshots'], 'external snapshots are owner-only');
+select is((select relrowsecurity from pg_class where oid = 'public.external_content_snapshots'::regclass), true, 'external snapshot RLS enabled');
 
 select * from finish();
 rollback;

@@ -8,7 +8,9 @@ const optionalSecret = z.preprocess(
 const serverEnvSchema = z.object({
   GROQ_API_KEY: optionalSecret,
   GROQ_MODEL: optionalSecret,
-  USDA_FDC_API_KEY: optionalSecret
+  USDA_FDC_API_KEY: optionalSecret,
+  THEMEALDB_API_KEY: optionalSecret,
+  MUSCLEWIKI_API_KEY: optionalSecret,
 });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { ArrowRight, CircleUserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import { forgotPasswordAction, googleOAuthAction, magicLinkAction, signInAction, signUpAction } from "@/features/auth/actions";
 import { initialAuthState } from "@/features/auth/types";
 import type { Locale } from "@/lib/i18n/config";
@@ -25,10 +26,10 @@ export function AuthForm({ mode, locale, next = "/today" }: { mode: Mode; locale
     {mode === "sign-in" && <div className="auth-divider"><span>or</span></div>}
     <form action={action} className="auth-fields">
       <input type="hidden" name="next" value={next} />
-      {mode === "sign-up" && <label>{c.displayName}<input name="displayName" autoComplete="name" required minLength={2} aria-invalid={Boolean(state.fieldErrors?.displayName)} /></label>}
-      <label>{c.email}<input name="email" type="email" autoComplete="email" required aria-invalid={Boolean(state.fieldErrors?.email)} /></label>
-      {!emailOnly && <label>{c.password}<input name="password" type="password" autoComplete={mode === "sign-up" ? "new-password" : "current-password"} required minLength={mode === "sign-up" ? 10 : 1} aria-invalid={Boolean(state.fieldErrors?.password)} /></label>}
-      {mode === "sign-up" && <><label>{c.confirmPassword}<input name="confirmPassword" type="password" autoComplete="new-password" required minLength={10} aria-invalid={Boolean(state.fieldErrors?.confirmPassword)} /></label><input type="hidden" name="locale" value={locale} /></>}
+      {mode === "sign-up" && <Field label={c.displayName} error={state.fieldErrors?.displayName?.[0]}><input name="displayName" autoComplete="name" required minLength={2} /></Field>}
+      <Field label={c.email} error={state.fieldErrors?.email?.[0]}><input name="email" type="email" autoComplete="email" required /></Field>
+      {!emailOnly && <Field label={c.password} description={mode === "sign-up" ? "Use at least 10 characters." : undefined} error={state.fieldErrors?.password?.[0]}><input name="password" type="password" autoComplete={mode === "sign-up" ? "new-password" : "current-password"} required minLength={mode === "sign-up" ? 10 : 1} /></Field>}
+      {mode === "sign-up" && <><Field label={c.confirmPassword} error={state.fieldErrors?.confirmPassword?.[0]}><input name="confirmPassword" type="password" autoComplete="new-password" required minLength={10} /></Field><input type="hidden" name="locale" value={locale} /></>}
       {state.message && <p className={`form-notice ${state.status}`} role="status" aria-live="polite">{state.message}</p>}
       <Button type="submit" size="lg" className="auth-wide" disabled={pending}>{pending ? "Please wait…" : submit}<ArrowRight aria-hidden="true" /></Button>
     </form>

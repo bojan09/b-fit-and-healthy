@@ -1,8 +1,15 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 import { AnatomyExplorer } from "@/features/anatomy/anatomy-explorer";
 
 describe("AnatomyExplorer encyclopedia", () => {
+  afterEach(cleanup);
+  it("explains benefit and training options for the selected muscle", () => {
+    render(<AnatomyExplorer locale="en" />);
+    expect(screen.getByText("Why it matters")).toBeInTheDocument();
+    expect(screen.getByText("Exercises to explore")).toBeInTheDocument();
+  });
+
   it("searches, filters, switches views, and recovers from empty results", () => {
     render(<AnatomyExplorer locale="en" />);
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "hamstrings" } });

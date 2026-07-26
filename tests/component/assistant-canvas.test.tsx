@@ -33,6 +33,8 @@ describe("AssistantCanvas", () => {
     render(<AssistantCanvas {...props} />);
     expect(screen.getByRole("heading", { name: /what would make today easier/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /plan dinner/i })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: /starter questions/i })).toBeVisible();
+    expect(screen.getByRole("complementary", { name: /context used/i })).toBeVisible();
     expect(screen.getByText(/deletes after 30 days/i)).toBeInTheDocument();
     expect(screen.getByText(/1,310 kcal/i)).toBeInTheDocument();
   });

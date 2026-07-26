@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { getLocale } from "@/lib/i18n/server";
 import { getPublicContent } from "@/lib/i18n/public-content";
 import { publicMetadata, siteUrl } from "@/lib/seo/metadata";
-import { SystemConstellation } from "@/features/landing/system-constellation";
+import { GuidedHealthPath } from "@/features/landing/guided-health-path";
 import { LandingMotion } from "@/features/landing/landing-motion";
 import { MotionReveal } from "@/features/motion/motion-reveal";
 
@@ -36,7 +36,7 @@ export default async function HomePage() {
         <div className="action-row hero-account-actions"><Button asChild size="lg"><Link href="/sign-up">{c.nav.getStarted}<ArrowRight aria-hidden="true" size={18} /></Link></Button><Button asChild size="lg" variant="secondary"><Link href="/sign-in">{c.nav.signIn}</Link></Button><Link className="text-link" href="/features">{c.common.explore}<MoveRight aria-hidden="true" size={18} /></Link></div>
         <p className="supporting-note">{c.common.educational}</p>
       </div>
-      <SystemConstellation locale={locale} />
+      <GuidedHealthPath locale={locale} />
     </section>
 
     <MotionReveal className="landing-reveal"><section className="public-section shell" aria-labelledby="modules-title" data-motion-section>

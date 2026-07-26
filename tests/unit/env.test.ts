@@ -20,8 +20,15 @@ describe("environment validation", () => {
   });
 
   it("keeps external service keys server-only and optional in Phase 1", () => {
-    const value = parseServerEnv({ GROQ_API_KEY: "", USDA_FDC_API_KEY: "usda-test" });
+    const value = parseServerEnv({
+      GROQ_API_KEY: "",
+      USDA_FDC_API_KEY: "usda-test",
+      THEMEALDB_API_KEY: "meal-test",
+      MUSCLEWIKI_API_KEY: "",
+    });
     expect(value.USDA_FDC_API_KEY).toBe("usda-test");
+    expect(value.THEMEALDB_API_KEY).toBe("meal-test");
+    expect(value.MUSCLEWIKI_API_KEY).toBeUndefined();
     expect(value.GROQ_API_KEY).toBeUndefined();
   });
 });

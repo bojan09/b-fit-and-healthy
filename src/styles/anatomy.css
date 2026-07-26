@@ -1,14 +1,69 @@
 .anatomy-explorer {
-  border-radius: var(--radius-feature);
+  grid-template-columns: minmax(20rem, 0.88fr) minmax(0, 1.12fr);
+  min-height: 39rem;
+  border-radius: var(--radius-card);
+  box-shadow: none;
 }
 
 .anatomy-stage {
-  background: color-mix(in srgb, var(--anatomy-ground) 84%, var(--surface));
+  background:
+    linear-gradient(var(--border), var(--border)) 50% 0 / 1px 100% no-repeat,
+    color-mix(in srgb, var(--anatomy-ground) 86%, var(--surface));
+  padding: var(--space-4);
+}
+
+.anatomy-hero {
+  min-height: 21rem;
+}
+
+.anatomy-tools {
+  grid-template-columns: minmax(15rem, 1fr) minmax(11rem, 0.42fr) auto auto;
+  border-radius: var(--radius-card);
+  padding: var(--space-3);
+}
+
+.anatomy-tools input,
+.anatomy-tools select {
+  min-height: 2.5rem;
+}
+
+.view-switcher {
+  border-radius: var(--radius-control);
+  padding: 0.1875rem;
+}
+
+.view-switcher button {
+  min-height: 2.25rem;
+  border-radius: calc(var(--radius-control) - 0.125rem);
+  padding-inline: var(--space-4);
+}
+
+.anatomy-figure {
+  width: min(100%, 22rem);
+  height: 32rem;
+}
+
+.anatomy-figure path {
+  vector-effect: non-scaling-stroke;
+}
+
+.body-silhouette {
+  fill: color-mix(in srgb, var(--anatomy-ground) 76%, var(--surface));
+  stroke: color-mix(in srgb, var(--foreground) 65%, var(--brand));
+  stroke-width: 1.1;
+}
+
+.body-landmarks path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--foreground-muted) 48%, transparent);
+  stroke-width: 0.8;
+  stroke-linecap: round;
 }
 
 .muscle-region path {
-  fill: color-mix(in srgb, var(--anatomy-muscle) 68%, var(--anatomy-ground));
-  stroke: var(--anatomy-muscle);
+  fill: color-mix(in srgb, var(--anatomy-muscle) 62%, var(--anatomy-ground));
+  stroke: color-mix(in srgb, var(--anatomy-muscle) 76%, var(--foreground));
+  stroke-width: 0.9;
 }
 
 .muscle-region:hover path,
@@ -18,4 +73,73 @@
 
 .muscle-region[aria-pressed="true"] path {
   fill: var(--anatomy-muscle-selected);
+}
+
+.anatomy-panel {
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.anatomy-panel h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+}
+
+.anatomy-summary {
+  margin-top: var(--space-4);
+  font-size: 0.9375rem;
+}
+
+.anatomy-panel dl {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-block: var(--space-6);
+}
+
+.anatomy-panel dl div {
+  padding-top: var(--space-3);
+}
+
+.anatomy-panel dt {
+  font-size: 0.8125rem;
+}
+
+.anatomy-panel dd {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.anatomy-directory {
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+}
+
+.anatomy-directory > div:not(.anatomy-empty) {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.anatomy-directory > div > button {
+  min-height: 4.25rem;
+  background: transparent;
+}
+
+@media (max-width: 64rem) {
+  .anatomy-explorer,
+  .anatomy-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .anatomy-directory > div:not(.anatomy-empty) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 42rem) {
+  .anatomy-panel dl,
+  .anatomy-directory > div:not(.anatomy-empty) {
+    grid-template-columns: 1fr;
+  }
+
+  .anatomy-figure {
+    height: 29rem;
+  }
 }

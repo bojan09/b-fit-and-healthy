@@ -9,7 +9,7 @@ import { useLocale } from "@/components/providers/locale-provider";
 const order = ["system", "light", "dark"] as const;
 const subscribe = () => () => undefined;
 
-export function ThemeToggle() {
+export function ThemeToggle({ compact = false }: { compact?: boolean }) {
   const { theme = "system", setTheme } = useTheme();
   const { messages } = useLocale();
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
@@ -20,7 +20,7 @@ export function ThemeToggle() {
   const label = active === "dark" ? messages.dark : active === "light" ? messages.light : messages.system;
 
   return (
-    <Button variant="secondary" size="icon" onClick={() => setTheme(next)} aria-label={`${messages.theme}: ${label}`} title={`${messages.theme}: ${label}`}>
+    <Button className={compact ? "header-utility" : undefined} variant="secondary" size="icon" onClick={() => setTheme(next)} aria-label={`${messages.theme}: ${label}`} title={`${messages.theme}: ${label}`}>
       <Icon aria-hidden="true" size={18} />
     </Button>
   );
