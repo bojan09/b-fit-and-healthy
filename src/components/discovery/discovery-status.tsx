@@ -4,9 +4,11 @@ import type { DiscoverySearchStatus } from "@/features/discovery/use-discovery-s
 export function DiscoveryStatus({
   status,
   message,
+  onRetry,
 }: {
   status: DiscoverySearchStatus;
   message: string | null;
+  onRetry?: () => void;
 }) {
   if (status === "loading") {
     return (
@@ -24,6 +26,11 @@ export function DiscoveryStatus({
     >
       <CircleAlert aria-hidden="true" />
       {message}
+      {(status === "partial" || status === "error") && onRetry ? (
+        <button type="button" className="discovery-retry" onClick={onRetry}>
+          Try again
+        </button>
+      ) : null}
     </p>
   );
 }

@@ -41,3 +41,21 @@ test("exercise catalogue is bilingual and anatomy-compatible", () => {
   assert.match(catalogue, /primaryMuscles/);
   assert.match(catalogue, /bodyweight-squat/);
 });
+
+test("exercise catalogue media contains exactly 60 nonempty WebP assets", () => {
+  const mediaDirectory = path.join(root, "public", "media", "exercises");
+  assert.ok(fs.existsSync(mediaDirectory), "public/media/exercises must exist");
+  if (!fs.existsSync(mediaDirectory)) return;
+
+  const assets = fs.readdirSync(mediaDirectory)
+    .filter((file) => file.endsWith(".webp"))
+    .sort();
+  assert.equal(assets.length, 60);
+
+  for (const asset of assets) {
+    const contents = fs.readFileSync(path.join(mediaDirectory, asset));
+    assert.ok(contents.length > 0, `${asset} must not be empty`);
+    assert.equal(contents.subarray(0, 4).toString("ascii"), "RIFF", `${asset} must start with a WebP RIFF signature`);
+    assert.equal(contents.subarray(8, 12).toString("ascii"), "WEBP", `${asset} must be a WebP file`);
+  }
+});

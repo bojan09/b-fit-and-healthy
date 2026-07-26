@@ -14,6 +14,9 @@ import {
 import {
   searchWrkoutExercises,
 } from "@/features/fitness/providers/wrkout";
+import type {
+  ExerciseSearchCriteria,
+} from "@/features/fitness/exercise-search";
 
 type MeshOptions<T> = {
   timeoutMs?: number;
@@ -21,21 +24,21 @@ type MeshOptions<T> = {
 };
 
 export async function searchCommercialExerciseProviders<T = DiscoveryExercise>(
-  query: string,
+  criteria: ExerciseSearchCriteria,
   options: MeshOptions<T> = {},
 ) {
   const defaultProviders: readonly ProviderJob<DiscoveryExercise>[] = [
     {
       id: "wger",
-      run: (signal) => searchWgerExercises(query, signal),
+      run: (signal) => searchWgerExercises(criteria, signal),
     },
     {
       id: "exercise-api",
-      run: (signal) => searchExerciseApiExercises(query, signal),
+      run: (signal) => searchExerciseApiExercises(criteria, signal),
     },
     {
       id: "wrkout",
-      run: (signal) => searchWrkoutExercises(query, signal),
+      run: (signal) => searchWrkoutExercises(criteria, signal),
     },
   ];
 

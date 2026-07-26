@@ -5,6 +5,14 @@ import {
 import {
   normalizeCommercialLicense,
 } from "@/features/discovery/commercial-license";
+import {
+  exerciseTextQuery,
+  type ExerciseSearchCriteria,
+} from "@/features/fitness/exercise-search";
+import {
+  requireExerciseProviderResponse,
+  rethrowExerciseProviderError,
+} from "@/features/fitness/providers/provider-error";
 
 type WgerExercise = {
   id: number;
@@ -84,16 +92,26 @@ export function normalizeWgerExercise(
 }
 
 export async function searchWgerExercises(
-  query: string,
+  criteria: ExerciseSearchCriteria,
   signal?: AbortSignal,
 ) {
-  const response = await fetch(
-    `https://wger.de/api/v2/exerciseinfo/?limit=20&language=2&name=${encodeURIComponent(query)}`,
-    { signal, next: { revalidate: 86_400 } },
-  );
-  if (!response.ok) return [];
-  const payload = (await response.json()) as { results?: WgerExercise[] };
-  return (payload.results ?? [])
-    .map(normalizeWgerExercise)
-    .filter((item): item is DiscoveryExercise => item !== null);
+  try {
+    const query = exerciseTextQuery(criteria);
+    const params = new URLSearchParams({
+      limit: query ? "20" : "100",
+      language: "2",
+    });
+    if (query) params.set("name", query);
+    const response = await fetch(
+      `https://wger.de/api/v2/exerciseinfo/?${params.toString()}`,
+      { signal, next: { revalidate: 86_400 } },
+    );
+    requireExerciseProviderResponse("wger", response);
+    const payload = (await response.json()) as { results?: WgerExercise[] };
+    return (payload.results ?? [])
+      .map(normalizeWgerExercise)
+      .filter((item): item is DiscoveryExercise => item !== null);
+  } catch (error) {
+    rethrowExerciseProviderError("wger", error);
+  }
 }

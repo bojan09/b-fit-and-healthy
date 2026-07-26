@@ -8,6 +8,7 @@
 @import "../styles/product.css";
 @import "../styles/anatomy.css";
 @import "../styles/responsive.css";
+@import "../styles/interaction.css";
 
 @custom-variant dark (&:is(.dark *));
 

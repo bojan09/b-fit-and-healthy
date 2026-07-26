@@ -1,2 +1,70 @@
-import Link from "next/link";import {notFound}from"next/navigation";import{ArrowLeft,ShieldCheck}from"lucide-react";import{getExercise}from"@/features/fitness/catalogue";import{getLocale}from"@/lib/i18n/server";
-export default async function ExercisePage({params}:{params:Promise<{slug:string}>}){const[{slug},locale]=await Promise.all([params,getLocale()]);const exercise=getExercise(slug);if(!exercise)notFound();const mk=locale==="mk";return <main className="product-page fitness-page"><Link className="back-link" href="/exercises"><ArrowLeft/> {mk?"Сите вежби":"All exercises"}</Link><article className="exercise-detail"><header><div className={`movement-hero movement-${exercise.movementPattern}`}><span>{exercise.movementPattern}</span></div><div><p className="eyebrow">{exercise.exerciseType} · {exercise.difficulty}</p><h1>{mk?exercise.titleMk:exercise.titleEn}</h1><p>{mk?exercise.summaryMk:exercise.summaryEn}</p><ul className="tag-row">{exercise.equipment.map(item=><li key={item}>{item}</li>)}</ul></div></header><div className="exercise-detail-grid"><section><h2>{mk?"Како се изведува":"How to perform it"}</h2><ol>{(mk?exercise.instructionsMk:exercise.instructionsEn).map(item=><li key={item}>{item}</li>)}</ol></section><aside className="product-panel"><h2>{mk?"Мускули":"Muscles"}</h2><p><strong>{mk?"Главни":"Primary"}:</strong> {exercise.primaryMuscles.join(", ")}</p><h3>{mk?"Чести грешки":"Common mistakes"}</h3><ul>{(mk?exercise.mistakesMk:exercise.mistakesEn).map(item=><li key={item}>{item}</li>)}</ul><div className="safety-note"><ShieldCheck/><p>{mk?exercise.safetyMk:exercise.safetyEn}</p></div></aside></div></article></main>}
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { CatalogueImage } from "@/components/media/catalogue-image";
+import { getExercise } from "@/features/fitness/catalogue";
+import {
+  catalogueMediaForDisplay,
+  fallbackKindForMedia,
+} from "@/features/media/catalogue-media";
+import { getLocale } from "@/lib/i18n/server";
+
+export default async function ExercisePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+  const exercise = getExercise(slug);
+
+  if (!exercise) notFound();
+
+  const mk = locale === "mk";
+  const media = catalogueMediaForDisplay(exercise.media, locale);
+
+  return (
+    <main className="product-page fitness-page">
+      <Link className="back-link" href="/exercises">
+        <ArrowLeft /> {mk ? "Сите вежби" : "All exercises"}
+      </Link>
+      <article className="exercise-detail">
+        <header>
+          <CatalogueImage
+            className="exercise-detail-media"
+            media={media}
+            fallback={fallbackKindForMedia({
+              kind: "exercise",
+              category: exercise.movementPattern,
+            })}
+            sizes="(max-width: 48rem) 100vw, 50vw"
+            showAttribution
+            objectFit="contain"
+          />
+          <div>
+            <p className="eyebrow">{exercise.exerciseType} · {exercise.difficulty}</p>
+            <h1>{mk ? exercise.titleMk : exercise.titleEn}</h1>
+            <p>{mk ? exercise.summaryMk : exercise.summaryEn}</p>
+            <ul className="tag-row">
+              {exercise.equipment.map((item) => <li key={item}>{item}</li>)}
+            </ul>
+          </div>
+        </header>
+        <div className="exercise-detail-grid">
+          <section>
+            <h2>{mk ? "Како се изведува" : "How to perform it"}</h2>
+            <ol>
+              {(mk ? exercise.instructionsMk : exercise.instructionsEn).map((item) => <li key={item}>{item}</li>)}
+            </ol>
+          </section>
+          <aside className="product-panel">
+            <h2>{mk ? "Мускули" : "Muscles"}</h2>
+            <p><strong>{mk ? "Главни" : "Primary"}:</strong> {exercise.primaryMuscles.join(", ")}</p>
+            <h3>{mk ? "Чести грешки" : "Common mistakes"}</h3>
+            <ul>{(mk ? exercise.mistakesMk : exercise.mistakesEn).map((item) => <li key={item}>{item}</li>)}</ul>
+            <div className="safety-note"><ShieldCheck /><p>{mk ? exercise.safetyMk : exercise.safetyEn}</p></div>
+          </aside>
+        </div>
+      </article>
+    </main>
+  );
+}

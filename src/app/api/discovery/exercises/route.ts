@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 import { loadDiscoveryContext } from "@/features/discovery/context";
-import {
-  localDiscoveryExercises,
-  searchLocal,
-} from "@/features/discovery/local";
-import { mergeAndRank } from "@/features/discovery/merge";
+import { localDiscoveryExercises } from "@/features/discovery/local";
 import {
   discoveryResponse,
   logDiscoveryProviders,
 } from "@/features/discovery/route-response";
 import { discoveryQuerySchema } from "@/features/discovery/schemas";
+import {
+  effectiveExerciseQuery,
+  type ExerciseSearchCriteria,
+} from "@/features/fitness/exercise-search";
+import { resolveExerciseDiscovery } from "@/features/fitness/exercise-discovery";
 import {
   searchCommercialExerciseProviders,
 } from "@/features/fitness/providers/exercise-mesh";
@@ -24,23 +25,29 @@ export async function GET(request: Request) {
   const parsed = discoveryQuerySchema.safeParse(
     Object.fromEntries(new URL(request.url).searchParams),
   );
-  if (!parsed.success || !parsed.data.q) {
+  if (!parsed.success) {
     return NextResponse.json({ results: [] }, { status: 400 });
   }
-  const query = parsed.data.q;
+  const criteria: ExerciseSearchCriteria = {
+    query: parsed.data.q ?? "",
+    muscle: parsed.data.muscle ?? "",
+    equipment: parsed.data.equipment ?? "",
+    type: parsed.data.type ?? "",
+  };
+  const query = effectiveExerciseQuery(criteria);
   const [external, context] = await Promise.all([
-    searchCommercialExerciseProviders(query),
+    searchCommercialExerciseProviders(criteria),
     loadDiscoveryContext(user.id),
   ]);
-  const results = mergeAndRank(
-    [...searchLocal(localDiscoveryExercises, query), ...external.results],
-    {
-      query,
+  const results = resolveExerciseDiscovery({
+    local: localDiscoveryExercises,
+    external: external.results,
+    criteria,
+    context: {
       ...context,
-      equipment: parsed.data.equipment ? [parsed.data.equipment] : undefined,
       difficulty: parsed.data.difficulty ?? null,
     },
-  );
+  });
   logDiscoveryProviders("exercises", external.failures, external.elapsedMs);
   return discoveryResponse(query, results, external.failures);
 }

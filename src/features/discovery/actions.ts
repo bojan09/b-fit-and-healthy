@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import type { AuthActionState } from "@/features/auth/types";
-import { discoveryItemSchema } from "@/features/discovery/schemas";
+import { discoveryImportSchema } from "@/features/discovery/import-policy";
 import { createClient } from "@/lib/supabase/server";
 
 export async function importDiscoveryItemAction(
@@ -21,7 +21,7 @@ export async function importDiscoveryItemAction(
     return { status: "error", message: "The selected item is not valid." };
   }
 
-  const parsed = discoveryItemSchema.safeParse(candidate);
+  const parsed = discoveryImportSchema.safeParse(candidate);
   if (!parsed.success) {
     return { status: "error", message: "The selected item is incomplete." };
   }

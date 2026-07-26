@@ -1040,7 +1040,13 @@
 }
 
 .fitness-library {
-  gap: var(--space-5);
+  gap: clamp(var(--space-6), 3vw, var(--space-8));
+}
+
+.curated-exercise-results {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-6);
 }
 
 .fitness-filter {
@@ -1067,8 +1073,48 @@
 }
 
 .fitness-filter .exercise-search input {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   grid-column: 2;
   padding-left: var(--space-3);
+}
+
+.fitness-filter select,
+.fitness-filter .text-action {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+}
+
+.fitness-filter .text-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exercise-filter-toggle {
+  min-height: 2.75rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--foreground);
+  padding: 0.55rem var(--space-3);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.exercise-filter-toggle svg {
+  width: 1rem;
+  flex: 0 0 auto;
+}
+
+.exercise-filter-region {
+  min-width: 0;
 }
 
 .exercise-filter-row {
@@ -1285,6 +1331,22 @@
 
 .discovery-status-error {
   color: var(--danger);
+}
+
+.discovery-retry {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: currentColor;
+  padding-inline: var(--space-3);
+  font: inherit;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
 }
 
 .is-spinning {
@@ -1523,10 +1585,11 @@
 }
 
 .provider-discovery-results {
+  min-width: 0;
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-6);
   border-top: 1px solid var(--border);
-  padding-top: var(--space-5);
+  padding-top: clamp(var(--space-6), 3vw, var(--space-8));
 }
 
 .provider-card-grid {
@@ -1583,6 +1646,7 @@
 }
 
 .provider-card-provenance {
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-1);
@@ -1598,6 +1662,20 @@
   font-size: 0.6875rem;
   font-weight: 700;
   line-height: 1.2;
+}
+
+.provider-card-provenance > span,
+.provider-card > span,
+.provider-card small {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.exercise-show-more {
+  min-height: 2.75rem;
+  justify-self: start;
+  border-radius: var(--radius-control);
+  padding: 0.55rem var(--space-3);
 }
 
 .discovery-review-section {
@@ -1675,6 +1753,49 @@
   .account-settings-layout,
   .account-settings-form {
     grid-template-columns: 1fr;
+  }
+
+  .curated-exercise-results,
+  .provider-discovery-results {
+    gap: var(--space-6);
+  }
+
+  .exercise-filter-toggle {
+    display: inline-flex;
+    justify-self: start;
+  }
+
+  .exercise-filter-region {
+    display: none;
+  }
+
+  .exercise-filter-region.is-open {
+    display: flex;
+  }
+
+  .exercise-filter-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .fitness-library .exercise-grid,
+  .provider-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .provider-card,
+  .provider-card-provenance {
+    min-width: 0;
+  }
+
+  .provider-card-provenance {
+    flex-wrap: wrap;
+  }
+
+  .exercise-show-more {
+    width: 100%;
+    justify-content: center;
+    padding-block: 0.55rem;
   }
 
   .account-settings-form label:first-child,

@@ -126,11 +126,15 @@ export const discoveryQuerySchema = z.object({
   q: z.string().trim().min(2).max(100).optional(),
   barcode: z.string().trim().regex(/^\d{6,18}$/).optional(),
   source: z.enum(["all", "branded"]).default("all"),
+  muscle: z.string().trim().max(80).optional(),
   equipment: z.string().trim().max(80).optional(),
+  type: z.enum(["strength", "core", "mobility"]).optional(),
   difficulty: z.string().trim().max(80).optional(),
-}).refine((value) => value.q || value.barcode, {
-  message: "Enter a query or barcode.",
-});
+}).refine(
+  (value) =>
+    value.q || value.barcode || value.muscle || value.equipment || value.type,
+  { message: "Enter a query, barcode, or filter." },
+);
 
 export const discoveryFoodLogSchema = z.object({
   item: z

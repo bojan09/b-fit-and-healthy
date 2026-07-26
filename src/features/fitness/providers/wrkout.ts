@@ -5,6 +5,15 @@ import {
 import {
   normalizeCommercialLicense,
 } from "@/features/discovery/commercial-license";
+import {
+  exerciseProviderSearchTerms,
+  exerciseTextQuery,
+  type ExerciseSearchCriteria,
+} from "@/features/fitness/exercise-search";
+import {
+  requireExerciseProviderResponse,
+  rethrowExerciseProviderError,
+} from "@/features/fitness/providers/provider-error";
 
 type WrkoutExercise = {
   name: string;
@@ -73,7 +82,7 @@ function scoreFolder(folder: string, query: string) {
 }
 
 export async function searchWrkoutExercises(
-  query: string,
+  criteria: ExerciseSearchCriteria,
   signal?: AbortSignal,
 ) {
   try {
@@ -88,18 +97,27 @@ export async function searchWrkoutExercises(
         next: { revalidate: 2_592_000 },
       },
     );
-    if (!treeResponse.ok) return [];
+    requireExerciseProviderResponse("wrkout", treeResponse);
     const payload = (await treeResponse.json()) as GitHubTree;
-    const normalizedQuery = normalizeDiscoveryTitle(query);
-    const matches = (payload.tree ?? [])
+    const normalizedQuery = normalizeDiscoveryTitle(
+      exerciseTextQuery(criteria),
+    );
+    const searchTerms = exerciseProviderSearchTerms(criteria);
+    const folders = (payload.tree ?? [])
       .flatMap((entry) => {
         const match = entry.path?.match(/^exercises\/([^/]+)\/exercise\.json$/);
         return match ? [match[1]] : [];
-      })
-      .filter((folder) =>
-        normalizeDiscoveryTitle(folder.replaceAll("_", " "))
-          .includes(normalizedQuery)
-      )
+      });
+    const matchingFolders = searchTerms.length
+      ? folders.filter((folder) => {
+          const normalizedFolder = normalizeDiscoveryTitle(
+            folder.replaceAll("_", " "),
+          );
+          return searchTerms.some((term) => normalizedFolder.includes(term));
+        })
+      : folders;
+    const candidates = matchingFolders.length ? matchingFolders : folders;
+    const matches = candidates
       .sort((left, right) =>
         scoreFolder(left, normalizedQuery) - scoreFolder(right, normalizedQuery)
         || left.localeCompare(right)
@@ -115,7 +133,7 @@ export async function searchWrkoutExercises(
           next: { revalidate: 2_592_000 },
         },
       );
-      if (!response.ok) return null;
+      requireExerciseProviderResponse("wrkout", response);
       return {
         folder,
         exercise: (await response.json()) as WrkoutExercise,
@@ -125,7 +143,7 @@ export async function searchWrkoutExercises(
     return records.flatMap((record) =>
       record ? [normalizeWrkoutExercise(record.exercise, record.folder)] : []
     );
-  } catch {
-    return [];
+  } catch (error) {
+    rethrowExerciseProviderError("wrkout", error);
   }
 }

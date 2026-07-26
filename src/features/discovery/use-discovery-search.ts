@@ -15,6 +15,13 @@ type DiscoveryResponse<T> = {
   message?: string;
 };
 
+type DiscoveryResponseState<T> = {
+  key: string | null;
+  results: T[];
+  status: DiscoverySearchStatus;
+  message: string | null;
+};
+
 export function useDiscoverySearch<T>({
   endpoint,
   localResults,
@@ -27,52 +34,80 @@ export function useDiscoverySearch<T>({
   delay?: number;
 }) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<T[]>(localResults);
-  const [status, setStatus] = useState<DiscoverySearchStatus>("idle");
-  const [message, setMessage] = useState<string | null>(null);
+  const [responseState, setResponseState] = useState<
+    DiscoveryResponseState<T>
+  >({
+    key: null,
+    results: localResults,
+    status: "idle",
+    message: null,
+  });
+  const [retryGeneration, setRetryGeneration] = useState(0);
   const requestId = useRef(0);
   const updateQuery = useCallback((value: string) => {
     requestId.current += 1;
     setQuery(value);
   }, []);
-  const isSearchable = query.trim().length >= minLength;
+  const trimmedQuery = query.trim();
+  const isSearchable = trimmedQuery.length >= minLength;
+  const requestKey = isSearchable
+    ? `${endpoint}\u0000${trimmedQuery}`
+    : null;
+  const retry = useCallback(() => {
+    if (isSearchable) {
+      setRetryGeneration((generation) => generation + 1);
+    }
+  }, [isSearchable]);
 
   useEffect(() => {
-    if (!isSearchable) return;
+    if (!isSearchable || requestKey === null) return;
 
     const currentRequest = ++requestId.current;
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
-      setStatus("loading");
-      setMessage(null);
+      setResponseState((current) => ({
+        key: requestKey,
+        results: current.key === requestKey
+          ? current.results
+          : localResults,
+        status: "loading",
+        message: null,
+      }));
       try {
         const separator = endpoint.includes("?") ? "&" : "?";
         const response = await fetch(
-          `${endpoint}${separator}q=${encodeURIComponent(query.trim())}`,
+          `${endpoint}${separator}q=${encodeURIComponent(trimmedQuery)}`,
           { signal: controller.signal },
         );
         const body = (await response.json()) as DiscoveryResponse<T>;
         if (requestId.current !== currentRequest) return;
         if (!response.ok) {
-          setResults(localResults);
-          setStatus("error");
-          setMessage(body.message ?? "Search is temporarily unavailable.");
+          setResponseState({
+            key: requestKey,
+            results: localResults,
+            status: "error",
+            message: body.message ?? "Search is temporarily unavailable.",
+          });
           return;
         }
-        setResults(body.results ?? localResults);
-        setStatus(body.partial ? "partial" : "success");
-        setMessage(
-          body.partial
+        setResponseState({
+          key: requestKey,
+          results: body.results ?? localResults,
+          status: body.partial ? "partial" : "success",
+          message: body.partial
             ? "Some sources are unavailable. Showing the results we could verify."
             : null,
-        );
+        });
       } catch {
         if (controller.signal.aborted || requestId.current !== currentRequest) {
           return;
         }
-        setResults(localResults);
-        setStatus("error");
-        setMessage("Live sources are unavailable. Local results remain available.");
+        setResponseState({
+          key: requestKey,
+          results: localResults,
+          status: "error",
+          message: "Live sources are unavailable. Local results remain available.",
+        });
       }
     }, delay);
 
@@ -80,13 +115,27 @@ export function useDiscoverySearch<T>({
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [delay, endpoint, isSearchable, localResults, query]);
+  }, [
+    delay,
+    endpoint,
+    isSearchable,
+    localResults,
+    requestKey,
+    retryGeneration,
+    trimmedQuery,
+  ]);
+
+  const currentResponse = requestKey !== null
+    && responseState.key === requestKey
+    ? responseState
+    : null;
 
   return {
     query,
     setQuery: updateQuery,
-    results: isSearchable ? results : localResults,
-    status: isSearchable ? status : ("idle" as const),
-    message: isSearchable ? message : null,
+    results: currentResponse?.results ?? localResults,
+    status: currentResponse?.status ?? ("idle" as const),
+    message: currentResponse?.message ?? null,
+    retry,
   };
 }
