@@ -82,6 +82,13 @@ export const localDiscoveryExercises: DiscoveryExercise[] = exercises.map(
     id: `local:${exercise.slug}`,
     kind: "exercise",
     provider: "local",
+    license: {
+      id: "LOCAL-CURATED",
+      name: "B Fit & Healthy curated content",
+      url: null,
+      attribution: "B Fit & Healthy clinical exercise catalogue",
+      commercialUse: true,
+    },
     externalId: exercise.slug,
     title: exercise.titleEn,
     normalizedTitle: normalizeDiscoveryTitle(exercise.titleEn),
@@ -120,16 +127,18 @@ export const localDiscoveryWorkouts: DiscoveryWorkout[] = workoutIdeas.map(
     durationMinutes: workout.durationMinutes,
     difficulty: workout.level,
     equipment: workout.equipment,
-    exercises: workout.exerciseSlugs.map((slug) => {
-      const exercise = exercises.find((item) => item.slug === slug);
+    exercises: workout.exercises.map((prescription) => {
+      const exercise = exercises.find(
+        (item) => item.slug === prescription.exerciseSlug,
+      );
       return {
-        exerciseId: `local:${slug}`,
-        title: exercise?.titleEn ?? slug,
-        sets: 3,
-        repMin: 8,
-        repMax: 12,
-        durationSeconds: null,
-        restSeconds: 90,
+        exerciseId: `local:${prescription.exerciseSlug}`,
+        title: exercise?.titleEn ?? prescription.exerciseSlug,
+        sets: prescription.sets,
+        repMin: prescription.repMin,
+        repMax: prescription.repMax,
+        durationSeconds: prescription.durationSeconds,
+        restSeconds: prescription.restSeconds,
       };
     }),
   }),

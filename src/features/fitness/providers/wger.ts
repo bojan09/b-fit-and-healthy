@@ -2,6 +2,9 @@ import {
   normalizeDiscoveryTitle,
   type DiscoveryExercise,
 } from "@/features/discovery/types";
+import {
+  normalizeCommercialLicense,
+} from "@/features/discovery/commercial-license";
 
 type WgerExercise = {
   id: number;
@@ -9,6 +12,12 @@ type WgerExercise = {
   muscles?: Array<{ name_en?: string; name?: string }>;
   muscles_secondary?: Array<{ name_en?: string; name?: string }>;
   equipment?: Array<{ name?: string }>;
+  license?: {
+    full_name?: string;
+    short_name?: string;
+    url?: string;
+  };
+  license_author?: string;
   translations?: Array<{
     language?: number;
     name?: string;
@@ -17,12 +26,25 @@ type WgerExercise = {
 };
 
 function stripHtml(value: string) {
-  return value.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  return value
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export function normalizeWgerExercise(
   exercise: WgerExercise,
 ): DiscoveryExercise | null {
+  const license = normalizeCommercialLicense({
+    name: exercise.license?.short_name
+      ?? exercise.license?.full_name
+      ?? "",
+    url: exercise.license?.url ?? null,
+    attribution: exercise.license_author?.trim() || "wger contributor",
+  });
+  if (!license) return null;
+
   const translation =
     exercise.translations?.find((item) => item.language === 2) ??
     exercise.translations?.find((item) => item.name?.trim());
@@ -36,6 +58,7 @@ export function normalizeWgerExercise(
     id: `wger:${exercise.id}`,
     kind: "exercise",
     provider: "wger",
+    license,
     externalId: String(exercise.id),
     title,
     normalizedTitle: normalizeDiscoveryTitle(title),

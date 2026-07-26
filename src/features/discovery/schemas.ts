@@ -13,6 +13,8 @@ const base = z.object({
     "themealdb",
     "wger",
     "musclewiki",
+    "exercise-api",
+    "wrkout",
   ]),
   externalId: z.string().min(1).max(180),
   title: z.string().trim().min(1).max(180),
@@ -68,6 +70,18 @@ export const discoveryRecipeSchema = base.extend({
 
 export const discoveryExerciseSchema = base.extend({
   kind: z.literal("exercise"),
+  license: z.object({
+    id: z.enum([
+      "CC-BY-4.0",
+      "CC-BY-SA-4.0",
+      "Unlicense",
+      "LOCAL-CURATED",
+    ]),
+    name: z.string().min(1).max(100),
+    url: z.url().nullable(),
+    attribution: z.string().min(1).max(240),
+    commercialUse: z.literal(true),
+  }),
   primaryMuscles: z.array(z.string().max(80)).max(30),
   secondaryMuscles: z.array(z.string().max(80)).max(30),
   equipment: z.array(z.string().max(80)).max(30),

@@ -6,6 +6,7 @@ import {
   kgToDisplayLoad,
   trainingWeekDates,
 } from "@/features/fitness/domain";
+import { templateSchema } from "@/features/fitness/schemas";
 
 describe("fitness domain", () => {
   it("counts completed work but excludes incomplete and bodyweight sets from load volume", () => {
@@ -38,5 +39,39 @@ describe("fitness domain", () => {
     expect(trainingWeekDates(new Date("2026-07-22T12:00:00Z"))).toEqual([
       "2026-07-20", "2026-07-21", "2026-07-22", "2026-07-23", "2026-07-24", "2026-07-25", "2026-07-26",
     ]);
+  });
+
+  it("parses reviewed workout prescriptions", () => {
+    const result = templateSchema.parse({
+      name: "Full body",
+      description: "",
+      duration: "45",
+      prescriptions: JSON.stringify([{
+        exerciseSlug: "bodyweight-squat",
+        sets: 3,
+        repMin: 8,
+        repMax: 12,
+        durationSeconds: null,
+        restSeconds: 90,
+      }]),
+    });
+
+    expect(result.prescriptions[0].exerciseSlug).toBe("bodyweight-squat");
+  });
+
+  it("rejects workout rows without reps or duration", () => {
+    expect(() => templateSchema.parse({
+      name: "Invalid",
+      description: "",
+      duration: "45",
+      prescriptions: JSON.stringify([{
+        exerciseSlug: "bodyweight-squat",
+        sets: 3,
+        repMin: null,
+        repMax: null,
+        durationSeconds: null,
+        restSeconds: 90,
+      }]),
+    })).toThrow();
   });
 });

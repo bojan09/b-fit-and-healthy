@@ -4,7 +4,9 @@ export type DiscoveryProvider =
   | "open-food-facts"
   | "themealdb"
   | "wger"
-  | "musclewiki";
+  | "musclewiki"
+  | "exercise-api"
+  | "wrkout";
 
 export type DiscoveryQuality = "curated" | "verified" | "community";
 export type DiscoveryKind = "food" | "recipe" | "exercise" | "workout";
@@ -54,8 +56,17 @@ export type DiscoveryRecipe = DiscoveryBase & {
   nutrition: NutrientValues | null;
 };
 
+export type CommercialExerciseLicense = {
+  id: "CC-BY-4.0" | "CC-BY-SA-4.0" | "Unlicense" | "LOCAL-CURATED";
+  name: string;
+  url: string | null;
+  attribution: string;
+  commercialUse: true;
+};
+
 export type DiscoveryExercise = DiscoveryBase & {
   kind: "exercise";
+  license: CommercialExerciseLicense;
   primaryMuscles: string[];
   secondaryMuscles: string[];
   equipment: string[];

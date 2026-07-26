@@ -5,14 +5,14 @@ import {
   searchLocal,
 } from "@/features/discovery/local";
 import { mergeAndRank } from "@/features/discovery/merge";
-import { runProviders } from "@/features/discovery/provider-runner";
 import {
   discoveryResponse,
   logDiscoveryProviders,
 } from "@/features/discovery/route-response";
 import { discoveryQuerySchema } from "@/features/discovery/schemas";
-import { searchMuscleWikiExercises } from "@/features/fitness/providers/musclewiki";
-import { searchWgerExercises } from "@/features/fitness/providers/wger";
+import {
+  searchCommercialExerciseProviders,
+} from "@/features/fitness/providers/exercise-mesh";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -29,17 +29,7 @@ export async function GET(request: Request) {
   }
   const query = parsed.data.q;
   const [external, context] = await Promise.all([
-    runProviders(
-      [
-        { id: "wger", run: (signal) => searchWgerExercises(query, signal) },
-        {
-          id: "musclewiki",
-          run: async (signal) =>
-            (await searchMuscleWikiExercises(query, signal)).results,
-        },
-      ],
-      { timeoutMs: 2_500 },
-    ),
+    searchCommercialExerciseProviders(query),
     loadDiscoveryContext(user.id),
   ]);
   const results = mergeAndRank(

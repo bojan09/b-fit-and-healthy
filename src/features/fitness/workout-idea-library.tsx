@@ -102,7 +102,7 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
             </div>
             <div className="workout-idea-meta">
               <span><Clock aria-hidden="true" />{idea.durationMinutes} min</span>
-              <span>{idea.exerciseSlugs.length} exercises</span>
+              <span>{idea.exercises.length} exercises</span>
               <ArrowRight aria-hidden="true" />
             </div>
           </Link>

@@ -19,6 +19,16 @@ import type { AuthActionState } from "@/features/auth/types";
 
 const noExternalExercises: DiscoveryExercise[] = [];
 const initial: AuthActionState = { status: "idle" };
+const providerLabels: Record<DiscoveryExercise["provider"], string> = {
+  local: "B Fit & Healthy",
+  usda: "USDA",
+  "open-food-facts": "Open Food Facts",
+  themealdb: "TheMealDB",
+  wger: "wger",
+  musclewiki: "MuscleWiki",
+  "exercise-api": "ExerciseAPI",
+  wrkout: "wrkout",
+};
 
 export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
   const [query, setQuery] = useState("");
@@ -121,8 +131,11 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
       </div>
       <DiscoveryStatus status={providerSearch.status} message={providerSearch.message} />
       <div className="exercise-results-heading">
-        <strong>{results.length} exercises</strong>
-        <span>Locally curated movement guidance</span>
+        <strong>
+          {results.length} local · {providerResults.length} connected{" "}
+          {providerResults.length === 1 ? "exercise" : "exercises"}
+        </strong>
+        <span>Curated guidance with commercially permitted connected sources</span>
       </div>
       {results.length ? (
         <div className="exercise-grid">
@@ -162,12 +175,16 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
                 className="provider-card"
                 type="button"
                 key={exercise.id}
+                aria-label={`Review ${exercise.title} from ${providerLabels[exercise.provider]}`}
                 onClick={(event) => {
                   setReturnFocus(event.currentTarget);
                   setSelected(exercise);
                 }}
               >
-                <span className="provider-card-kicker">{exercise.attribution}</span>
+                <span className="provider-card-provenance">
+                  <span>{providerLabels[exercise.provider]}</span>
+                  <span>{exercise.license.name}</span>
+                </span>
                 <strong>{exercise.title}</strong>
                 <span>{exercise.primaryMuscles.join(", ") || "General movement"}</span>
                 <small>{exercise.equipment.join(", ") || "No equipment listed"}</small>
@@ -192,13 +209,24 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
         {selected ? (
           <form id="exercise-review-form" action={saveAction} className="discovery-review-form">
             <input type="hidden" name="item" value={JSON.stringify(selected)} />
-            <p className="discovery-source">{selected.attribution} · {selected.quality}</p>
+            <p className="discovery-source">
+              {providerLabels[selected.provider]} · {selected.quality}
+            </p>
             <dl className="discovery-facts">
               <div><dt>Primary muscles</dt><dd>{selected.primaryMuscles.join(", ") || "Not supplied"}</dd></div>
               <div><dt>Equipment</dt><dd>{selected.equipment.join(", ") || "Not supplied"}</dd></div>
               <div><dt>Difficulty</dt><dd>{selected.difficulty ?? "Not supplied"}</dd></div>
-              <div><dt>Media</dt><dd>{selected.media.length ? "Available in detail" : "None supplied"}</dd></div>
+              <div><dt>License</dt><dd>{selected.license.name}</dd></div>
             </dl>
+            <section className="discovery-review-section">
+              <h3>Source and attribution</h3>
+              <p>{selected.license.attribution}</p>
+              {selected.sourceUrl ? (
+                <a href={selected.sourceUrl} target="_blank" rel="noreferrer">
+                  Open original source
+                </a>
+              ) : null}
+            </section>
             <section className="discovery-review-section">
               <h3>How to perform it</h3>
               <ol>{selected.instructions.map((step, index) => <li key={index}>{step}</li>)}</ol>

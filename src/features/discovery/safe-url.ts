@@ -9,6 +9,8 @@ const allowedHosts: Partial<Record<DiscoveryProvider, string[]>> = {
   themealdb: ["themealdb.com", "www.themealdb.com"],
   wger: ["wger.de"],
   musclewiki: ["api.musclewiki.com", "musclewiki.com", "www.musclewiki.com"],
+  "exercise-api": ["exercise-api.com", "www.exercise-api.com"],
+  wrkout: ["github.com", "raw.githubusercontent.com"],
 };
 
 export function safeProviderUrl(

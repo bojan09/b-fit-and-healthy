@@ -23,6 +23,42 @@ function materialKey(item: DiscoveryItem) {
   return `workout:${item.normalizedTitle}:${item.goal}:${item.exercises.length}`;
 }
 
+function normalizedSet(values: readonly string[]) {
+  return new Set(values.map(normalizeDiscoveryTitle).filter(Boolean));
+}
+
+function hasOverlapOrMissing(left: Set<string>, right: Set<string>) {
+  return !left.size
+    || !right.size
+    || [...left].some((value) => right.has(value));
+}
+
+function normalizeEquipment(value: string) {
+  const normalized = normalizeDiscoveryTitle(value);
+  if (["bodyweight", "body only", "none bodyweight"].includes(normalized)) {
+    return "bodyweight";
+  }
+  return normalized;
+}
+
+function isSameExercise(
+  left: Extract<DiscoveryItem, { kind: "exercise" }>,
+  right: Extract<DiscoveryItem, { kind: "exercise" }>,
+) {
+  if (left.normalizedTitle !== right.normalizedTitle) return false;
+  const leftMuscles = normalizedSet(left.primaryMuscles);
+  const rightMuscles = normalizedSet(right.primaryMuscles);
+  if (!hasOverlapOrMissing(leftMuscles, rightMuscles)) return false;
+
+  const leftEquipment = new Set(
+    left.equipment.map(normalizeEquipment).filter(Boolean),
+  );
+  const rightEquipment = new Set(
+    right.equipment.map(normalizeEquipment).filter(Boolean),
+  );
+  return hasOverlapOrMissing(leftEquipment, rightEquipment);
+}
+
 function score(item: DiscoveryItem, context: DiscoveryContext) {
   const query = normalizeDiscoveryTitle(context.query);
   let value = 0;
@@ -77,12 +113,17 @@ export function mergeAndRank<T extends DiscoveryItem>(
   for (const item of items) {
     const normalized = {
       ...item,
-      normalizedTitle:
-        item.normalizedTitle || normalizeDiscoveryTitle(item.title),
+      normalizedTitle: normalizeDiscoveryTitle(item.title),
       alternates: [...item.alternates],
     } as T;
-    const key = materialKey(normalized);
-    const existing = groups.get(key);
+    const matchingExercise = normalized.kind === "exercise"
+      ? [...groups.entries()].find(([, existing]) =>
+          existing.kind === "exercise"
+          && isSameExercise(existing, normalized)
+        )
+      : undefined;
+    const key = matchingExercise?.[0] ?? materialKey(normalized);
+    const existing = matchingExercise?.[1] ?? groups.get(key);
     if (!existing) {
       groups.set(key, normalized);
       continue;

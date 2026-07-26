@@ -12,12 +12,33 @@ const refresh = () => ["/today","/training","/training/planner","/workouts","/wo
 
 export async function createTemplateAction(formData: FormData) {
   const parsed = templateSchema.safeParse(Object.fromEntries(formData)); if (!parsed.success) redirect("/workouts/new?error=invalid");
-  const { supabase, user } = await authorized(); const template = await supabase.from("workout_templates").insert({ user_id: user.id, name: parsed.data.name, description: parsed.data.description, expected_duration_minutes: parsed.data.duration }).select("id").single();
-  if (template.error || !template.data) redirect("/workouts/new?error=storage");
-  const slugs = parsed.data.exerciseSlugs.split(",").filter(Boolean); const found = await supabase.from("exercises").select("id,slug").in("slug", slugs);
+  const { supabase, user } = await authorized();
+  const slugs = [...new Set(parsed.data.prescriptions.map((row) => row.exerciseSlug))];
+  const found = await supabase.from("exercises").select("id,slug").in("slug", slugs);
   const bySlug = new Map((found.data ?? []).map((row) => [row.slug, row.id]));
-  const rows = slugs.flatMap((slug, position) => bySlug.has(slug) ? [{ user_id: user.id, template_id: template.data.id, exercise_id: bySlug.get(slug)!, position, target_sets: 3, rep_min: 8, rep_max: 12, rest_seconds: 90 }] : []);
-  if (rows.length) await supabase.from("workout_template_exercises").insert(rows); refresh(); redirect(`/workouts/${template.data.id}`);
+  if (found.error || slugs.some((slug) => !bySlug.has(slug))) {
+    redirect("/workouts/new?error=invalid");
+  }
+  const template = await supabase.from("workout_templates").insert({ user_id: user.id, name: parsed.data.name, description: parsed.data.description, expected_duration_minutes: parsed.data.duration }).select("id").single();
+  if (template.error || !template.data) redirect("/workouts/new?error=storage");
+  const rows = parsed.data.prescriptions.map((prescription, position) => ({
+    user_id: user.id,
+    template_id: template.data.id,
+    exercise_id: bySlug.get(prescription.exerciseSlug)!,
+    position,
+    target_sets: prescription.sets,
+    rep_min: prescription.repMin,
+    rep_max: prescription.repMax,
+    target_duration_seconds: prescription.durationSeconds,
+    rest_seconds: prescription.restSeconds,
+  }));
+  const inserted = await supabase.from("workout_template_exercises").insert(rows);
+  if (inserted.error) {
+    await supabase.from("workout_templates").delete().eq("id", template.data.id).eq("user_id", user.id);
+    redirect("/workouts/new?error=storage");
+  }
+  refresh();
+  redirect(`/workouts/${template.data.id}`);
 }
 
 export async function importDiscoveryWorkoutAction(
@@ -41,6 +62,29 @@ export async function importDiscoveryWorkoutAction(
 
   const { supabase, user } = await authorized();
   const workout = parsed.data;
+  const exerciseLicense = workout.provider === "local"
+    ? {
+        id: "LOCAL-CURATED" as const,
+        name: "B Fit & Healthy curated content",
+        url: null,
+        attribution: "B Fit & Healthy curated workout",
+        commercialUse: true as const,
+      }
+    : workout.provider === "wrkout"
+      ? {
+          id: "Unlicense" as const,
+          name: "Unlicense",
+          url: "https://github.com/wrkout/exercises.json/blob/master/LICENSE.md",
+          attribution: "wrkout/exercises.json public-domain exercise dataset",
+          commercialUse: true as const,
+        }
+      : null;
+  if (!exerciseLicense) {
+    return {
+      status: "error",
+      message: "This workout does not include a commercial-use exercise license.",
+    };
+  }
   try {
     const { saveDiscoverySnapshot } = await import(
       "@/features/discovery/repository"
@@ -66,6 +110,7 @@ export async function importDiscoveryWorkoutAction(
         id: `${workout.provider}:${movement.exerciseId}`,
         kind: "exercise",
         provider: workout.provider,
+        license: exerciseLicense,
         externalId: movement.exerciseId,
         title: movement.title,
         normalizedTitle: movement.title.toLocaleLowerCase().trim(),
@@ -115,7 +160,44 @@ export async function importDiscoveryWorkoutAction(
     return { status: "error", message: "The workout could not be imported." };
   }
 }
-export async function updateTemplateAction(formData: FormData) { const id=uuidSchema.safeParse(formData.get("templateId"));const parsed=templateSchema.safeParse(Object.fromEntries(formData));if(!id.success||!parsed.success)return;const{supabase,user}=await authorized();await supabase.from("workout_templates").update({name:parsed.data.name,description:parsed.data.description,expected_duration_minutes:parsed.data.duration}).eq("id",id.data).eq("user_id",user.id);const slugs=parsed.data.exerciseSlugs.split(",").filter(Boolean);const found=await supabase.from("exercises").select("id,slug").in("slug",slugs);const bySlug=new Map((found.data??[]).map(row=>[row.slug,row.id]));await supabase.from("workout_template_exercises").delete().eq("template_id",id.data).eq("user_id",user.id);const rows=slugs.flatMap((slug,position)=>bySlug.has(slug)?[{user_id:user.id,template_id:id.data,exercise_id:bySlug.get(slug)!,position,target_sets:3,rep_min:8,rep_max:12,rest_seconds:90}]:[]);if(rows.length)await supabase.from("workout_template_exercises").insert(rows);refresh();redirect(`/workouts/${id.data}`);}
+export async function updateTemplateAction(formData: FormData) {
+  const id = uuidSchema.safeParse(formData.get("templateId"));
+  const parsed = templateSchema.safeParse(Object.fromEntries(formData));
+  if (!id.success || !parsed.success) return;
+  const { supabase, user } = await authorized();
+  const slugs = [...new Set(parsed.data.prescriptions.map((row) => row.exerciseSlug))];
+  const found = await supabase.from("exercises").select("id,slug").in("slug", slugs);
+  const bySlug = new Map((found.data ?? []).map((row) => [row.slug, row.id]));
+  if (found.error || slugs.some((slug) => !bySlug.has(slug))) return;
+  await supabase
+    .from("workout_templates")
+    .update({
+      name: parsed.data.name,
+      description: parsed.data.description,
+      expected_duration_minutes: parsed.data.duration,
+    })
+    .eq("id", id.data)
+    .eq("user_id", user.id);
+  await supabase
+    .from("workout_template_exercises")
+    .delete()
+    .eq("template_id", id.data)
+    .eq("user_id", user.id);
+  const rows = parsed.data.prescriptions.map((prescription, position) => ({
+    user_id: user.id,
+    template_id: id.data,
+    exercise_id: bySlug.get(prescription.exerciseSlug)!,
+    position,
+    target_sets: prescription.sets,
+    rep_min: prescription.repMin,
+    rep_max: prescription.repMax,
+    target_duration_seconds: prescription.durationSeconds,
+    rest_seconds: prescription.restSeconds,
+  }));
+  await supabase.from("workout_template_exercises").insert(rows);
+  refresh();
+  redirect(`/workouts/${id.data}`);
+}
 export async function deleteTemplateAction(formData: FormData) { const id = uuidSchema.safeParse(formData.get("id")); if (!id.success) return; const { supabase, user } = await authorized(); await supabase.from("workout_templates").delete().eq("id", id.data).eq("user_id", user.id); refresh(); redirect("/workouts"); }
 export async function scheduleWorkoutAction(formData: FormData) { const parsed = scheduleSchema.safeParse(Object.fromEntries(formData)); if (!parsed.success) return; const { supabase, user } = await authorized(); await supabase.from("planned_workouts").insert({ user_id: user.id, template_id: parsed.data.templateId, planned_on: parsed.data.plannedOn }); refresh(); }
 export async function updatePlanStatusAction(formData: FormData) { const id = uuidSchema.safeParse(formData.get("id")); const status = formData.get("status"); if (!id.success || !["planned","skipped"].includes(String(status))) return; const { supabase, user } = await authorized(); await supabase.from("planned_workouts").update({ status: String(status) as "planned"|"skipped" }).eq("id", id.data).eq("user_id", user.id); refresh(); }

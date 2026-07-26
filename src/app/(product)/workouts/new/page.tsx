@@ -20,7 +20,7 @@ export default async function NewWorkoutPage({ searchParams }: { searchParams: P
           name: idea.title,
           description: idea.summary,
           duration: idea.durationMinutes,
-          exerciseSlugs: idea.exerciseSlugs,
+          prescriptions: idea.exercises,
         } : undefined}
       />
     </main>
