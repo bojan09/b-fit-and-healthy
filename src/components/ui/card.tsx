@@ -14,12 +14,14 @@ const cardToneClasses: Record<CardTone, string> = {
 export function Card({
   className,
   tone = "default",
+  cut = true,
   ...props
-}: HTMLAttributes<HTMLDivElement> & { tone?: CardTone }) {
+}: HTMLAttributes<HTMLDivElement> & { tone?: CardTone; cut?: boolean }) {
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--card-padding)]",
+        "border border-[var(--border)] p-[var(--card-padding)]",
+        cut ? "card-cut rounded-none [clip-path:var(--cut-clip)]" : "rounded-[var(--radius-card)]",
         cardToneClasses[tone],
         className,
       )}
