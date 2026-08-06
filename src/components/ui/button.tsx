@@ -19,9 +19,27 @@ export const buttonVariants = cva(
   }
 );
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof buttonVariants> & { asChild?: boolean };
+const cutByVariant: Record<NonNullable<VariantProps<typeof buttonVariants>["variant"]>, boolean> = {
+  primary: true,
+  secondary: true,
+  quiet: false,
+  danger: false
+};
 
-export function Button({ className, variant, size, asChild, ...props }: ButtonProps) {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+  VariantProps<typeof buttonVariants> & { asChild?: boolean; cut?: boolean };
+
+export function Button({ className, variant = "primary", size, asChild, cut, ...props }: ButtonProps) {
   const Component = asChild ? Slot : "button";
-  return <Component className={cn(buttonVariants({ variant, size }), className)} {...props} />;
+  const applyCut = cut ?? cutByVariant[variant ?? "primary"];
+  return (
+    <Component
+      className={cn(
+        buttonVariants({ variant, size }),
+        applyCut && "ui-button-cut rounded-none [clip-path:var(--cut-clip)]",
+        className
+      )}
+      {...props}
+    />
+  );
 }
