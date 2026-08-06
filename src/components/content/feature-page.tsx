@@ -4,7 +4,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MotionReveal } from "@/features/motion/motion-reveal";
 
-export function FeaturePage({ eyebrow, title, body, Icon, principles, workflow, destination, labels }: { eyebrow: string; title: string; body: string; Icon: LucideIcon; principles: { title: string; body: string }[]; workflow: string[]; destination: { href: string; label: string }; labels: { connects: string; processTitle: string; continueTitle: string; continueBody: string } }) {
+export function FeaturePage({ eyebrow, title, body, Icon, principles, workflow, destination, labels }: { eyebrow: string; title: string; body: string; Icon: LucideIcon; principles: readonly { title: string; body: string }[]; workflow: readonly string[]; destination: { href: string; label: string }; labels: { connects: string; processTitle: string; continueTitle: string; continueBody: string } }) {
   return <main id="main-content" tabIndex={-1}>
     <section className="shell page-hero compact-hero"><div><p className="eyebrow"><Icon aria-hidden="true" size={18} />{eyebrow}</p><h1>{title}</h1><p className="lede">{body}</p></div><div className="feature-emblem"><Icon aria-hidden="true" /><span>{eyebrow}</span></div></section>
     <MotionReveal className="feature-page-reveal"><section className="shell public-section"><div className="principle-grid">{principles.map((item) => <article key={item.title}><Check aria-hidden="true" /><h2>{item.title}</h2><p>{item.body}</p></article>)}</div></section></MotionReveal>
