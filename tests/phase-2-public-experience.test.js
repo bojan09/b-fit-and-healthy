@@ -136,8 +136,8 @@ test('shared public compositions keep Macedonian parity instead of hardcoded Eng
   assert.match(read('src/components/shell/public-footer.tsx'), /c\.nav\.contact/);
 });
 
-test('shared buttons use the coordinated Sky Dusk tokens in both themes', () => {
-  const css = read('src/app/globals.css');
+test('shared buttons use the coordinated Voltage tokens in both themes', () => {
+  const css = read('src/styles/tokens.css');
   const button = read('src/components/ui/button.tsx');
   for (const token of ['--button-primary', '--button-primary-hover', '--button-primary-text', '--button-secondary', '--button-secondary-hover']) {
     assert.ok(css.split(token).length >= 3, `${token} must be defined for light and dark themes`);
@@ -146,11 +146,11 @@ test('shared buttons use the coordinated Sky Dusk tokens in both themes', () => 
   assert.match(button, /--button-secondary/);
   assert.match(button, /ui-button-primary/);
   assert.match(button, /ui-button-secondary/);
-  for (const value of ['#287eac', '#176b95', '#e5eef3', '#75c5e9', '#2a424f']) {
-    assert.match(css, new RegExp(value, 'i'), `missing approved Sky Dusk token ${value}`);
+  for (const value of ['#0a0a0a', '#d4ff2f', '#c2ec1c', '#bfe829', '#262626']) {
+    assert.match(css, new RegExp(value, 'i'), `missing approved Voltage token ${value}`);
   }
-  assert.doesNotMatch(css, /--button-secondary:\s*#(?:f1e5cf|3d3424)/i);
-  assert.match(css, /\.ui-button-primary\s*\{[^}]*color:\s*var\(--button-primary-text\)/s);
+  assert.match(css, /:root\s*\{[\s\S]*--button-primary:\s*#0a0a0a/i);
+  assert.match(css, /\.dark\s*\{[\s\S]*--button-primary:\s*#d4ff2f/i);
 });
 
 test('ambient halo sits above the page paint and below interactive content', () => {
