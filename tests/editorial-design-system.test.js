@@ -4,19 +4,19 @@ const test = require("node:test");
 
 const read = (path) => fs.readFileSync(path, "utf8");
 
-test("editorial design system is centralized", () => {
+test("Voltage design system is centralized", () => {
   const layout = read("src/app/layout.tsx");
   const tokens = read("src/styles/tokens.css");
 
-  assert.match(layout, /Source_Sans_3/);
+  assert.match(layout, /Archivo_Black/);
+  assert.match(layout, /Inter/);
   assert.match(tokens, /--shell:\s*73\.75rem/);
   assert.match(tokens, /--control-height:\s*2\.5rem/);
   assert.match(tokens, /--radius-card:\s*0\.8125rem/);
-  assert.match(tokens, /\.dark\s*\{[\s\S]*--background:\s*#10161a/i);
-  assert.doesNotMatch(
-    tokens,
-    /--brand:[^;]*(yellow|#f[bc][0-9a-f]{3})/i,
-  );
+  assert.match(tokens, /--accent:\s*#d4ff2f/);
+  assert.match(tokens, /--cut-clip:\s*polygon\(/);
+  assert.match(tokens, /\.dark\s*\{[\s\S]*--background:\s*#0a0a0a/i);
+  assert.match(tokens, /:root\s*\{[\s\S]*--background:\s*#f4f4f2/i);
 });
 
 test("global styles are split by responsibility", () => {
@@ -37,6 +37,7 @@ test("global styles are split by responsibility", () => {
       `${stylesheet}.css is not imported`,
     );
   }
+  assert.doesNotMatch(globalStyles, /@layer legacy/);
 });
 
 test("primary product routes expose local loading UI", () => {
