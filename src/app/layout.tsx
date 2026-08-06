@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Source_Sans_3 } from "next/font/google";
+import { Archivo_Black, Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { LocaleProvider } from "@/components/providers/locale-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -10,7 +10,8 @@ import { getLocale, getMessages } from "@/lib/i18n/server";
 import "./globals.css";
 import { siteUrl } from "@/lib/seo/metadata";
 
-const sans = Source_Sans_3({ subsets: ["latin", "cyrillic"], variable: "--font-sans", display: "swap" });
+const sans = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-sans", display: "swap" });
+const display = Archivo_Black({ subsets: ["latin"], weight: "400", variable: "--font-display", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin", "cyrillic"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
@@ -43,7 +44,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${sans.variable} ${mono.variable}`}>
+      <body className={`${sans.variable} ${display.variable} ${mono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LocaleProvider locale={locale}>
             <SkipLink label={messages.skip} />
