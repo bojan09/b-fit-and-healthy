@@ -21,6 +21,7 @@ out/
 node_modules/
 .superpowers/
 .worktrees/
+.claude/worktrees/
 playwright-report/
 test-results/
 .auth/
