@@ -19,7 +19,7 @@ npm.cmd install
 npm.cmd run dev
 ```
 
-Open `http://localhost:3000/`. Authentication begins at `/sign-in`; supporting foundation routes are available at `/states` and `/~offline`.
+Open `http://localhost:3000/`. Authentication begins at `/sign-in`; the offline fallback is available at `/~offline`.
 
 Keep local environment values in an untracked `.env.local` file. Configure deployment values in the hosting provider's environment settings. Never expose the service-role key or server integration credentials in `NEXT_PUBLIC_*` variables.
 

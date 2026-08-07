@@ -3,6 +3,7 @@ import Link from "next/link";
 import { MotionKnowledgeLibrary as KnowledgeLibrary } from "@/features/knowledge/motion-knowledge-library";
 import { getArticles } from "@/lib/content/articles";
 import { getLocale } from "@/lib/i18n/server";
+import { getPublicContent } from "@/lib/i18n/public-content";
 import { publicMetadata } from "@/lib/seo/metadata";
 
 export const metadata = publicMetadata(
@@ -15,7 +16,7 @@ export default async function BlogPage() {
   const locale = await getLocale();
   const articles = await getArticles(locale);
   const featured = articles[0];
-  const isEnglish = locale === "en";
+  const c = getPublicContent(locale).blogIndex;
 
   return (
     <main id="main-content" tabIndex={-1}>
@@ -23,36 +24,22 @@ export default async function BlogPage() {
         <div>
           <p className="eyebrow">
             <BookOpen aria-hidden="true" />
-            {isEnglish ? "Knowledge library" : "Библиотека на знаење"}
+            {c.eyebrow}
           </p>
-          <h1>
-            {isEnglish
-              ? "Understand more. Choose with confidence."
-              : "Разбери повеќе. Избери со сигурност."}
-          </h1>
-          <p className="lede">
-            {isEnglish
-              ? "Reviewed starter guides connect training, nutrition, recovery, habits, and anatomy without miracle claims or unnecessary jargon."
-              : "Прегледани почетни водичи ги поврзуваат тренингот, исхраната, опоравувањето, навиките и анатомијата без чудесни тврдења и непотребен жаргон."}
-          </p>
+          <h1>{c.title}</h1>
+          <p className="lede">{c.lede}</p>
         </div>
         <div className="library-signal">
           <Search aria-hidden="true" />
           <span>{articles.length}</span>
-          <small>
-            {isEnglish
-              ? "reviewed bilingual guides"
-              : "прегледани двојазични водичи"}
-          </small>
+          <small>{c.signalSuffix}</small>
         </div>
       </section>
 
       {featured && (
         <section className="shell featured-article">
           <div>
-            <p className="eyebrow">
-              {isEnglish ? "Editor’s starting point" : "Избор на уредникот"}
-            </p>
+            <p className="eyebrow">{c.featuredEyebrow}</p>
             <h2>
               <Link href={`/blog/${featured.slug}`}>{featured.title}</Link>
             </h2>
@@ -60,7 +47,7 @@ export default async function BlogPage() {
             <div className="article-meta">
               <span>{featured.category}</span>
               <span>
-                {featured.readingTime} {isEnglish ? "min read" : "мин читање"}
+                {featured.readingTime} {c.minRead}
               </span>
             </div>
           </div>
@@ -73,20 +60,10 @@ export default async function BlogPage() {
       <section className="shell public-section" aria-labelledby="article-library">
         <div className="library-heading">
           <div>
-            <p className="eyebrow">
-              {isEnglish ? "Browse by question" : "Истражи по прашање"}
-            </p>
-            <h2 id="article-library">
-              {isEnglish
-                ? "Build understanding one useful topic at a time."
-                : "Гради разбирање, една корисна тема по една."}
-            </h2>
+            <p className="eyebrow">{c.browseEyebrow}</p>
+            <h2 id="article-library">{c.browseTitle}</h2>
           </div>
-          <p>
-            {isEnglish
-              ? "Search by a question or narrow the full reviewed collection by topic."
-              : "Пребарај по прашање или филтрирај ја целата прегледана колекција по тема."}
-          </p>
+          <p>{c.browseBody}</p>
         </div>
         <KnowledgeLibrary
           locale={locale}
@@ -104,16 +81,8 @@ export default async function BlogPage() {
       </section>
 
       <section className="shell health-disclaimer">
-        <strong>
-          {isEnglish
-            ? "A note about health content"
-            : "Белешка за здравствената содржина"}
-        </strong>
-        <p>
-          {isEnglish
-            ? "This library provides general education, not diagnosis or individualized care. Persistent symptoms or personal health concerns deserve qualified professional assessment."
-            : "Оваа библиотека нуди општа едукација, а не дијагноза или индивидуална грижа. Постојаните симптоми и личните здравствени грижи заслужуваат стручна проценка."}
-        </p>
+        <strong>{c.noteTitle}</strong>
+        <p>{c.noteBody}</p>
       </section>
     </main>
   );
