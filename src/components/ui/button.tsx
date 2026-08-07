@@ -21,7 +21,7 @@ export const buttonVariants = cva(
 
 const cutByVariant: Record<NonNullable<VariantProps<typeof buttonVariants>["variant"]>, boolean> = {
   primary: true,
-  secondary: true,
+  secondary: false,
   quiet: false,
   danger: false
 };

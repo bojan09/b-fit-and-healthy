@@ -146,7 +146,7 @@ test('shared buttons use the coordinated Voltage tokens in both themes', () => {
   assert.match(button, /--button-secondary/);
   assert.match(button, /ui-button-primary/);
   assert.match(button, /ui-button-secondary/);
-  for (const value of ['#0a0a0a', '#d4ff2f', '#c2ec1c', '#bfe829', '#262626']) {
+  for (const value of ['#0a0a0a', '#d4ff2f', '#465100', '#bfe829', '#262626']) {
     assert.match(css, new RegExp(value, 'i'), `missing approved Voltage token ${value}`);
   }
   assert.match(css, /:root\s*\{[\s\S]*--button-primary:\s*#0a0a0a/i);
