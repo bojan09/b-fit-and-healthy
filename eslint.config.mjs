@@ -12,6 +12,7 @@ export default defineConfig([
   globalIgnores([
     ".next/**",
     ".worktrees/**",
+    ".claude/worktrees/**",
     "node_modules/**",
     "prototype/**",
     "playwright-report/**",
