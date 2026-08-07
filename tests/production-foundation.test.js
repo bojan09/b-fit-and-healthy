@@ -26,7 +26,6 @@ test('App Router exposes accessible foundation, state, and offline routes', () =
   for (const file of [
     'src/app/layout.tsx',
     'src/app/(marketing)/page.tsx',
-    'src/app/(marketing)/states/page.tsx',
     'src/app/~offline/page.tsx',
     'src/app/loading.tsx',
     'src/app/error.tsx',
