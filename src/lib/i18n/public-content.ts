@@ -22,7 +22,14 @@ export const publicContent = {
       knowledgeTitle: "Clear answers before louder advice",
       knowledgeBody: "Read practical, carefully framed guidance about training, nutrition, recovery, habits, and anatomy.",
       finalTitle: "Start by understanding the system.",
-      finalBody: "Explore the public foundation now. Personal tracking and coaching arrive only after their own quality and approval gates."
+      finalBody: "Explore the public foundation now. Personal tracking and coaching arrive only after their own quality and approval gates.",
+      nutritionVisualLabel: "Nutrition",
+      breakfastLabel: "Breakfast",
+      breakfastNote: "A useful start, not a score",
+      trainingVisualLabel: "Training",
+      squatLabel: "Squat pattern",
+      pullLabel: "Horizontal pull",
+      carryLabel: "Loaded carry"
     },
     features: {
       eyebrow: "The ecosystem",
@@ -196,7 +203,14 @@ export const publicContent = {
       knowledgeTitle: "Јасни одговори пред погласни совети",
       knowledgeBody: "Читај практични и внимателно формулирани насоки за тренинг, исхрана, опоравување, навики и анатомија.",
       finalTitle: "Почни со разбирање на системот.",
-      finalBody: "Истражи ја јавната основа. Личното следење и советување доаѓаат по сопствените проверки и одобрувања."
+      finalBody: "Истражи ја јавната основа. Личното следење и советување доаѓаат по сопствените проверки и одобрувања.",
+      nutritionVisualLabel: "Исхрана",
+      breakfastLabel: "Појадок",
+      breakfastNote: "Корисен почеток, не оцена",
+      trainingVisualLabel: "Тренинг",
+      squatLabel: "Чучнување",
+      pullLabel: "Хоризонтално влечење",
+      carryLabel: "Носење товар"
     },
     features: {
       eyebrow: "Екосистемот",
