@@ -174,17 +174,32 @@ h3 { margin: 0; line-height: 1.2; letter-spacing: -0.025em; }
 .feature-story { display: grid; grid-template-columns: minmax(20rem, 1fr) minmax(0, 0.86fr); align-items: center; gap: clamp(3rem, 8vw, 7rem); }
 .feature-story-reverse .feature-visual { order: 2; }
 .feature-visual { min-height: 30rem; border: 1px solid var(--border); border-radius: var(--radius-feature); background: var(--surface); box-shadow: var(--shadow-raised); padding: clamp(1.5rem, 4vw, 3rem); }
-.nutrition-visual { display: grid; grid-template-rows: auto 1fr; background: linear-gradient(155deg, var(--surface), color-mix(in srgb, var(--brand-soft) 80%, var(--surface))); }
-.nutrition-visual > div:first-child { display: grid; gap: var(--space-2); }
-.nutrition-visual span, .training-row span { color: var(--brand); font-family: var(--font-mono), monospace; font-size: 0.75rem; }
-.nutrition-visual strong { font-size: clamp(1.8rem, 4vw, 3.5rem); }
-.nutrition-visual small { color: var(--foreground-secondary); }
-.nutrient-lines { align-self: end; display: grid; gap: var(--space-4); }
-.nutrient-lines i { display: block; height: 0.7rem; border-radius: 999px; background: linear-gradient(90deg, var(--brand) 0 72%, var(--surface-hover) 72%); }
-.nutrient-lines i:nth-child(2) { background: linear-gradient(90deg, var(--mineral) 0 58%, var(--surface-hover) 58%); }.nutrient-lines i:nth-child(3) { background: linear-gradient(90deg, var(--ochre) 0 84%, var(--surface-hover) 84%); }
-.training-visual { display: grid; align-content: center; gap: var(--space-3); background: linear-gradient(145deg, color-mix(in srgb, var(--mineral-soft) 50%, var(--surface)), var(--surface)); }
-.training-row { display: grid; grid-template-columns: 2.2rem 1fr auto; align-items: center; gap: var(--space-4); border-bottom: 1px solid var(--border); padding-block: var(--space-5, 1.25rem); }
-.training-row:last-child { border-bottom: 0; }.training-row small { color: var(--foreground-secondary); font-family: var(--font-mono), monospace; }
+.nutrition-visual { display: grid; grid-template-rows: auto auto 1fr; gap: var(--space-5); background: linear-gradient(155deg, var(--surface), color-mix(in srgb, var(--brand-soft) 80%, var(--surface))); }
+.nutrition-visual-header { display: grid; gap: var(--space-2); }
+.nutrition-visual-header span, .training-visual-header span { color: var(--brand); font-family: var(--font-mono), monospace; font-size: 0.75rem; }
+.nutrition-visual-header strong { font-size: 1.3rem; }
+.nutrition-visual-header small { color: var(--foreground-secondary); }
+.nutrition-stat { display: flex; align-items: baseline; gap: var(--space-2); }
+.nutrition-stat strong { font-family: var(--font-mono), monospace; font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1; }
+.nutrition-stat span { color: var(--foreground-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.nutrient-lines { align-self: end; display: grid; gap: var(--space-3); }
+.nutrient-line { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--space-2) var(--space-3); }
+.nutrient-line span { font-size: 0.8125rem; color: var(--foreground-secondary); }
+.nutrient-line b { font-family: var(--font-mono), monospace; font-weight: 700; font-size: 0.8125rem; }
+.nutrient-line i { grid-column: 1 / -1; display: block; height: 0.5rem; border-radius: 999px; background: var(--surface-hover); }
+.nutrient-line:nth-child(1) i { background: linear-gradient(90deg, var(--brand) 0 72%, var(--surface-hover) 72%); }
+.nutrient-line:nth-child(2) i { background: linear-gradient(90deg, var(--mineral) 0 58%, var(--surface-hover) 58%); }
+.nutrient-line:nth-child(3) i { background: linear-gradient(90deg, var(--ochre) 0 84%, var(--surface-hover) 84%); }
+.training-visual { display: grid; align-content: center; gap: var(--space-2); background: linear-gradient(145deg, color-mix(in srgb, var(--mineral-soft) 50%, var(--surface)), var(--surface)); }
+.training-visual-header { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border); }
+.training-visual-header strong { font-size: 1.1rem; }
+.training-row { display: grid; grid-template-columns: 1.5rem 1fr auto auto; align-items: center; gap: var(--space-3); border-bottom: 1px solid var(--border); padding-block: var(--space-4); }
+.training-row:last-child { border-bottom: 0; }
+.training-row small { color: var(--foreground-secondary); font-family: var(--font-mono), monospace; }
+.training-row svg { width: 1.1rem; color: var(--foreground-muted); }
+.training-row[data-done="true"] svg { color: var(--brand); }
+.training-row-status { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--foreground-muted); }
+.training-row[data-done="true"] .training-row-status { color: var(--brand); }
 
 .split-callouts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
 .callout { min-height: 25rem; display: grid; grid-template-columns: auto 1fr; align-items: start; gap: var(--space-6); padding: clamp(1.5rem, 4vw, 3rem); }

@@ -26,10 +26,18 @@ export const publicContent = {
       nutritionVisualLabel: "Nutrition",
       breakfastLabel: "Breakfast",
       breakfastNote: "A useful start, not a score",
+      caloriesUnit: "kcal",
+      proteinLabel: "Protein",
+      carbsLabel: "Carbs",
+      fatLabel: "Fat",
       trainingVisualLabel: "Training",
+      workoutSessionLabel: "Full-body warmup",
+      workoutDurationLabel: "22 min",
       squatLabel: "Squat pattern",
       pullLabel: "Horizontal pull",
-      carryLabel: "Loaded carry"
+      carryLabel: "Loaded carry",
+      exerciseDoneLabel: "Done",
+      exercisePendingLabel: "Up next"
     },
     features: {
       eyebrow: "The ecosystem",
@@ -207,10 +215,18 @@ export const publicContent = {
       nutritionVisualLabel: "Исхрана",
       breakfastLabel: "Појадок",
       breakfastNote: "Корисен почеток, не оцена",
+      caloriesUnit: "kcal",
+      proteinLabel: "Протеини",
+      carbsLabel: "Јаглехидрати",
+      fatLabel: "Масти",
       trainingVisualLabel: "Тренинг",
+      workoutSessionLabel: "Загревање за цело тело",
+      workoutDurationLabel: "22 мин",
       squatLabel: "Чучнување",
       pullLabel: "Хоризонтално влечење",
-      carryLabel: "Носење товар"
+      carryLabel: "Носење товар",
+      exerciseDoneLabel: "Завршено",
+      exercisePendingLabel: "Следно"
     },
     features: {
       eyebrow: "Екосистемот",

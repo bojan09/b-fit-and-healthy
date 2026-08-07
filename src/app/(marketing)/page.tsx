@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, Apple, ArrowRight, BookOpen, Dumbbell, HeartPulse, MoveRight } from "lucide-react";
+import { Activity, Apple, ArrowRight, BookOpen, CheckCircle2, Circle, Dumbbell, HeartPulse, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SectionIntro } from "@/components/content/section-intro";
@@ -45,12 +45,30 @@ export default async function HomePage() {
     </section></MotionReveal>
 
     <MotionReveal className="landing-reveal"><section className="public-section feature-story shell" data-motion-section>
-      <div className="feature-visual nutrition-visual"><div><span>07:40</span><strong>{c.home.breakfastLabel}</strong><small>{c.home.breakfastNote}</small></div><div className="nutrient-lines"><i /><i /><i /></div></div>
+      <div className="feature-visual nutrition-visual">
+        <div className="nutrition-visual-header"><span>07:40</span><strong>{c.home.breakfastLabel}</strong><small>{c.home.breakfastNote}</small></div>
+        <div className="nutrition-stat"><strong>420</strong><span>{c.home.caloriesUnit}</span></div>
+        <div className="nutrient-lines">
+          {([[c.home.proteinLabel, "32g"], [c.home.carbsLabel, "48g"], [c.home.fatLabel, "14g"]] as const).map(([label, value]) => (
+            <div className="nutrient-line" key={label}><span>{label}</span><i /><b>{value}</b></div>
+          ))}
+        </div>
+      </div>
       <SectionIntro eyebrow={c.home.nutritionVisualLabel} title={c.home.nutritionTitle} body={c.home.nutritionBody} action={<Button asChild variant="secondary"><Link href="/features/nutrition">{c.common.learnMore}<ArrowRight aria-hidden="true" size={17} /></Link></Button>} />
     </section></MotionReveal>
 
     <MotionReveal className="landing-reveal"><section className="public-section feature-story feature-story-reverse shell" data-motion-section>
-      <div className="feature-visual training-visual"><div className="training-row"><span>01</span><strong>{c.home.squatLabel}</strong><small>3 × 8</small></div><div className="training-row"><span>02</span><strong>{c.home.pullLabel}</strong><small>3 × 10</small></div><div className="training-row"><span>03</span><strong>{c.home.carryLabel}</strong><small>4 × 30 m</small></div></div>
+      <div className="feature-visual training-visual">
+        <div className="training-visual-header"><strong>{c.home.workoutSessionLabel}</strong><span>{c.home.workoutDurationLabel}</span></div>
+        {([[c.home.squatLabel, "3 × 8", true], [c.home.pullLabel, "3 × 10", true], [c.home.carryLabel, "4 × 30 m", false]] as const).map(([label, sets, done]) => (
+          <div className="training-row" data-done={done} key={label}>
+            {done ? <CheckCircle2 aria-hidden="true" /> : <Circle aria-hidden="true" />}
+            <strong>{label}</strong>
+            <small>{sets}</small>
+            <span className="training-row-status">{done ? c.home.exerciseDoneLabel : c.home.exercisePendingLabel}</span>
+          </div>
+        ))}
+      </div>
       <SectionIntro eyebrow={c.home.trainingVisualLabel} title={c.home.trainingTitle} body={c.home.trainingBody} action={<Button asChild variant="secondary"><Link href="/features/training">{c.common.learnMore}<ArrowRight aria-hidden="true" size={17} /></Link></Button>} />
     </section></MotionReveal>
 
