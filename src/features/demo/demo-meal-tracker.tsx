@@ -45,6 +45,7 @@ export function DemoMealTracker({
 
   return (
     <div className="demo-nutrition">
+      <p className="demo-nutrition-total">{labels.total}</p>
       <div className="nutrition-stat">
         <strong>{totals.kcal}</strong>
         <span>{labels.kcal}</span>

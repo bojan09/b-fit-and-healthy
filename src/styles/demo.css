@@ -13,6 +13,7 @@
 .demo-habit-list button[aria-pressed="true"] { border-color: var(--brand); }
 .demo-habit-list button[aria-pressed="true"] svg { color: var(--brand); }
 .demo-nutrition { display: grid; gap: var(--space-5); }
+.demo-nutrition-total { margin: 0; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--foreground-muted); }
 .demo-meal-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
 .demo-meal-list li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-3); border-bottom: 1px solid var(--border); padding-block: var(--space-3); }
 .demo-meal-list li span { font-family: var(--font-mono), monospace; font-size: 0.75rem; color: var(--foreground-muted); }
