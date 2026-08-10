@@ -8,6 +8,18 @@ import type { DemoMeal } from "@/features/demo/data";
 
 type Labels = { addFood: string; total: string; protein: string; carbs: string; fat: string; kcal: string };
 
+// Reference maxima express each bar as "progress toward a typical daily amount," not raw
+// proportion-of-each-other (which would always sum to 100% regardless of total intake).
+const REFERENCE_MAX_G = { protein: 150, carbs: 300, fat: 90 } as const;
+
+function fillPercent(grams: number, referenceMax: number) {
+  return Math.min(100, Math.round((grams / referenceMax) * 100));
+}
+
+function fillStyle(colorVar: string, percent: number) {
+  return { background: `linear-gradient(90deg, var(${colorVar}) 0 ${percent}%, var(--surface-hover) ${percent}%)` };
+}
+
 export function DemoMealTracker({
   meals,
   addableMeal,
@@ -38,9 +50,21 @@ export function DemoMealTracker({
         <span>{labels.kcal}</span>
       </div>
       <div className="nutrient-lines">
-        <div className="nutrient-line"><span>{labels.protein}</span><i /><b>{totals.proteinG}g</b></div>
-        <div className="nutrient-line"><span>{labels.carbs}</span><i /><b>{totals.carbsG}g</b></div>
-        <div className="nutrient-line"><span>{labels.fat}</span><i /><b>{totals.fatG}g</b></div>
+        <div className="nutrient-line">
+          <span>{labels.protein}</span>
+          <i style={fillStyle("--brand", fillPercent(totals.proteinG, REFERENCE_MAX_G.protein))} />
+          <b>{totals.proteinG}g</b>
+        </div>
+        <div className="nutrient-line">
+          <span>{labels.carbs}</span>
+          <i style={fillStyle("--mineral", fillPercent(totals.carbsG, REFERENCE_MAX_G.carbs))} />
+          <b>{totals.carbsG}g</b>
+        </div>
+        <div className="nutrient-line">
+          <span>{labels.fat}</span>
+          <i style={fillStyle("--ochre", fillPercent(totals.fatG, REFERENCE_MAX_G.fat))} />
+          <b>{totals.fatG}g</b>
+        </div>
       </div>
       <ul className="demo-meal-list">
         {list.map((meal) => (

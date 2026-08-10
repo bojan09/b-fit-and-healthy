@@ -32,4 +32,25 @@ describe("DemoMealTracker", () => {
     expect(screen.getByText("Yogurt")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Add food/i })).not.toBeInTheDocument();
   });
+
+  it("renders macro bar fills computed from actual totals, and updates them after adding food", () => {
+    const { container } = render(
+      <DemoMealTracker meals={meals} addableMeal={addableMeal} locale="en" labels={labels} />
+    );
+    const bars = container.querySelectorAll(".nutrient-line i");
+    expect(bars).toHaveLength(3);
+
+    // Initial totals: proteinG=20 (of 150 ref -> 13%), carbsG=60 (of 300 ref -> 20%), fatG=10 (of 90 ref -> 11%)
+    const [proteinBar, carbsBar, fatBar] = Array.from(bars) as HTMLElement[];
+    expect(proteinBar.style.background).toContain("13%");
+    expect(carbsBar.style.background).toContain("20%");
+    expect(fatBar.style.background).toContain("11%");
+
+    fireEvent.click(screen.getByRole("button", { name: /Add food/i }));
+
+    // After adding: proteinG=30 (20%), carbsG=75 (25%), fatG=18 (20%)
+    expect(proteinBar.style.background).toContain("20%");
+    expect(carbsBar.style.background).toContain("25%");
+    expect(fatBar.style.background).toContain("20%");
+  });
 });
