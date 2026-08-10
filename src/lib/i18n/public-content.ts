@@ -37,7 +37,8 @@ export const publicContent = {
       pullLabel: "Horizontal pull",
       carryLabel: "Loaded carry",
       exerciseDoneLabel: "Done",
-      exercisePendingLabel: "Up next"
+      exercisePendingLabel: "Up next",
+      tryDemoLabel: "Try the demo"
     },
     features: {
       eyebrow: "The ecosystem",
@@ -47,6 +48,37 @@ export const publicContent = {
       training: "Plans, sessions, exercise education, and steady progression.",
       anatomy: "A visual bridge between muscles, movement, and exercise choices.",
       knowledge: "Readable articles that explain the reasoning behind practical actions."
+    },
+    demo: {
+      nav: { today: "Today", nutrition: "Nutrition", training: "Training", progress: "Progress" },
+      banner: {
+        message: "You're viewing example data — sign up to start tracking your own.",
+        cta: "Get started",
+        signUp: "Sign up"
+      },
+      today: {
+        greeting: "Good morning, Alex",
+        subtitle: "Here's what your day looks like at a glance.",
+        habitsTitle: "Today's habits"
+      },
+      nutrition: {
+        title: "Today's meals",
+        subtitle: "See how meals and macros add up across the day.",
+        addFood: "Add food",
+        total: "Today's total"
+      },
+      training: {
+        subtitle: "Today's session, planned and tracked.",
+        done: "Done",
+        pending: "Up next",
+        complete: "complete"
+      },
+      progress: {
+        title: "Weight trend",
+        subtitle: "The last few weeks at a glance.",
+        history: "History",
+        unit: "kg"
+      }
     },
     about: {
       eyebrow: "About the product",
@@ -226,7 +258,8 @@ export const publicContent = {
       pullLabel: "Хоризонтално влечење",
       carryLabel: "Носење товар",
       exerciseDoneLabel: "Завршено",
-      exercisePendingLabel: "Следно"
+      exercisePendingLabel: "Следно",
+      tryDemoLabel: "Пробај ја демо-верзијата"
     },
     features: {
       eyebrow: "Екосистемот",
@@ -236,6 +269,37 @@ export const publicContent = {
       training: "Планови, сесии, едукација за вежби и постепен напредок.",
       anatomy: "Визуелен мост меѓу мускулите, движењето и изборот на вежби.",
       knowledge: "Читливи статии што го објаснуваат размислувањето зад практичните чекори."
+    },
+    demo: {
+      nav: { today: "Денес", nutrition: "Исхрана", training: "Тренинг", progress: "Напредок" },
+      banner: {
+        message: "Гледаш пример-податоци — регистрирај се за да го следиш своето.",
+        cta: "Започни",
+        signUp: "Регистрирај се"
+      },
+      today: {
+        greeting: "Добро утро, Алекс",
+        subtitle: "Еве како изгледа твојот ден накратко.",
+        habitsTitle: "Денешни навики"
+      },
+      nutrition: {
+        title: "Денешни оброци",
+        subtitle: "Погледни како оброците и макросите се собираат преку денот.",
+        addFood: "Додај храна",
+        total: "Денешен вкупен внес"
+      },
+      training: {
+        subtitle: "Денешна сесија, планирана и следена.",
+        done: "Завршено",
+        pending: "Следно",
+        complete: "завршено"
+      },
+      progress: {
+        title: "Тренд на тежина",
+        subtitle: "Последните неколку недели накратко.",
+        history: "Историја",
+        unit: "kg"
+      }
     },
     about: {
       eyebrow: "За производот",
