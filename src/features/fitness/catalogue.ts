@@ -85,6 +85,21 @@ exercises.push(
   make("deep-squat-hold", "Deep squat hold", "Задржување во длабоко чучнување", "Use a supported bottom position to explore hip and ankle range.", "Користете ја долната положба за да го истражите опсегот на колковите и глуждовите.", ["Bodyweight"], "mobility", "mobility", ["hips", "calves"]),
 );
 
+exercises.push(
+  make("barbell-row", "Barbell row", "Веслање со шипка", "Bend at the hips and row a loaded barbell into the torso.", "Наведнете се од колковите и веслајте оптоварена шипка кон трупот.", ["Barbell"], "horizontal-pull", "strength", ["mid-back", "lats"], false, "intermediate"),
+  make("v-bar-pulldown", "V-bar lat pulldown", "Лат повлекување со В-рачка", "A close, neutral-grip pulldown that emphasizes the lower lats.", "Тесно повлекување со неутрален фат кое ги нагласува долните лати.", ["Cable"], "vertical-pull", "strength", ["lats", "biceps"], false),
+  make("dumbbell-pullover", "Dumbbell pullover", "Пулбек со тег", "Move a single dumbbell overhead in an arc to train the chest and lats.", "Движете еден тег над глава во лак за да ги тренирате градите и латите.", ["Dumbbell", "Bench"], "horizontal-pull", "strength", ["lats", "chest"], false),
+  make("band-chest-press", "Band chest press", "Потисок за гради со лента", "Press a resistance band forward from a staggered stance.", "Турнете еластична лента напред од расчекорен став.", ["Band"], "horizontal-push", "strength", ["chest", "triceps"]),
+  make("triceps-kickback", "Triceps kickback", "Трицепс изопнување наназад", "Extend the elbow behind the body to isolate the triceps.", "Испружете го лактот зад телото за да го изолирате трицепсот.", ["Dumbbell"], "elbow-extension", "strength", ["triceps"]),
+  make("lying-triceps-extension", "Lying triceps extension", "Лежечко изопнување за трицепс", "Lower a dumbbell toward the forehead while lying on a bench.", "Спуштајте тег кон челото лежејќи на клупа.", ["Dumbbells", "Bench"], "elbow-extension", "strength", ["triceps"], false),
+  make("cable-rope-overhead-extension", "Cable rope overhead extension", "Кабелско изопнување над глава со јаже", "Extend a cable rope overhead to load the triceps through a long range.", "Испружете кабелско јаже над глава за да го оптоварите трицепсот низ долг опсег.", ["Cable"], "elbow-extension", "strength", ["triceps"], false),
+  make("reverse-curl", "Reverse curl", "Обратно свиткување", "Curl with an overhand grip to train the forearms and biceps.", "Виткајте со надворешен фат за да ги тренирате подлактиците и бицепсот.", ["Dumbbells"], "elbow-flexion", "strength", ["biceps", "forearms"]),
+  make("barbell-overhead-press", "Barbell overhead press", "Потисок над глава со шипка", "Press a loaded barbell from the shoulders to lockout overhead.", "Потиснувајте оптоварена шипка од рамениците до целосно испружување над глава.", ["Barbell"], "vertical-push", "strength", ["shoulders", "triceps"], false, "intermediate"),
+  make("upright-row", "Upright row", "Веслање исправено", "Pull a load vertically along the body to the collarbone height.", "Влечете товар вертикално долж телото до висина на клучната коска.", ["Dumbbells"], "vertical-pull", "strength", ["side-delts", "traps"]),
+  make("arnold-press", "Arnold press", "Арнолд потисок", "Rotate the dumbbells while pressing overhead for full shoulder coverage.", "Ротирајте ги теговите додека потиснувате над глава за целосна работа на рамото.", ["Dumbbells"], "vertical-push", "strength", ["shoulders", "triceps"], true, "intermediate"),
+  make("ab-wheel-rollout", "Ab wheel rollout", "Ролање со тркало за стомак", "Roll a wheel forward from the knees while keeping the trunk braced.", "Ролајте тркало напред од колена додека трупот е стабилен и затегнат.", ["Ab wheel"], "anti-extension", "core", ["abdominals"], true, "intermediate"),
+);
+
 export const equipmentOptions = [...new Set(exercises.flatMap((exercise) => exercise.equipment))].sort();
 export const movementOptions = [...new Set(exercises.map((exercise) => exercise.movementPattern))].sort();
 export const muscleOptions = [...new Set(exercises.flatMap((exercise) => exercise.primaryMuscles))].sort();
