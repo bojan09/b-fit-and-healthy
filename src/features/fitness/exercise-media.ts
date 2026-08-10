@@ -135,4 +135,9 @@ export const exerciseMedia: Record<string, CatalogueMedia> = {
   "low-plank-side-knee": wrkout("low-plank-side-knee", "Plank", "Athlete holding a low plank while drawing a knee out to the side", "Спортист држи низок планк додека повлекува колено странично"),
   "plank-party": wrkout("plank-party", "Plank", "Athlete moving between a forearm plank and a straight-arm plank", "Спортист се движи помеѓу планк на подлактици и планк на испружени раце"),
   "spin-burpee": wrkout("spin-burpee", "Knee_Tuck_Jump", "Athlete in mid-air during an explosive full-body jump with a turn", "Спортист во воздух при експлозивен скок на целото тело со вртење"),
+  "bulgarian-split-squat": wrkout("bulgarian-split-squat", "Suspended_Split_Squat", "Athlete lowering into a split squat with the rear foot elevated", "Спортист се спушта во split чучнување со задната нога кренато"),
+  "sumo-squat": wrkout("sumo-squat", "Plie_Dumbbell_Squat", "Athlete squatting with a wide stance and toes turned outward", "Спортист чучнува со широк став и стапала свртени нанадвор"),
+  "clean-and-press": wrkout("clean-and-press", "Clean_and_Press", "Athlete pressing a barbell overhead after pulling it to the shoulders", "Спортист потиснува шипка над глава откако ја крена до рамениците"),
+  "t-bar-row": wrkout("t-bar-row", "T-Bar_Row_with_Handle", "Athlete rowing a T-bar handle while hinged forward at the hips", "Спортист весла Т-бар рачка додека е наведнат напред од колковите"),
+  "zottman-curl": wrkout("zottman-curl", "Zottman_Curl", "Athlete curling dumbbells with a grip rotation between the up and down phase", "Спортист витка тегови со ротација на фатот меѓу горната и долната фаза"),
 };

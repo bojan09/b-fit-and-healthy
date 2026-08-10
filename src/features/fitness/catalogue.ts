@@ -124,6 +124,14 @@ exercises.push(
   make("spin-burpee", "Spin burpee", "Ротирачки бурпи", "Add a quarter turn between each burpee repetition to change facing.", "Додадете четвртина вртење меѓу секое повторување на бурпи за смена на насока.", ["Bodyweight"], "full-body", "strength", ["quadriceps", "shoulders"], true, "intermediate"),
 );
 
+exercises.push(
+  make("bulgarian-split-squat", "Bulgarian split squat", "Бугарско split чучнување", "A rear-foot-elevated split squat that isolates each leg with added balance demand.", "Split чучнување со задна нога кренато што изолира секоја нога со дополнителен предизвик за рамнотежа.", ["Dumbbells", "Bench"], "lunge", "strength", ["quadriceps", "glutes"], false, "intermediate"),
+  make("sumo-squat", "Sumo squat", "Суму чучнување", "A wide-stance, toes-out squat that shifts more emphasis onto the inner thighs and glutes.", "Чучнување со широк став и стапала свртени нанадвор, со поголем фокус на внатрешните бутови и глутеус.", ["Dumbbell"], "squat", "strength", ["quadriceps", "glutes"]),
+  make("clean-and-press", "Clean and press", "Кревање и потисок", "Pull a load from the floor to the shoulders, then press it overhead in one flowing sequence.", "Кревајте товар од под до рамениците, потоа потиснувајте го над глава во една течна секвенца.", ["Barbell"], "full-body", "strength", ["shoulders", "glutes", "hamstrings"], false, "intermediate"),
+  make("t-bar-row", "T-bar row", "Т-бар веслање", "Row a barbell loaded at one end while bracing the torso in a hinged position.", "Веслајте шипка оптоварена на еден крај додека трупот е стабилен во наведната положба.", ["Barbell"], "horizontal-pull", "strength", ["mid-back", "lats"], false, "intermediate"),
+  make("zottman-curl", "Zottman curl", "Zottman свиткување", "Curl with palms up, then rotate to palms down for the lowering phase.", "Виткајте со дланки нагоре, потоа ротирајте со дланки надолу за фазата на спуштање.", ["Dumbbells"], "elbow-flexion", "strength", ["biceps", "forearms"]),
+);
+
 export const equipmentOptions = [...new Set(exercises.flatMap((exercise) => exercise.equipment))].sort();
 export const movementOptions = [...new Set(exercises.map((exercise) => exercise.movementPattern))].sort();
 export const muscleOptions = [...new Set(exercises.flatMap((exercise) => exercise.primaryMuscles))].sort();
