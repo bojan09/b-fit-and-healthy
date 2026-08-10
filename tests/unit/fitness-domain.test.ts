@@ -84,9 +84,9 @@ describe("fitness domain", () => {
 
 describe("curated exercise catalogue", () => {
   it("contains exactly 60 exercises with unique IDs and slugs", () => {
-    expect(exercises).toHaveLength(72);
-    expect(new Set(exercises.map((exercise) => exercise.id))).toHaveLength(72);
-    expect(new Set(exercises.map((exercise) => exercise.slug))).toHaveLength(72);
+    expect(exercises).toHaveLength(93);
+    expect(new Set(exercises.map((exercise) => exercise.id))).toHaveLength(93);
+    expect(new Set(exercises.map((exercise) => exercise.slug))).toHaveLength(93);
   });
 
   it("covers the required movement, equipment, type, and difficulty ranges", () => {
@@ -141,7 +141,7 @@ describe("curated exercise catalogue", () => {
 
     const mediaModule = await import(/* @vite-ignore */ pathToFileURL(manifestPath).href);
     const exerciseMedia = (mediaModule.exerciseMedia ?? {}) as Record<string, CatalogueMedia>;
-    expect(Object.keys(exerciseMedia)).toHaveLength(72);
+    expect(Object.keys(exerciseMedia)).toHaveLength(93);
     expect(new Set(Object.keys(exerciseMedia))).toEqual(new Set(exercises.map((exercise) => exercise.slug)));
 
     for (const exercise of exercises) {
