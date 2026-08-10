@@ -54,6 +54,8 @@ export async function updateSession(request: NextRequest) {
     // Protected route components still authorize before reading user data.
   }
 
-  response.headers.set("Cache-Control", "private, no-store");
+  if (isProtected(request.nextUrl.pathname)) {
+    response.headers.set("Cache-Control", "private, no-store");
+  }
   return response;
 }
