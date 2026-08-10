@@ -14,7 +14,7 @@ const cardToneClasses: Record<CardTone, string> = {
 export function Card({
   className,
   tone = "default",
-  cut = true,
+  cut = false,
   ...props
 }: HTMLAttributes<HTMLDivElement> & { tone?: CardTone; cut?: boolean }) {
   return (
