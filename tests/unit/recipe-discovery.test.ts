@@ -4,7 +4,7 @@ import { recipeCatalogue } from "@/features/nutrition/recipe-catalogue";
 
 describe("recipe discovery", () => {
   it("ships a useful local catalogue across every meal", () => {
-    expect(recipeCatalogue).toHaveLength(24);
+    expect(recipeCatalogue).toHaveLength(40);
     const groups = groupRecipesByMeal(recipeCatalogue);
     expect(groups.breakfast.length).toBeGreaterThanOrEqual(5);
     expect(groups.lunch.length).toBeGreaterThanOrEqual(5);
