@@ -33,7 +33,7 @@ export default async function HomePage() {
         <p className="eyebrow"><HeartPulse aria-hidden="true" size={17} />{c.home.eyebrow}</p>
         <h1 id="hero-title">{c.home.title}</h1>
         <p className="lede">{c.home.body}</p>
-        <div className="action-row hero-account-actions"><Button asChild size="lg"><Link href="/sign-up">{c.nav.getStarted}<ArrowRight aria-hidden="true" size={18} /></Link></Button><Button asChild size="lg" variant="secondary"><Link href="/sign-in">{c.nav.signIn}</Link></Button><Link className="text-link" href="/features">{c.common.explore}<MoveRight aria-hidden="true" size={18} /></Link></div>
+        <div className="action-row hero-account-actions"><Button asChild size="lg"><Link href="/sign-up">{c.nav.getStarted}<ArrowRight aria-hidden="true" size={18} /></Link></Button><Button asChild size="lg" variant="quiet"><Link href="/demo/today">{c.home.tryDemoLabel}</Link></Button><Button asChild size="lg" variant="secondary"><Link href="/sign-in">{c.nav.signIn}</Link></Button><Link className="text-link" href="/features">{c.common.explore}<MoveRight aria-hidden="true" size={18} /></Link></div>
         <p className="supporting-note">{c.common.educational}</p>
       </div>
       <GuidedHealthPath locale={locale} />

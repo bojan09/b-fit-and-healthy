@@ -1,0 +1,23 @@
+.demo-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.demo-header { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--background) 88%, transparent); backdrop-filter: blur(16px); }
+.demo-header-inner { min-height: 4rem; display: flex; align-items: center; gap: var(--space-6); }
+.demo-nav { margin-inline-start: auto; }
+.demo-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-4); background: var(--brand-soft); padding: var(--space-3) var(--space-4); text-align: center; }
+.demo-banner p { margin: 0; font-size: 0.875rem; font-weight: 700; color: var(--foreground); }
+.demo-main { padding-block: clamp(2rem, 6vw, 4rem); display: grid; gap: var(--space-8); }
+.demo-page { display: grid; gap: var(--space-6); }
+.demo-today-layout { display: grid; gap: var(--space-6); }
+.demo-habit-list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.demo-habit-list button { display: flex; align-items: center; gap: var(--space-3); width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-control); padding: var(--space-3) var(--space-4); font: inherit; text-align: left; cursor: pointer; }
+.demo-habit-list button svg { color: var(--foreground-muted); }
+.demo-habit-list button[aria-pressed="true"] { border-color: var(--brand); }
+.demo-habit-list button[aria-pressed="true"] svg { color: var(--brand); }
+.demo-nutrition { display: grid; gap: var(--space-5); }
+.demo-nutrition-total { margin: 0; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--foreground-muted); }
+.demo-meal-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.demo-meal-list li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-3); border-bottom: 1px solid var(--border); padding-block: var(--space-3); }
+.demo-meal-list li span { font-family: var(--font-mono), monospace; font-size: 0.75rem; color: var(--foreground-muted); }
+.demo-meal-list li b { font-family: var(--font-mono), monospace; font-size: 0.8125rem; }
+.demo-training-visual { max-width: 32rem; }
+button.training-row { background: none; border: 0; border-bottom: 1px solid var(--border); width: 100%; font: inherit; text-align: left; cursor: pointer; }
+button.training-row:last-child { border-bottom: 0; }

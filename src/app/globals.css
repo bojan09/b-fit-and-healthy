@@ -9,6 +9,7 @@
 @import "../styles/anatomy.css";
 @import "../styles/responsive.css";
 @import "../styles/interaction.css";
+@import "../styles/demo.css";
 
 @custom-variant dark (&:is(.dark *));
 
