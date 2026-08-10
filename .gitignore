@@ -25,6 +25,10 @@ node_modules/
 playwright-report/
 test-results/
 .auth/
+memory.md
+
+# Personal source material - never commit, extract content only.
+/b-fit/
 
 # Serwist generates these from src/app/sw.ts during production builds.
 public/sw.js
