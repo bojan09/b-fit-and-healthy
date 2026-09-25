@@ -72,6 +72,22 @@ export const muscles: MuscleSummary[] = baseMuscles.map((muscle) => {
 
 export function getMuscle(id: string) { return muscles.find((muscle) => muscle.id === id); }
 export function getMusclesForView(view: MuscleView) { return muscles.filter((muscle) => muscle.view === view); }
+const regionLabels: Record<string, { en: string; mk: string }> = {
+  arms: { en: "Arms", mk: "Раце" },
+  back: { en: "Back", mk: "Грб" },
+  chest: { en: "Chest", mk: "Гради" },
+  core: { en: "Core", mk: "Труп" },
+  hips: { en: "Hips", mk: "Колкови" },
+  legs: { en: "Legs", mk: "Нозе" },
+  "lower legs": { en: "Lower legs", mk: "Потколеници" },
+  "lower-legs": { en: "Lower legs", mk: "Потколеници" },
+  shoulders: { en: "Shoulders", mk: "Рамена" },
+  "upper back": { en: "Upper back", mk: "Горен грб" },
+  "upper-back": { en: "Upper back", mk: "Горен грб" },
+};
+export function regionLabel(region: string, locale: "en" | "mk") {
+  return regionLabels[region]?.[locale] ?? region.replaceAll("-", " ");
+}
 export function getAnatomyRegions() { return [...new Set(muscles.map((muscle) => muscle.regionKey))].sort(); }
 export function searchMuscles(query: string, region = "all") {
   const needle = query.trim().toLocaleLowerCase();

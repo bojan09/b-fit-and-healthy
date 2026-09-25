@@ -42,7 +42,7 @@ describe("Anatomy motion", () => {
       top: 900, bottom: 1500, left: 0, right: 360, width: 360, height: 600, x: 0, y: 900,
       toJSON: () => ({}),
     });
-    const directoryButton = view.container.querySelector(".anatomy-directory button") as HTMLButtonElement;
+    const directoryButton = view.container.querySelector(".anatomy-directory button[aria-pressed]") as HTMLButtonElement;
     directoryButton.focus();
     fireEvent.click(directoryButton);
     expect(directoryButton).toHaveFocus();

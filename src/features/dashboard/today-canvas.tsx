@@ -162,6 +162,7 @@ export function TodayCanvas({
           />
 
           <RhythmRail
+            noActivity={c.today.noActivity}
             title={c.today.rhythm}
             waterTitle={c.today.water}
             waterEntries={waterEntries.map((entry) => ({

@@ -11,11 +11,11 @@ export default async function RecipesPage() {
     <main className="product-page recipe-page">
       <header className="product-page-heading recipe-heading">
         <div>
-          <p className="eyebrow">Cook with clarity</p>
+          <p className="eyebrow">{locale === "mk" ? "Готвење со јасност" : "Cook with clarity"}</p>
           <h1>{c.recipes.title}</h1>
-          <p>{c.recipes.intro} Browse a broad, dependable starting collection without waiting for an external service.</p>
+          <p>{c.recipes.intro}</p>
         </div>
-        <Link href="/meal-planner" className="button button-secondary">Open meal planner</Link>
+        <Link href="/meal-planner" className="ui-button ui-button-secondary">{locale === "mk" ? "Отвори планер за оброци" : "Open meal planner"}</Link>
       </header>
       <RecipeLibrary recipes={recipes} locale={locale} />
     </main>

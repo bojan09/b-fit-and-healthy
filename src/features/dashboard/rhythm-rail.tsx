@@ -16,7 +16,9 @@ export function RhythmRail({
   habits,
   statusLabels,
   empty,
+  noActivity = "No tracked activity yet today.",
 }: {
+  noActivity?: string;
   title: string;
   waterTitle: string;
   waterEntries: Array<{ id: string; amount: string; time: string }>;
@@ -91,7 +93,7 @@ export function RhythmRail({
           }
         />
       ) : (
-        <p className="tracking-empty">No tracked activity yet today.</p>
+        <p className="tracking-empty">{noActivity}</p>
       )}
     </section>
   );

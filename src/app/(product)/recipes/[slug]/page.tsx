@@ -32,10 +32,10 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
               <form action={toggleSavedRecipeAction}>
                 <input type="hidden" name="recipeId" value={recipe.id} />
                 <input type="hidden" name="saved" value={String(saved)} />
-                <button className="button button-secondary"><Bookmark />{saved ? c.recipes.saved : c.recipes.save}</button>
+                <button className="ui-button ui-button-secondary"><Bookmark />{saved ? c.recipes.saved : c.recipes.save}</button>
               </form>
             )}
-            <Link className="button button-primary" href={`/meal-planner?recipe=${recipe.slug}`}>
+            <Link className="ui-button ui-button-primary" href={`/meal-planner?recipe=${recipe.slug}`}>
               <CalendarPlus />{c.recipes.plan}
             </Link>
           </div>
