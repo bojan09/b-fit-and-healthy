@@ -47,6 +47,7 @@ export const fitnessContent = {
     date: "Date",
     schedule: "Schedule",
     deleteTemplate: "Delete template",
+    deleteConfirm: "Delete this workout template? Completed sessions stay in your history.",
     // builder pages
     editorEyebrow: "Workout editor",
     editTitle: (name: string) => `Edit ${name}`,
@@ -126,6 +127,8 @@ export const fitnessContent = {
     // exercises
     catalogueEyebrow: "Movement catalogue",
     catalogueIntro: "Clear instructions, target muscles, and practical equipment guidance.",
+    errorInvalid: "Some details were not valid. Check the name, duration, and exercises, then try again.",
+    errorStorage: "We could not save that change. Nothing was lost; please try again.",
   },
   mk: {
     training: "Тренинг",
@@ -171,6 +174,7 @@ export const fitnessContent = {
     date: "Датум",
     schedule: "Закажи",
     deleteTemplate: "Избриши шаблон",
+    deleteConfirm: "Да се избрише шаблонот? Завршените сесии остануваат во историјата.",
     editorEyebrow: "Уредувач на тренинг",
     editTitle: (name: string) => `Уреди: ${name}`,
     editIntro: "Завршените сесии остануваат непроменети кога го подобрувате шаблонот.",
@@ -243,6 +247,8 @@ export const fitnessContent = {
     latestAchievement: (date: string) => `Последно достигнување · ${date}`,
     catalogueEyebrow: "Каталог на движења",
     catalogueIntro: "Јасни упатства, целни мускули и практични совети за опрема.",
+    errorInvalid: "Некои податоци не се валидни. Проверете го името, времетраењето и вежбите, па обидете се пак.",
+    errorStorage: "Промената не можеше да се зачува. Ништо не е изгубено; обидете се повторно.",
   },
 } as const;
 

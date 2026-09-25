@@ -1,2 +1,49 @@
-import Link from"next/link";import{Plus}from"lucide-react";import{requireUser}from"@/features/auth/session";import{loadTraining}from"@/features/fitness/repository";
-export default async function WorkoutsPage(){const user=await requireUser();const data=await loadTraining(user.id);return <main className="product-page fitness-page"><header className="product-page-heading"><div><p className="eyebrow">Reusable structure</p><h1>My workouts</h1><p>Build routines once, schedule them, and keep every completed session intact.</p></div><Link className="ui-button ui-button-primary" href="/workouts/new"><Plus/> Create workout</Link></header>{data.unavailable&&<p className="inline-notice warning">Apply the Phase 6 migration to enable saved workouts.</p>}{data.templates.length?<div className="template-grid">{data.templates.map(item=><Link className="product-panel template-card" href={`/workouts/${item.id}`} key={item.id}><p className="eyebrow">{item.goal}</p><h2>{item.name}</h2><p>{item.description||"Ready when you are."}</p><span>{item.expected_duration_minutes} min · {item.difficulty}</span></Link>)}</div>:<div className="product-empty"><h2>Build your first repeatable workout</h2><p>Start with a small routine you can complete confidently.</p><Link href="/workouts/new">Create workout</Link></div>}</main>}
+import Link from "next/link";
+import { Plus } from "lucide-react";
+import { requireUser } from "@/features/auth/session";
+import { getFitnessCopy } from "@/features/fitness/content";
+import { fitnessLabel } from "@/features/fitness/labels";
+import { loadTraining } from "@/features/fitness/repository";
+import { getLocale } from "@/lib/i18n/server";
+
+export default async function WorkoutsPage() {
+  const [user, locale] = await Promise.all([requireUser(), getLocale()]);
+  const data = await loadTraining(user.id);
+  const c = getFitnessCopy(locale);
+
+  return (
+    <main className="product-page fitness-page">
+      <header className="product-page-heading">
+        <div>
+          <p className="eyebrow">{c.workoutsEyebrow}</p>
+          <h1>{c.workouts}</h1>
+          <p>{c.workoutsIntro}</p>
+        </div>
+        <Link className="ui-button ui-button-primary" href="/workouts/new">
+          <Plus aria-hidden="true" /> {c.create}
+        </Link>
+      </header>
+      {data.unavailable && <p className="inline-notice warning">{c.unavailable}</p>}
+      {data.templates.length ? (
+        <div className="template-grid">
+          {data.templates.map((item) => (
+            <Link className="product-panel template-card" href={`/workouts/${item.id}`} key={item.id}>
+              <p className="eyebrow">{fitnessLabel(item.goal, locale)}</p>
+              <h2>{item.name}</h2>
+              <p>{item.description || c.readyDescription}</p>
+              <span>
+                {item.expected_duration_minutes} {c.min} · {fitnessLabel(item.difficulty, locale)}
+              </span>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="product-empty">
+          <h2>{c.firstWorkoutTitle}</h2>
+          <p>{c.firstWorkoutBody}</p>
+          <Link className="ui-button ui-button-secondary" href="/workouts/new">{c.create}</Link>
+        </div>
+      )}
+    </main>
+  );
+}

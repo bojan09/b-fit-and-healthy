@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { ArrowDown, ArrowUp, Plus, Search, Trash2 } from "lucide-react";
 import { exercises } from "@/features/fitness/catalogue";
+import { getFitnessCopy, type FitnessCopy } from "@/features/fitness/content";
+import { fitnessLabel } from "@/features/fitness/labels";
 import type { WorkoutPrescription } from "@/features/fitness/workout-ideas";
+import type { Locale } from "@/lib/i18n/config";
 
 type InitialWorkout = {
   id?: string;
@@ -22,22 +26,42 @@ const defaultPrescription = (exerciseSlug: string): WorkoutPrescription => ({
   restSeconds: 90,
 });
 
-function prescriptionLabel(row: WorkoutPrescription) {
+function prescriptionLabel(row: WorkoutPrescription, c: FitnessCopy) {
   if (row.durationSeconds !== null) {
-    const sets = row.sets > 1 ? `${row.sets} sets · ` : "";
-    return `${sets}${row.durationSeconds} sec · ${row.restSeconds} sec rest`;
+    const sets = row.sets > 1 ? `${row.sets} ${c.sets} · ` : "";
+    return `${sets}${row.durationSeconds} ${c.sec} · ${row.restSeconds} ${c.sec} ${c.rest}`;
   }
 
-  return `${row.sets} sets · ${row.repMin}–${row.repMax} reps · ${row.restSeconds} sec rest`;
+  return `${row.sets} ${c.sets} · ${row.repMin}–${row.repMax} ${c.reps} · ${row.restSeconds} ${c.sec} ${c.rest}`;
+}
+
+function SaveButton({ disabled, c }: { disabled: boolean; c: FitnessCopy }) {
+  const { pending } = useFormStatus();
+  return (
+    <button className="ui-button ui-button-primary" disabled={disabled || pending}>
+      {pending ? c.saving : c.saveWorkout}
+    </button>
+  );
 }
 
 export function WorkoutBuilder({
   action,
   initial = {},
+  locale = "en",
 }: {
   action?: (formData: FormData) => void | Promise<void>;
   initial?: InitialWorkout;
+  locale?: Locale;
 }) {
+  const c = getFitnessCopy(locale);
+  const title = (exercise: (typeof exercises)[number]) => (locale === "mk" ? exercise.titleMk : exercise.titleEn);
+  const [filter, setFilter] = useState("");
+  const catalogue = useMemo(() => {
+    const needle = filter.trim().toLowerCase();
+    if (!needle) return exercises;
+    return exercises.filter((exercise) =>
+      `${exercise.titleEn} ${exercise.titleMk} ${exercise.primaryMuscles.join(" ")}`.toLowerCase().includes(needle));
+  }, [filter]);
   const [rows, setRows] = useState<WorkoutPrescription[]>(
     initial.prescriptions ?? [],
   );
@@ -60,17 +84,17 @@ export function WorkoutBuilder({
         ) : null}
         <div className="field-grid">
           <label>
-            Workout name
+            {c.workoutName}
             <input
               name="name"
               required
               maxLength={80}
               defaultValue={initial.name}
-              placeholder="e.g. Full body A"
+              placeholder={c.namePlaceholder}
             />
           </label>
           <label>
-            Expected duration
+            {c.expectedDuration}
             <input
               name="duration"
               type="number"
@@ -81,12 +105,12 @@ export function WorkoutBuilder({
           </label>
         </div>
         <label>
-          Description
+          {c.description}
           <textarea
             name="description"
             rows={3}
             defaultValue={initial.description}
-            placeholder="What is this session for?"
+            placeholder={c.descriptionPlaceholder}
           />
         </label>
         <input
@@ -109,17 +133,17 @@ export function WorkoutBuilder({
               >
                 <div className="builder-row-content">
                   <span>{index + 1}</span>
-                  <strong>{exercise.titleEn}</strong>
-                  <small>{prescriptionLabel(row)}</small>
+                  <strong>{title(exercise)}</strong>
+                  <small>{prescriptionLabel(row, c)}</small>
                 </div>
                 <div
                   className="builder-row-actions"
                   role="group"
-                  aria-label={`Reorder or remove ${exercise.titleEn}`}
+                  aria-label={c.reorderOrRemove(title(exercise))}
                 >
                   <button
                     type="button"
-                    aria-label={`Move ${exercise.titleEn} up`}
+                    aria-label={c.moveUp(title(exercise))}
                     onClick={() => move(index, -1)}
                     disabled={index === 0}
                   >
@@ -127,7 +151,7 @@ export function WorkoutBuilder({
                   </button>
                   <button
                     type="button"
-                    aria-label={`Move ${exercise.titleEn} down`}
+                    aria-label={c.moveDown(title(exercise))}
                     onClick={() => move(index, 1)}
                     disabled={index === rows.length - 1}
                   >
@@ -135,7 +159,7 @@ export function WorkoutBuilder({
                   </button>
                   <button
                     type="button"
-                    aria-label={`Remove ${exercise.titleEn}`}
+                    aria-label={c.remove(title(exercise))}
                     onClick={() => setRows((current) =>
                       current.filter((_, rowIndex) => rowIndex !== index)
                     )}
@@ -149,25 +173,25 @@ export function WorkoutBuilder({
         </div>
         {!rows.length ? (
           <p data-testid="builder-error" className="inline-notice warning">
-            Add at least one exercise to save this workout.
+            {c.addAtLeastOne}
           </p>
         ) : null}
-        <button
-          className="ui-button ui-button-primary"
-          disabled={!rows.length}
-        >
-          Save workout
-        </button>
+        <SaveButton disabled={!rows.length} c={c} />
       </form>
 
       <aside className="product-panel builder-catalogue">
-        <p className="eyebrow">Exercise library</p>
-        <h2>Add movement</h2>
+        <p className="eyebrow">{c.exercises}</p>
+        <h2>{c.addMovement}</h2>
+        <label className="discovery-search-field builder-filter">
+          <Search aria-hidden="true" />
+          <span className="sr-only">{c.searchMovements}</span>
+          <input type="search" value={filter} onChange={(event) => setFilter(event.target.value)} placeholder={c.searchMovements} />
+        </label>
         <div>
-          {exercises.map((exercise) => (
+          {catalogue.map((exercise) => (
             <button
               type="button"
-              aria-label={`Add ${exercise.titleEn}`}
+              aria-label={c.add(title(exercise))}
               key={exercise.slug}
               onClick={() => setRows((current) => [
                 ...current,
@@ -175,8 +199,8 @@ export function WorkoutBuilder({
               ])}
             >
               <span>
-                <strong>{exercise.titleEn}</strong>
-                <small>{exercise.primaryMuscles.join(" · ")}</small>
+                <strong>{title(exercise)}</strong>
+                <small>{exercise.primaryMuscles.map((muscle) => fitnessLabel(muscle, locale)).join(" · ")}</small>
               </span>
               <Plus aria-hidden="true" />
             </button>

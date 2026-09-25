@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { CatalogueImage } from "@/components/media/catalogue-image";
 import { getExercise } from "@/features/fitness/catalogue";
+import { fitnessLabel } from "@/features/fitness/labels";
 import {
   catalogueMediaForDisplay,
   fallbackKindForMedia,
@@ -41,11 +42,11 @@ export default async function ExercisePage({
             objectFit="contain"
           />
           <div>
-            <p className="eyebrow">{exercise.exerciseType} · {exercise.difficulty}</p>
+            <p className="eyebrow">{fitnessLabel(exercise.exerciseType, locale)} · {fitnessLabel(exercise.difficulty, locale)}</p>
             <h1>{mk ? exercise.titleMk : exercise.titleEn}</h1>
             <p>{mk ? exercise.summaryMk : exercise.summaryEn}</p>
             <ul className="tag-row">
-              {exercise.equipment.map((item) => <li key={item}>{item}</li>)}
+              {exercise.equipment.map((item) => <li key={item}>{fitnessLabel(item, locale)}</li>)}
             </ul>
           </div>
         </header>
@@ -58,7 +59,7 @@ export default async function ExercisePage({
           </section>
           <aside className="product-panel">
             <h2>{mk ? "Мускули" : "Muscles"}</h2>
-            <p><strong>{mk ? "Главни" : "Primary"}:</strong> {exercise.primaryMuscles.join(", ")}</p>
+            <p><strong>{mk ? "Главни" : "Primary"}:</strong> {exercise.primaryMuscles.map((muscle) => fitnessLabel(muscle, locale)).join(", ")}</p>
             <h3>{mk ? "Чести грешки" : "Common mistakes"}</h3>
             <ul>{(mk ? exercise.mistakesMk : exercise.mistakesEn).map((item) => <li key={item}>{item}</li>)}</ul>
             <div className="safety-note"><ShieldCheck /><p>{mk ? exercise.safetyMk : exercise.safetyEn}</p></div>
