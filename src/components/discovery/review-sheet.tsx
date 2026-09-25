@@ -7,11 +7,17 @@ import {
   useRef,
 } from "react";
 import { X } from "lucide-react";
+import { useOptionalLocale } from "@/components/providers/locale-provider";
+
+const copy = {
+  en: { eyebrow: "Review before saving", close: "Close review" },
+  mk: { eyebrow: "Прегледај пред зачувување", close: "Затвори преглед" },
+} as const;
 
 export function ReviewSheet({
   open,
   title,
-  eyebrow = "Review before saving",
+  eyebrow,
   onClose,
   children,
   footer,
@@ -25,6 +31,7 @@ export function ReviewSheet({
   footer?: ReactNode;
   returnFocus?: HTMLElement | null;
 }) {
+  const t = copy[useOptionalLocale()];
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -51,7 +58,7 @@ export function ReviewSheet({
         className="review-sheet-backdrop"
         type="button"
         onClick={onClose}
-        aria-label="Close review"
+        aria-label={t.close}
       />
       <section
         className="review-sheet"
@@ -61,7 +68,7 @@ export function ReviewSheet({
       >
         <header className="review-sheet-header">
           <div>
-            <p className="eyebrow">{eyebrow}</p>
+            <p className="eyebrow">{eyebrow ?? t.eyebrow}</p>
             <h2 id={titleId}>{title}</h2>
           </div>
           <button
@@ -69,7 +76,7 @@ export function ReviewSheet({
             className="icon-action quiet"
             type="button"
             onClick={onClose}
-            aria-label="Close review"
+            aria-label={t.close}
           >
             <X aria-hidden="true" />
           </button>

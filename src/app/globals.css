@@ -71,7 +71,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   background: var(--button-primary);
   color: var(--button-primary-text);
   box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 18%, transparent);
-  transition-timing-function: var(--ease-emphasized);
+  transition-timing-function: var(--ease-standard);
 }
 .ui-button-primary:hover {
   background: var(--button-primary-hover);
@@ -83,7 +83,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   background: var(--button-secondary);
   color: var(--button-secondary-text);
   box-shadow: 0 3px 10px color-mix(in srgb, var(--button-secondary-border) 15%, transparent);
-  transition-timing-function: var(--ease-emphasized);
+  transition-timing-function: var(--ease-standard);
 }
 .ui-button-secondary:hover {
   background: var(--button-secondary-hover);

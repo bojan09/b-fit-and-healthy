@@ -1,3 +1,8 @@
+"use client";
+
+import { useOptionalLocale } from "@/components/providers/locale-provider";
+import type { Locale } from "@/lib/i18n/config";
+
 export type RouteSkeletonVariant =
   | "today"
   | "nutrition"
@@ -6,13 +11,23 @@ export type RouteSkeletonVariant =
   | "progress"
   | "assistant";
 
-const labels: Record<RouteSkeletonVariant, string> = {
-  today: "Loading today…",
-  nutrition: "Loading nutrition…",
-  recipes: "Loading recipes…",
-  training: "Loading training…",
-  progress: "Loading progress…",
-  assistant: "Loading coach…",
+const labels: Record<Locale, Record<RouteSkeletonVariant, string>> = {
+  en: {
+    today: "Loading today…",
+    nutrition: "Loading nutrition…",
+    recipes: "Loading recipes…",
+    training: "Loading training…",
+    progress: "Loading progress…",
+    assistant: "Loading coach…",
+  },
+  mk: {
+    today: "Се вчитува денес…",
+    nutrition: "Се вчитува исхраната…",
+    recipes: "Се вчитуваат рецептите…",
+    training: "Се вчитува тренингот…",
+    progress: "Се вчитува напредокот…",
+    assistant: "Се вчитува тренерот…",
+  },
 };
 
 export function RouteSkeleton({
@@ -20,6 +35,7 @@ export function RouteSkeleton({
 }: {
   variant: RouteSkeletonVariant;
 }) {
+  const locale = useOptionalLocale();
   return (
     <main
       className="route-skeleton product-page"
@@ -29,7 +45,7 @@ export function RouteSkeleton({
       aria-live="polite"
       data-skeleton-variant={variant}
     >
-      <p className="sr-only">{labels[variant]}</p>
+      <p className="sr-only">{labels[locale][variant]}</p>
       <header className="skeleton-heading">
         <span className="skeleton-line short" />
         <span className="skeleton-line title" />

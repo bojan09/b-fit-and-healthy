@@ -204,3 +204,34 @@ textarea {
     background-position: -220% 0;
   }
 }
+
+/* Cut (clip-path) buttons clip any outer ring, so draw focus inside the shape. */
+.ui-button-cut:focus-visible,
+.card-cut:focus-visible {
+  outline: 2px solid var(--button-primary-text);
+  outline-offset: -5px;
+}
+
+@media (pointer: coarse) {
+  .ui-button { min-height: var(--touch-target); }
+  .site-footer a,
+  .footer-grid a,
+  .header-actions button { min-height: var(--touch-target); display: inline-flex; align-items: center; }
+}
+
+/* Shared inline text action (icon + label on one line). */
+.text-action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  border: 0;
+  background: transparent;
+  color: var(--foreground-secondary);
+  font-weight: 700;
+  padding-inline: var(--space-2);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.text-action:hover { color: var(--foreground); }
+.text-action svg { width: 1rem; height: 1rem; flex: none; }

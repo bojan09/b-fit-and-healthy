@@ -21,11 +21,18 @@ import { ReviewSheet } from "@/components/discovery/review-sheet";
 import { importDiscoveryWorkoutAction } from "@/features/fitness/actions";
 import { ActionFeedback } from "@/features/motion/action-feedback";
 import type { AuthActionState } from "@/features/auth/types";
+import { useOptionalLocale } from "@/components/providers/locale-provider";
+
+const copy = {
+  en: { eyebrow: "A useful place to begin", title: "Workout ideas", intro: "Choose a sensible starting structure, then edit every exercise to fit you.", goal: "Goal", allGoals: "All goals", strength: "Strength", mobility: "Mobility", conditioning: "Conditioning", time: "Time", m15: "15 minutes", m30: "30 minutes", m45: "Up to 45 minutes", searchLabel: "Search connected workout ideas", searchPlaceholder: "Search by goal, muscle or equipment", min: "min", exercises: "exercises", connected: "Connected workout libraries", liveMatches: "live matches", reviewNote: "Review the complete structure before saving it to your private library.", openLevel: "Open level", flexible: "Flexible", cancel: "Cancel", creating: "Creating…", create: "Create editable workout", difficulty: "Difficulty", duration: "Duration", equipment: "Equipment", notSupplied: "Not supplied", structure: "Workout structure", sets: "sets", reps: "reps", beginner: "Beginner", intermediate: "Intermediate", advanced: "Advanced" },
+  mk: { eyebrow: "Корисно место за почеток", title: "Идеи за тренинг", intro: "Изберете разумна почетна структура, па прилагодете ја секоја вежба.", goal: "Цел", allGoals: "Сите цели", strength: "Сила", mobility: "Мобилност", conditioning: "Кондиција", time: "Време", m15: "15 минути", m30: "30 минути", m45: "До 45 минути", searchLabel: "Пребарај поврзани идеи за тренинг", searchPlaceholder: "Пребарај по цел, мускул или опрема", min: "мин", exercises: "вежби", connected: "Поврзани библиотеки со тренинзи", liveMatches: "резултати", reviewNote: "Прегледајте ја целата структура пред да ја зачувате во приватната библиотека.", openLevel: "Отворено ниво", flexible: "Флексибилно", cancel: "Откажи", creating: "Се креира…", create: "Креирај тренинг за уредување", difficulty: "Тежина", duration: "Времетраење", equipment: "Опрема", notSupplied: "Не е наведено", structure: "Структура на тренингот", sets: "серии", reps: "повторувања", beginner: "Почетно", intermediate: "Средно", advanced: "Напредно" },
+} as const;
 
 const noExternalWorkouts: DiscoveryWorkout[] = [];
 const initial: AuthActionState = { status: "idle" };
 
 export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] }) {
+  const t = copy[useOptionalLocale()];
   const [goal, setGoal] = useState<WorkoutGoal | "all">("all");
   const [duration, setDuration] = useState(45);
   const providerSearch = useDiscoverySearch<DiscoveryWorkout>({
@@ -53,27 +60,27 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
     <section className="workout-ideas" aria-labelledby="workout-ideas-title">
       <div className="workout-ideas-heading">
         <div>
-          <p className="eyebrow">A useful place to begin</p>
-          <h2 id="workout-ideas-title">Workout ideas</h2>
-          <p>Choose a sensible starting structure, then edit every exercise to fit you.</p>
+          <p className="eyebrow">{t.eyebrow}</p>
+          <h2 id="workout-ideas-title">{t.title}</h2>
+          <p>{t.intro}</p>
         </div>
         <div className="workout-idea-filters">
           <SlidersHorizontal aria-hidden="true" />
           <label>
-            <span>Goal</span>
+            <span>{t.goal}</span>
             <select value={goal} onChange={(event) => setGoal(event.target.value as WorkoutGoal | "all")}>
-              <option value="all">All goals</option>
-              <option value="strength">Strength</option>
-              <option value="mobility">Mobility</option>
-              <option value="conditioning">Conditioning</option>
+              <option value="all">{t.allGoals}</option>
+              <option value="strength">{t.strength}</option>
+              <option value="mobility">{t.mobility}</option>
+              <option value="conditioning">{t.conditioning}</option>
             </select>
           </label>
           <label>
-            <span>Time</span>
+            <span>{t.time}</span>
             <select value={duration} onChange={(event) => setDuration(Number(event.target.value))}>
-              <option value="15">15 minutes</option>
-              <option value="30">30 minutes</option>
-              <option value="45">Up to 45 minutes</option>
+              <option value="15">{t.m15}</option>
+              <option value="30">{t.m30}</option>
+              <option value="45">{t.m45}</option>
             </select>
           </label>
         </div>
@@ -81,12 +88,12 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
       <div className="workout-provider-search">
         <label className="discovery-search-field">
           <Search aria-hidden="true" />
-          <span className="sr-only">Search connected workout ideas</span>
+          <span className="sr-only">{t.searchLabel}</span>
           <input
             type="search"
             value={providerSearch.query}
             onChange={(event) => providerSearch.setQuery(event.target.value)}
-            placeholder="Search by goal, muscle or equipment"
+            placeholder={t.searchPlaceholder}
           />
         </label>
         <DiscoveryStatus status={providerSearch.status} message={providerSearch.message} />
@@ -96,13 +103,13 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
           <Link href={`/workouts/new?idea=${idea.slug}`} className="workout-idea-card" key={idea.slug}>
             <div className="workout-idea-icon"><Dumbbell aria-hidden="true" /></div>
             <div>
-              <p className="eyebrow">{idea.goal} · {idea.level}</p>
+              <p className="eyebrow">{t[idea.goal]} · {t[idea.level]}</p>
               <h3>{idea.title}</h3>
               <p>{idea.summary}</p>
             </div>
             <div className="workout-idea-meta">
-              <span><Clock aria-hidden="true" />{idea.durationMinutes} min</span>
-              <span>{idea.exercises.length} exercises</span>
+              <span><Clock aria-hidden="true" />{idea.durationMinutes} {t.min}</span>
+              <span>{idea.exercises.length} {t.exercises}</span>
               <ArrowRight aria-hidden="true" />
             </div>
           </Link>
@@ -112,10 +119,10 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
         <section className="provider-discovery-results" aria-labelledby="provider-workouts-title">
           <div className="recipe-results-heading">
             <div>
-              <p className="eyebrow">Connected workout libraries</p>
-              <h2 id="provider-workouts-title">{providerResults.length} live matches</h2>
+              <p className="eyebrow">{t.connected}</p>
+              <h2 id="provider-workouts-title">{providerResults.length} {t.liveMatches}</h2>
             </div>
-            <p>Review the complete structure before saving it to your private library.</p>
+            <p>{t.reviewNote}</p>
           </div>
           <div className="provider-card-grid">
             {providerResults.map((workout) => (
@@ -130,8 +137,8 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
               >
                 <span className="provider-card-kicker">{workout.attribution}</span>
                 <strong>{workout.title}</strong>
-                <span>{workout.goal} · {workout.difficulty ?? "Open level"}</span>
-                <small>{workout.exercises.length} exercises · {workout.durationMinutes ?? "Flexible"} min</small>
+                <span>{workout.goal} · {workout.difficulty ?? t.openLevel}</span>
+                <small>{workout.exercises.length} {t.exercises} · {workout.durationMinutes ?? t.flexible} {t.min}</small>
               </button>
             ))}
           </div>
@@ -145,8 +152,8 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
         returnFocus={returnFocus}
         footer={selected ? (
           <>
-            <button className="ui-button ui-button-secondary" type="button" onClick={() => setSelected(null)}>Cancel</button>
-            <button className="ui-button ui-button-primary" form="workout-review-form" disabled={saving}>{saving ? "Creating…" : "Create editable workout"}</button>
+            <button className="ui-button ui-button-secondary" type="button" onClick={() => setSelected(null)}>{t.cancel}</button>
+            <button className="ui-button ui-button-primary" form="workout-review-form" disabled={saving}>{saving ? t.creating : t.create}</button>
           </>
         ) : null}
       >
@@ -155,18 +162,18 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
             <input type="hidden" name="item" value={JSON.stringify(selected)} />
             <p className="discovery-source">{selected.attribution} · {selected.quality}</p>
             <dl className="discovery-facts">
-              <div><dt>Goal</dt><dd>{selected.goal}</dd></div>
-              <div><dt>Difficulty</dt><dd>{selected.difficulty ?? "Not supplied"}</dd></div>
-              <div><dt>Duration</dt><dd>{selected.durationMinutes ? `${selected.durationMinutes} min` : "Flexible"}</dd></div>
-              <div><dt>Equipment</dt><dd>{selected.equipment.join(", ") || "Not supplied"}</dd></div>
+              <div><dt>{t.goal}</dt><dd>{selected.goal}</dd></div>
+              <div><dt>{t.difficulty}</dt><dd>{selected.difficulty ?? t.notSupplied}</dd></div>
+              <div><dt>{t.duration}</dt><dd>{selected.durationMinutes ? `${selected.durationMinutes} ${t.min}` : t.flexible}</dd></div>
+              <div><dt>{t.equipment}</dt><dd>{selected.equipment.join(", ") || t.notSupplied}</dd></div>
             </dl>
             <section className="discovery-review-section">
-              <h3>Workout structure</h3>
+              <h3>{t.structure}</h3>
               <ol>
                 {selected.exercises.map((exercise, index) => (
                   <li key={`${exercise.exerciseId}-${index}`}>
-                    <strong>{exercise.title}</strong> · {exercise.sets} sets
-                    {exercise.repMin ? ` · ${exercise.repMin}${exercise.repMax ? `–${exercise.repMax}` : ""} reps` : ""}
+                    <strong>{exercise.title}</strong> · {exercise.sets} {t.sets}
+                    {exercise.repMin ? ` · ${exercise.repMin}${exercise.repMax ? `–${exercise.repMax}` : ""} ${t.reps}` : ""}
                   </li>
                 ))}
               </ol>

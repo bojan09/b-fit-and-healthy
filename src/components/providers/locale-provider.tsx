@@ -34,3 +34,7 @@ export function useLocale() {
   if (!context) throw new Error("useLocale must be used within LocaleProvider");
   return context;
 }
+
+export function useOptionalLocale(): Locale {
+  return useContext(LocaleContext)?.locale ?? "en";
+}

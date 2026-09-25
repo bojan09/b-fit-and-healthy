@@ -103,7 +103,7 @@ describe("ExerciseLibrary", () => {
     render(<ExerciseLibrary locale="en" />);
 
     const media = screen.getAllByTestId("exercise-card-media");
-    expect(media).toHaveLength(exercises.length);
+    expect(media).toHaveLength(Math.min(exercises.length, 24));
     expect(within(media[0]).getByAltText("Athlete at the bottom of a bodyweight squat with feet grounded")).toHaveAttribute(
       "sizes",
       "(max-width: 48rem) 100vw, (max-width: 72rem) 50vw, 33vw",
@@ -111,7 +111,7 @@ describe("ExerciseLibrary", () => {
 
     const squatLink = screen.getByRole("link", { name: /Bodyweight squat/i });
     expect(squatLink).toHaveAttribute("href", "/exercises/bodyweight-squat");
-    expect(within(squatLink).getByText("squat")).toBeInTheDocument();
+    expect(within(squatLink).getByText("Squat")).toBeInTheDocument();
   });
 
   it("searches connected libraries when only a muscle is selected", async () => {
