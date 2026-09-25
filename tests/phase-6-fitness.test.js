@@ -42,7 +42,7 @@ test("exercise catalogue is bilingual and anatomy-compatible", () => {
   assert.match(catalogue, /bodyweight-squat/);
 });
 
-test("exercise catalogue media contains exactly 60 nonempty WebP assets", () => {
+test("exercise catalogue media contains exactly 98 nonempty WebP assets", () => {
   const mediaDirectory = path.join(root, "public", "media", "exercises");
   assert.ok(fs.existsSync(mediaDirectory), "public/media/exercises must exist");
   if (!fs.existsSync(mediaDirectory)) return;
@@ -50,7 +50,7 @@ test("exercise catalogue media contains exactly 60 nonempty WebP assets", () => 
   const assets = fs.readdirSync(mediaDirectory)
     .filter((file) => file.endsWith(".webp"))
     .sort();
-  assert.equal(assets.length, 60);
+  assert.equal(assets.length, 98);
 
   for (const asset of assets) {
     const contents = fs.readFileSync(path.join(mediaDirectory, asset));
