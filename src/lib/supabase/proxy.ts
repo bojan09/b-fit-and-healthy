@@ -11,14 +11,31 @@ const protectedPrefixes = [
 ];
 const ordinaryAuthRoutes = ["/sign-in", "/sign-up", "/magic-link", "/forgot-password"];
 
+// Public marketing pages are prerendered per locale under app/[locale]. Visitors
+// keep clean URLs (/blog); the proxy rewrites them to /en/blog or /mk/blog.
+const publicPrefixes = ["/features", "/anatomy", "/blog", "/about", "/contact", "/privacy", "/terms"];
+
 function isProtected(pathname: string) {
   return protectedPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+}
+
+function isPublicPage(pathname: string) {
+  return pathname === "/" || publicPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+}
+
+function localizedRewrite(request: NextRequest) {
+  const cookie = request.cookies.get("bfit-locale")?.value;
+  const locale = cookie === "mk" ? "mk" : "en";
+  const url = request.nextUrl.clone();
+  url.pathname = `/${locale}${url.pathname === "/" ? "" : url.pathname}`;
+  return NextResponse.rewrite(url);
 }
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
   const pathname = request.nextUrl.pathname;
   // Public pages render nothing session-specific, so they skip the auth round trip.
+  if (isPublicPage(pathname)) return localizedRewrite(request);
   // Protected routes refresh the session; auth routes redirect signed-in users.
   if (!isProtected(pathname) && !ordinaryAuthRoutes.includes(pathname)) return response;
 

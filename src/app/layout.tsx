@@ -1,11 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo_Black, Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
-import { LocaleProvider } from "@/components/providers/locale-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { SkipLink } from "@/components/shell/skip-link";
 import { PwaRegister } from "@/components/pwa/pwa-register";
-import { getLocale, getMessages } from "@/lib/i18n/server";
 import "./globals.css";
 import { siteUrl } from "@/lib/seo/metadata";
 
@@ -38,19 +35,21 @@ export const viewport: Viewport = {
   ]
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+// Sets <html lang> from the locale cookie before paint. The root layout reads no
+// request data so public pages stay static; area layouts provide LocaleProvider.
+const langScript = `try{var m=document.cookie.match(/(?:^|; )bfit-locale=(en|mk)/);if(m)document.documentElement.lang=m[1]}catch(e){}`;
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: langScript }} />
+      </head>
       <body className={`${sans.variable} ${display.variable} ${mono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <LocaleProvider locale={locale}>
-            <SkipLink label={messages.skip} />
-            <div className="ambient-field" aria-hidden="true" />
-            {children}
-            <PwaRegister />
-          </LocaleProvider>
+          <div className="ambient-field" aria-hidden="true" />
+          {children}
+          <PwaRegister />
         </ThemeProvider>
       </body>
     </html>

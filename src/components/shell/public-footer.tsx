@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { Brand } from "@/components/shell/brand";
-import { getLocale } from "@/lib/i18n/server";
+import type { Locale } from "@/lib/i18n/config";
 import { getPublicContent } from "@/lib/i18n/public-content";
 
-export async function PublicFooter() {
-  const locale = await getLocale();
+export function PublicFooter({ locale }: { locale: Locale }) {
   const c = getPublicContent(locale);
   return <footer className="site-footer">
     <div className="shell footer-grid">

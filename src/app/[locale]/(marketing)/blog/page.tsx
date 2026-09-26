@@ -2,7 +2,7 @@ import { BookOpen, Search } from "lucide-react";
 import Link from "next/link";
 import { MotionKnowledgeLibrary as KnowledgeLibrary } from "@/features/knowledge/motion-knowledge-library";
 import { getArticles } from "@/lib/content/articles";
-import { getLocale } from "@/lib/i18n/server";
+import { localeFromParams } from "@/lib/i18n/server";
 import { getPublicContent } from "@/lib/i18n/public-content";
 import { publicMetadata } from "@/lib/seo/metadata";
 
@@ -12,8 +12,8 @@ export const metadata = publicMetadata(
   "/blog",
 );
 
-export default async function BlogPage() {
-  const locale = await getLocale();
+export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
+  const locale = await localeFromParams(params);
   const articles = await getArticles(locale);
   const featured = articles[0];
   const c = getPublicContent(locale).blogIndex;

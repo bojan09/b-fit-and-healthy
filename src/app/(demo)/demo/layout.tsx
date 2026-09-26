@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Brand } from "@/components/shell/brand";
 import { Button } from "@/components/ui/button";
 import { DemoNav } from "@/components/shell/demo-nav";
-import { SkipLink } from "@/components/shell/skip-link";
+import { LocaleProvider } from "@/components/providers/locale-provider";
 import { getLocale } from "@/lib/i18n/server";
 import { getPublicContent } from "@/lib/i18n/public-content";
 
@@ -11,8 +11,8 @@ export default async function DemoLayout({ children }: { children: ReactNode }) 
   const locale = await getLocale();
   const c = getPublicContent(locale).demo;
   return (
+    <LocaleProvider key={locale} locale={locale}>
     <div className="demo-shell">
-      <SkipLink label={locale === "mk" ? "Прескокни до содржината" : "Skip to content"} />
       <header className="demo-header">
         <div className="shell demo-header-inner">
           <Brand authenticated={false} />
@@ -32,5 +32,6 @@ export default async function DemoLayout({ children }: { children: ReactNode }) 
         {children}
       </main>
     </div>
+    </LocaleProvider>
   );
 }

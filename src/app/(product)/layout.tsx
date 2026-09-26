@@ -8,6 +8,7 @@ import { getCurrentProfile, requireUser } from "@/features/auth/session";
 import { ProductPageMotion } from "@/features/motion/product-page-motion";
 import { loadUnreadNotificationCount } from "@/features/tracking/repository";
 import { getLocale } from "@/lib/i18n/server";
+import { LocaleProvider } from "@/components/providers/locale-provider";
 
 async function ProductNotifications({
   userId,
@@ -36,6 +37,7 @@ export default async function ProductLayout({
     (locale === "mk" ? "Сметка" : "Account");
 
   return (
+    <LocaleProvider key={locale} locale={locale}>
     <div className="product-frame">
       <ProductHeader
         locale={locale}
@@ -53,5 +55,6 @@ export default async function ProductLayout({
       </div>
       <MobileProductNavigation />
     </div>
+    </LocaleProvider>
   );
 }

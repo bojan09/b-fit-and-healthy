@@ -18,18 +18,18 @@ import {
   getArticles,
   getArticleSlugs,
 } from "@/lib/content/articles";
-import { getLocale } from "@/lib/i18n/server";
+import { localeFromParams } from "@/lib/i18n/server";
 import { getPublicContent } from "@/lib/i18n/public-content";
 import { siteUrl } from "@/lib/seo/metadata";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string; locale: string }> };
 
 export async function generateStaticParams() {
   return (await getArticleSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const locale = await getLocale();
+  const locale = await localeFromParams(params);
   const { slug } = await params;
   const article = await getArticle(locale, slug);
   if (!article) return {};
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const locale = await getLocale();
+  const locale = await localeFromParams(params);
   const { slug } = await params;
   const article = await getArticle(locale, slug);
   if (!article) notFound();

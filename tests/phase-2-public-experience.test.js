@@ -10,17 +10,17 @@ const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 
 test('Phase 2 exposes the complete approved public route foundation', () => {
   for (const file of [
-    'src/app/(marketing)/features/page.tsx',
-    'src/app/(marketing)/features/nutrition/page.tsx',
-    'src/app/(marketing)/features/training/page.tsx',
-    'src/app/(marketing)/blog/page.tsx',
-    'src/app/(marketing)/blog/[slug]/page.tsx',
-    'src/app/(marketing)/anatomy/page.tsx',
-    'src/app/(marketing)/anatomy/[muscle]/page.tsx',
-    'src/app/(marketing)/about/page.tsx',
-    'src/app/(marketing)/contact/page.tsx',
-    'src/app/(marketing)/privacy/page.tsx',
-    'src/app/(marketing)/terms/page.tsx'
+    'src/app/[locale]/(marketing)/features/page.tsx',
+    'src/app/[locale]/(marketing)/features/nutrition/page.tsx',
+    'src/app/[locale]/(marketing)/features/training/page.tsx',
+    'src/app/[locale]/(marketing)/blog/page.tsx',
+    'src/app/[locale]/(marketing)/blog/[slug]/page.tsx',
+    'src/app/[locale]/(marketing)/anatomy/page.tsx',
+    'src/app/[locale]/(marketing)/anatomy/[muscle]/page.tsx',
+    'src/app/[locale]/(marketing)/about/page.tsx',
+    'src/app/[locale]/(marketing)/contact/page.tsx',
+    'src/app/[locale]/(marketing)/privacy/page.tsx',
+    'src/app/[locale]/(marketing)/terms/page.tsx'
   ]) assert.ok(exists(file), `missing ${file}`);
 });
 
@@ -57,8 +57,8 @@ test('every paired article has parseable YAML frontmatter', () => {
 });
 
 test('Blog routes use the validated repository, readable composition, and JSON-LD', () => {
-  const index = read('src/app/(marketing)/blog/page.tsx');
-  const detail = read('src/app/(marketing)/blog/[slug]/page.tsx');
+  const index = read('src/app/[locale]/(marketing)/blog/page.tsx');
+  const detail = read('src/app/[locale]/(marketing)/blog/[slug]/page.tsx');
   assert.match(index, /getArticles/);
   assert.match(detail, /getArticle/);
   assert.match(detail, /ArticleJsonLd/);
@@ -116,7 +116,7 @@ test('public navigation points only to implemented routes', () => {
 test('public visitors can always find sign-in and registration', () => {
   const header = read('src/components/shell/public-header.tsx');
   const navigation = read('src/components/shell/public-navigation.tsx');
-  const home = read('src/app/(marketing)/page.tsx');
+  const home = read('src/app/[locale]/(marketing)/page.tsx');
   const footer = read('src/components/shell/public-footer.tsx');
   assert.match(header, /href="\/sign-in"/);
   assert.match(header, /href="\/sign-up"/);
@@ -129,8 +129,8 @@ test('public visitors can always find sign-in and registration', () => {
 });
 
 test('shared public compositions keep Macedonian parity instead of hardcoded English controls', () => {
-  assert.match(read('src/app/(marketing)/features/nutrition/page.tsx'), /getLocale/);
-  assert.match(read('src/app/(marketing)/features/training/page.tsx'), /getLocale/);
+  assert.match(read('src/app/[locale]/(marketing)/features/nutrition/page.tsx'), /localeFromParams/);
+  assert.match(read('src/app/[locale]/(marketing)/features/training/page.tsx'), /localeFromParams/);
   assert.match(read('src/components/content/article-card.tsx'), /readLabel/);
   assert.match(read('src/components/content/feature-page.tsx'), /labels/);
   assert.match(read('src/components/shell/public-footer.tsx'), /c\.nav\.contact/);

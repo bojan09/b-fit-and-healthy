@@ -42,10 +42,10 @@ test("every animation is opt-in behind prefers-reduced-motion", () => {
 test("approved content and planner surfaces reuse the restrained reveal primitive", () => {
   assert.match(read("src/components/content/feature-page.tsx"), /MotionReveal/);
   assert.match(read("src/features/knowledge/motion-knowledge-library.tsx"), /MotionReveal/);
-  assert.match(read("src/app/(marketing)/blog/page.tsx"), /MotionKnowledgeLibrary/);
+  assert.match(read("src/app/[locale]/(marketing)/blog/page.tsx"), /MotionKnowledgeLibrary/);
   const productMotion = read("src/features/motion/product-page-motion.tsx");
   assert.match(productMotion, /"\/nutrition"/);
   assert.match(productMotion, /"\/training"/);
   assert.match(read("src/app/(product)/layout.tsx"), /ProductPageMotion/);
-  assert.doesNotMatch(read("src/app/(marketing)/blog/[slug]/page.tsx"), /MotionReveal/);
+  assert.doesNotMatch(read("src/app/[locale]/(marketing)/blog/[slug]/page.tsx"), /MotionReveal/);
 });

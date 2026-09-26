@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SectionIntro } from "@/components/content/section-intro";
 import { JsonLd } from "@/components/seo/json-ld";
-import { getLocale } from "@/lib/i18n/server";
+import { localeFromParams } from "@/lib/i18n/server";
 import { getPublicContent } from "@/lib/i18n/public-content";
 import { publicMetadata, siteUrl } from "@/lib/seo/metadata";
 import { GuidedHealthPath } from "@/features/landing/guided-health-path";
@@ -13,8 +13,8 @@ import { MotionReveal } from "@/features/motion/motion-reveal";
 
 export const metadata = publicMetadata("Health and fitness, connected", "Understand nutrition, training, anatomy, habits, and health knowledge in one calm system.", "/");
 
-export default async function HomePage() {
-  const locale = await getLocale();
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const locale = await localeFromParams(params);
   const c = getPublicContent(locale);
   const modules = [
     [Apple, c.nav.nutrition, c.features.nutrition, "/features/nutrition"],
