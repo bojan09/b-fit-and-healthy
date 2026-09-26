@@ -1,4 +1,4 @@
-import { createServerClient } from "@supabase/ssr";
+﻿import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getPublicEnv } from "@/lib/env/public";
 import type { Database } from "@/types/database";
@@ -17,6 +17,10 @@ function isProtected(pathname: string) {
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
+  const pathname = request.nextUrl.pathname;
+  // Public pages render nothing session-specific, so they skip the auth round trip.
+  // Protected routes refresh the session; auth routes redirect signed-in users.
+  if (!isProtected(pathname) && !ordinaryAuthRoutes.includes(pathname)) return response;
 
   try {
     const env = getPublicEnv();
@@ -38,7 +42,6 @@ export async function updateSession(request: NextRequest) {
     );
 
     const { data, error } = await supabase.auth.getClaims();
-    const pathname = request.nextUrl.pathname;
     if ((!data?.claims || error) && isProtected(pathname)) {
       const signIn = request.nextUrl.clone();
       signIn.pathname = "/sign-in";

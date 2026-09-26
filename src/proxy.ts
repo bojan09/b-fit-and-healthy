@@ -6,5 +6,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|icons/|sw.js).*)"]
+  // Skip build assets, public media, and any file with an extension (images, fonts, feeds, manifests).
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|icons/|media/|sw.js|.*\\.[a-zA-Z0-9]+$).*)"]
 };

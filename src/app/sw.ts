@@ -1,4 +1,4 @@
-import type { PrecacheEntry, RuntimeCaching, SerwistGlobalConfig } from "serwist";
+﻿import type { PrecacheEntry, RuntimeCaching, SerwistGlobalConfig } from "serwist";
 import { CacheFirst, ExpirationPlugin, NetworkOnly, Serwist, StaleWhileRevalidate } from "serwist";
 
 declare global {
@@ -32,7 +32,7 @@ const runtimeCaching: RuntimeCaching[] = [
     matcher: ({ request, url }) => url.origin === self.location.origin && request.destination === "image",
     handler: new CacheFirst({
       cacheName: "bfit-public-images-v1",
-      plugins: [new ExpirationPlugin({ maxEntries: 48, maxAgeSeconds: 30 * 24 * 60 * 60 })]
+      plugins: [new ExpirationPlugin({ maxEntries: 160, maxAgeSeconds: 30 * 24 * 60 * 60 })]
     })
   }
 ];
