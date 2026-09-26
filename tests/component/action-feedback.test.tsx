@@ -1,41 +1,21 @@
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-
-const scoped = vi.hoisted(() => vi.fn());
-vi.mock("@/features/motion/use-gsap-scope", () => ({ useGsapScope: scoped }));
-
+import { afterEach, describe, expect, it } from "vitest";
 import { ActionFeedback } from "@/features/motion/action-feedback";
 
 describe("ActionFeedback", () => {
-  afterEach(() => {
-    cleanup();
-    vi.clearAllMocks();
-  });
+  afterEach(cleanup);
 
-  it("keeps success text semantic and registers one restrained pulse", () => {
+  it("keeps success text semantic and exposes the status for the CSS pulse", () => {
     render(<ActionFeedback status="success" message="Water added" />);
-    expect(screen.getByRole("status")).toHaveTextContent("Water added");
-    expect(screen.getByRole("status")).toHaveAttribute("data-action-status", "success");
-    const setup = scoped.mock.calls[0][1];
-    const fromTo = vi.fn();
-    setup({
-      gsap: { fromTo },
-      root: screen.getByRole("status"),
-      profile: "full",
-    });
-    expect(fromTo).toHaveBeenCalledTimes(1);
+    const status = screen.getByRole("status");
+    expect(status).toHaveTextContent("Water added");
+    expect(status).toHaveAttribute("data-action-status", "success");
+    expect(status).toHaveClass("action-feedback", "success");
   });
 
-  it("never plays success motion for an error", () => {
+  it("marks errors distinctly so they never get the success pulse", () => {
     render(<ActionFeedback status="error" message="Try again" />);
-    const setup = scoped.mock.calls[0][1];
-    const fromTo = vi.fn();
-    setup({
-      gsap: { fromTo },
-      root: screen.getByRole("status"),
-      profile: "full",
-    });
-    expect(fromTo).not.toHaveBeenCalled();
     expect(screen.getByRole("status")).toHaveAttribute("data-action-status", "error");
+    expect(screen.getByRole("status")).not.toHaveClass("success");
   });
 });

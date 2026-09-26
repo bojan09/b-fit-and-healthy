@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { Activity, Apple, ArrowRight, BookOpen, CheckCircle2, Circle, Dumbbell, HeartPulse, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import { getLocale } from "@/lib/i18n/server";
 import { getPublicContent } from "@/lib/i18n/public-content";
 import { publicMetadata, siteUrl } from "@/lib/seo/metadata";
 import { GuidedHealthPath } from "@/features/landing/guided-health-path";
-import { LandingMotion } from "@/features/landing/landing-motion";
 import { MotionReveal } from "@/features/motion/motion-reveal";
 
 export const metadata = publicMetadata("Health and fitness, connected", "Understand nutrition, training, anatomy, habits, and health knowledge in one calm system.", "/");
@@ -27,7 +27,6 @@ export default async function HomePage() {
       { "@context": "https://schema.org", "@type": "Organization", name: "B Fit & Healthy", url: siteUrl.href },
       { "@context": "https://schema.org", "@type": "WebSite", name: "B Fit & Healthy", url: siteUrl.href }
     ]} />
-    <LandingMotion>
     <section className="shell public-hero" aria-labelledby="hero-title" data-motion-hero>
       <div className="hero-copy">
         <p className="eyebrow"><HeartPulse aria-hidden="true" size={17} />{c.home.eyebrow}</p>
@@ -41,10 +40,10 @@ export default async function HomePage() {
 
     <MotionReveal className="landing-reveal"><section className="public-section shell" aria-labelledby="modules-title" data-motion-section>
       <SectionIntro eyebrow={c.home.signal} title={c.home.modulesTitle} body={c.home.modulesBody} />
-      <div className="module-grid">{modules.map(([Icon, title, body, href], index) => <Card className={`module-card module-${index + 1}`} key={href}><Icon aria-hidden="true" /><span className="module-index">0{index + 1}</span><h2>{title}</h2><p>{body}</p><Link className="text-link" href={href}>{c.common.learnMore}<MoveRight aria-hidden="true" size={18} /></Link></Card>)}</div>
+      <div className="module-grid">{modules.map(([Icon, title, body, href], index) => <Card className={`module-card module-${index + 1} depth-card`} key={href} style={{ "--i": index } as CSSProperties}><Icon aria-hidden="true" /><span className="module-index">0{index + 1}</span><h2>{title}</h2><p>{body}</p><Link className="text-link" href={href}>{c.common.learnMore}<MoveRight aria-hidden="true" size={18} /></Link></Card>)}</div>
     </section></MotionReveal>
 
-    <MotionReveal className="landing-reveal"><section className="public-section feature-story shell" data-motion-section>
+    <MotionReveal className="landing-reveal" variant="tilt"><section className="public-section feature-story shell" data-motion-section>
       <div className="feature-visual nutrition-visual">
         <div className="nutrition-visual-header"><span>07:40</span><strong>{c.home.breakfastLabel}</strong><small>{c.home.breakfastNote}</small></div>
         <div className="nutrition-stat"><strong>420</strong><span>{c.home.caloriesUnit}</span></div>
@@ -57,7 +56,7 @@ export default async function HomePage() {
       <SectionIntro eyebrow={c.home.nutritionVisualLabel} title={c.home.nutritionTitle} body={c.home.nutritionBody} action={<Button asChild variant="secondary"><Link href="/features/nutrition">{c.common.learnMore}<ArrowRight aria-hidden="true" size={17} /></Link></Button>} />
     </section></MotionReveal>
 
-    <MotionReveal className="landing-reveal"><section className="public-section feature-story feature-story-reverse shell" data-motion-section>
+    <MotionReveal className="landing-reveal" variant="tilt"><section className="public-section feature-story feature-story-reverse shell" data-motion-section>
       <div className="feature-visual training-visual">
         <div className="training-visual-header"><strong>{c.home.workoutSessionLabel}</strong><span>{c.home.workoutDurationLabel}</span></div>
         {([[c.home.squatLabel, "3 × 8", true], [c.home.pullLabel, "3 × 10", true], [c.home.carryLabel, "4 × 30 m", false]] as const).map(([label, sets, done]) => (
@@ -75,6 +74,5 @@ export default async function HomePage() {
     <MotionReveal className="landing-reveal"><section className="public-section split-callouts shell" data-motion-section><Card className="callout anatomy-callout"><Activity aria-hidden="true" /><div><p className="eyebrow">{c.nav.anatomy}</p><h2>{c.home.anatomyTitle}</h2><p>{c.home.anatomyBody}</p><Link className="text-link" href="/anatomy">{c.common.explore}<ArrowRight aria-hidden="true" size={18} /></Link></div></Card><Card className="callout knowledge-callout"><BookOpen aria-hidden="true" /><div><p className="eyebrow">{c.nav.blog}</p><h2>{c.home.knowledgeTitle}</h2><p>{c.home.knowledgeBody}</p><Link className="text-link" href="/blog">{c.common.explore}<ArrowRight aria-hidden="true" size={18} /></Link></div></Card></section></MotionReveal>
 
     <MotionReveal className="landing-reveal"><section className="public-section shell" data-motion-section><div className="final-cta"><div><p className="eyebrow">B Fit & Healthy</p><h2>{c.home.finalTitle}</h2><p>{c.home.finalBody}</p></div><div className="final-account-actions"><Button asChild size="lg"><Link href="/sign-up">{c.nav.getStarted}<ArrowRight aria-hidden="true" size={18} /></Link></Button><Link className="text-link" href="/sign-in">{c.nav.signIn}</Link></div></div></section></MotionReveal>
-    </LandingMotion>
   </main>;
 }

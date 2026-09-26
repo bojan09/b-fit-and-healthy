@@ -1,77 +1,56 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { ComponentType } from "react";
-import type { AnatomyRendererProps } from "@/features/anatomy/anatomy-renderer-types";
-
-const capabilities = vi.hoisted(() => ({
-  snapshot: {
-    reducedMotion: false,
-    coarsePointer: false,
-    saveData: false,
-    documentVisible: true,
-    hardwareConcurrency: 8,
-    deviceMemory: 8,
-    webgl2: true,
-  },
-}));
-vi.mock("@/features/motion/use-motion-profile", () => ({
-  useMotionCapabilities: () => capabilities.snapshot,
-}));
-
 import { AnatomyRenderer } from "@/features/anatomy/anatomy-renderer";
-import type { AnatomyAssetManifest } from "@/features/anatomy/anatomy-asset-manifest";
+import { AnatomyExplorer } from "@/features/anatomy/anatomy-explorer";
 
-const props: AnatomyRendererProps = {
-  view: "front",
-  selectedMuscleId: "pectorals",
-  locale: "en",
-  onSelectMuscle: vi.fn(),
-};
-const manifest: AnatomyAssetManifest = {
-  assetUrl: "/models/clinical.glb",
-  licenseName: "Commercial",
-  licenseUrl: "https://example.com/license",
-  attribution: "Studio",
-  commercialUseAllowed: true,
-  modelVersion: "1",
-  muscleMeshes: { pectorals: ["Pectoralis"] },
-};
+describe("AnatomyRenderer (CSS 3D turntable)", () => {
+  afterEach(cleanup);
 
-describe("AnatomyRenderer", () => {
-  afterEach(() => {
-    cleanup();
-    vi.clearAllMocks();
-    capabilities.snapshot.reducedMotion = false;
+  it("renders both atlas faces and makes only the active face interactive", () => {
+    const view = render(<AnatomyRenderer view="front" locale="en" selectedMuscleId="pectorals" onSelectMuscle={vi.fn()} />);
+    const turntable = view.container.querySelector(".anatomy-turntable") as HTMLElement;
+    expect(turntable).toHaveAttribute("data-view", "front");
+    const front = view.container.querySelector(".anatomy-face-front") as HTMLElement;
+    const back = view.container.querySelector(".anatomy-face-back") as HTMLElement;
+    expect(front).not.toHaveAttribute("aria-hidden");
+    expect(back).toHaveAttribute("aria-hidden", "true");
+    expect(back).toHaveAttribute("inert");
+    expect(front).not.toHaveAttribute("inert");
+    expect(within(front).getByRole("button", { name: "Pectorals" })).toHaveAttribute("aria-pressed", "true");
   });
 
-  it("renders the accessible SVG when no licensed manifest exists", () => {
-    render(<AnatomyRenderer {...props} manifest={null} />);
-    expect(screen.getByRole("group", { name: "Front muscle view" })).toBeInTheDocument();
-    expect(screen.queryByTestId("three-renderer")).not.toBeInTheDocument();
+  it("selects a muscle from the visible face by pointer or keyboard", () => {
+    const onSelect = vi.fn();
+    const view = render(<AnatomyRenderer view="back" locale="en" selectedMuscleId="trapezius" onSelectMuscle={onSelect} />);
+    const back = view.container.querySelector(".anatomy-face-back") as HTMLElement;
+    const lats = within(back).getByRole("button", { name: "Latissimus dorsi" });
+    fireEvent.click(lats);
+    fireEvent.keyDown(lats, { key: "Enter" });
+    expect(onSelect).toHaveBeenCalledTimes(2);
+    expect(onSelect).toHaveBeenCalledWith("latissimus");
   });
+});
 
-  it("keeps SVG for reduced motion even when a manifest exists", () => {
-    capabilities.snapshot.reducedMotion = true;
-    const loader = vi.fn();
-    render(<AnatomyRenderer {...props} manifest={manifest} loadThreeRenderer={loader} />);
-    expect(screen.getByRole("group", { name: "Front muscle view" })).toBeInTheDocument();
-    expect(loader).not.toHaveBeenCalled();
-  });
+describe("AnatomyExplorer", () => {
+  afterEach(cleanup);
 
-  it("loads the isolated renderer only when capability and licensing pass", async () => {
-    const Three: ComponentType<AnatomyRendererProps & { manifest: AnatomyAssetManifest }> =
-      () => <div data-testid="three-renderer">Three renderer</div>;
-    const loader = vi.fn(async () => ({ ThreeAnatomyRenderer: Three }));
-    render(<AnatomyRenderer {...props} manifest={manifest} loadThreeRenderer={loader} />);
-    await waitFor(() => expect(screen.getByTestId("three-renderer")).toBeInTheDocument());
-    expect(loader).toHaveBeenCalledTimes(1);
-  });
+  it("turns the figure when the view changes and keeps directory focus", () => {
+    const view = render(<AnatomyExplorer locale="en" />);
+    const turntable = view.container.querySelector(".anatomy-turntable") as HTMLElement;
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
+    expect(turntable).toHaveAttribute("data-view", "back");
 
-  it("falls back safely when the renderer loader fails", async () => {
-    const loader = vi.fn(async () => { throw new Error("raw loader detail"); });
-    render(<AnatomyRenderer {...props} manifest={manifest} loadThreeRenderer={loader} />);
-    await waitFor(() => expect(loader).toHaveBeenCalled());
-    expect(screen.getByRole("group", { name: "Front muscle view" })).toBeInTheDocument();
-    expect(screen.queryByText(/raw loader detail/i)).not.toBeInTheDocument();
+    const stage = view.container.querySelector(".anatomy-stage") as HTMLElement;
+    const scrollIntoView = vi.fn();
+    stage.scrollIntoView = scrollIntoView;
+    vi.spyOn(stage, "getBoundingClientRect").mockReturnValue({
+      top: 900, bottom: 1500, left: 0, right: 360, width: 360, height: 600, x: 0, y: 900,
+      toJSON: () => ({}),
+    });
+    const entry = view.container.querySelector(".anatomy-directory button[aria-pressed]") as HTMLButtonElement;
+    entry.focus();
+    fireEvent.click(entry);
+    expect(entry).toHaveFocus();
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest", behavior: "auto" });
   });
 });

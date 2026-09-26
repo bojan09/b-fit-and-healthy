@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ArrowRight, RotateCcw, Search, X } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { AnatomyRenderer } from "@/features/anatomy/anatomy-renderer";
-import { useAnatomyMotion } from "@/features/anatomy/anatomy-motion";
 import { getAnatomyRegions, getMuscle, getMusclesForView, regionLabel, searchMuscles, type MuscleView } from "@/features/anatomy/data";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -13,9 +12,7 @@ export function AnatomyExplorer({ locale }: { locale: Locale }) {
   const [selected, setSelected] = useState("pectorals");
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("all");
-  const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  useAnatomyMotion(rootRef, view, selected);
 
   const muscle = getMuscle(selected) ?? getMusclesForView(view)[0];
   const results = useMemo(() => searchMuscles(query, region), [query, region]);
@@ -41,7 +38,7 @@ export function AnatomyExplorer({ locale }: { locale: Locale }) {
   };
 
   return (
-    <div ref={rootRef} className="anatomy-encyclopedia">
+    <div className="anatomy-encyclopedia">
 
       <div className="anatomy-explorer">
         <div ref={stageRef} className="anatomy-stage">
@@ -54,7 +51,7 @@ export function AnatomyExplorer({ locale }: { locale: Locale }) {
           </div>
           <p className="stage-hint"><RotateCcw aria-hidden="true" size={16} />{locale === "en" ? "Choose a highlighted muscle or use the directory." : "Избери означен мускул или користи го именикот."}</p>
         </div>
-        <div className="anatomy-panel" data-anatomy-panel aria-live="polite">
+        <div className="anatomy-panel" data-anatomy-panel aria-live="polite" key={muscle.id}>
           <p className="eyebrow">{regionLabel(muscle.region, locale)}</p>
           <h2>{muscle.name[locale]}</h2>
           <p className="scientific-name">{muscle.scientific}</p>

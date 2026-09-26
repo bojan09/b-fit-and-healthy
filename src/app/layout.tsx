@@ -5,7 +5,6 @@ import { LocaleProvider } from "@/components/providers/locale-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SkipLink } from "@/components/shell/skip-link";
 import { PwaRegister } from "@/components/pwa/pwa-register";
-import { AmbientPointer } from "@/components/effects/ambient-pointer";
 import { getLocale, getMessages } from "@/lib/i18n/server";
 import "./globals.css";
 import { siteUrl } from "@/lib/seo/metadata";
@@ -48,7 +47,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LocaleProvider locale={locale}>
             <SkipLink label={messages.skip} />
-            <AmbientPointer />
+            <div className="ambient-field" aria-hidden="true" />
             {children}
             <PwaRegister />
           </LocaleProvider>

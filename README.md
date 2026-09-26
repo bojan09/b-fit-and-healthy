@@ -6,9 +6,9 @@ B Fit & Healthy is an English-first, bilingual health and fitness product built 
 
 Phase 1 established the production foundation; Phases 2–4 added the public experience, authentication/onboarding, and real-data Guided Daily Canvas. Phase 5 adds private nutrition logging, recipes, meal planning, groceries, and USDA-backed search. Phase 6 adds the exercise library, workout planning, active sessions, history, and personal records. Phase 7 adds the Anatomy encyclopedia, richer SVG atlas, content relationships, and bilingual knowledge depth. Phase 8 adds the private Groq AI Coach with minimized context, 30-day history, safety boundaries, and reviewable drafts.
 
-Phase 9 adds progressive GSAP motion and a licensed-asset-gated Three.js integration boundary. The accessible SVG atlas remains the active renderer; a live clinical 3D model is not claimed or enabled. Provider-backed features require their documented Supabase migrations and valid server credentials.
+Motion and 3D are CSS-only: no GSAP, Three.js, or animation libraries ship to the browser. The accessible SVG atlas remains the active renderer and turns between front and back as a CSS 3D card; scroll reveals use `animation-timeline: view()` and every effect is disabled under `prefers-reduced-motion`. Provider-backed features require their documented Supabase migrations and valid server credentials.
 
-See `docs/motion-and-three-operations.md` for capability gates, reduced-motion behavior, model licensing requirements, and renderer cleanup.
+See `docs/motion-and-three-operations.md` for the CSS motion system, 3D surfaces, and reduced-motion behavior.
 
 ## Local development
 

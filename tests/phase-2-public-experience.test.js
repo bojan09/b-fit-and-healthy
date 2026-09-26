@@ -153,9 +153,9 @@ test('shared buttons use the coordinated Voltage tokens in both themes', () => {
   assert.match(css, /\.dark\s*\{[\s\S]*--button-primary:\s*#d4ff2f/i);
 });
 
-test('ambient halo sits above the page paint and below interactive content', () => {
-  const css = read('src/app/globals.css');
-  assert.match(css, /\.ambient-pointer\s*\{[^}]*z-index:\s*0;/s);
-  assert.match(css, /body\s*>\s*:not\(\.ambient-pointer\):not\(\.skip-link\)\s*\{[^}]*z-index:\s*1;/s);
-  assert.match(css, /\.skip-link\s*\{[^}]*position:\s*fixed;/s);
+test('ambient field sits below interactive content and never tracks the pointer', () => {
+  const css = read('src/styles/motion.css');
+  assert.match(css, /\.ambient-field\s*\{[^}]*z-index:\s*0;/s);
+  assert.match(read('src/app/globals.css'), /body\s*>\s*:not\(\.ambient-field\):not\(\.skip-link\)\s*\{[^}]*z-index:\s*1;/s);
+  assert.doesNotMatch(read('src/app/layout.tsx'), /AmbientPointer/);
 });
