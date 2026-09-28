@@ -11,6 +11,7 @@ import {
 import { useActionState, useMemo, useState } from "react";
 import {
   discoverWorkoutIdeas,
+  ideaCopy,
   type WorkoutGoal,
   type WorkoutIdea,
 } from "./workout-ideas";
@@ -32,7 +33,8 @@ const noExternalWorkouts: DiscoveryWorkout[] = [];
 const initial: AuthActionState = { status: "idle" };
 
 export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] }) {
-  const t = copy[useOptionalLocale()];
+  const locale = useOptionalLocale();
+  const t = copy[locale];
   const [goal, setGoal] = useState<WorkoutGoal | "all">("all");
   const [duration, setDuration] = useState(45);
   const providerSearch = useDiscoverySearch<DiscoveryWorkout>({
@@ -104,8 +106,8 @@ export function WorkoutIdeaLibrary({ ideas }: { ideas: readonly WorkoutIdea[] })
             <div className="workout-idea-icon"><Dumbbell aria-hidden="true" /></div>
             <div>
               <p className="eyebrow">{t[idea.goal]} · {t[idea.level]}</p>
-              <h3>{idea.title}</h3>
-              <p>{idea.summary}</p>
+              <h3>{ideaCopy(idea, locale).title}</h3>
+              <p>{ideaCopy(idea, locale).summary}</p>
             </div>
             <div className="workout-idea-meta">
               <span><Clock aria-hidden="true" />{idea.durationMinutes} {t.min}</span>

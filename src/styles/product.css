@@ -2,25 +2,14 @@
   padding-block: clamp(1.75rem, 4vw, 3rem);
 }
 
-.product-page {
-  width: min(calc(100% - 2rem), var(--shell));
-  gap: clamp(1.5rem, 3vw, 2.25rem);
-}
-
-.product-page-heading {
-  gap: 1rem;
-}
-
 .product-page-heading h1,
 .tracking-page-header h1 {
-  font-size: clamp(1.875rem, 4vw, 2.75rem);
   font-weight: 500;
   line-height: 1.05;
 }
 
 .training-hero h2,
 .next-action-panel h2 {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 500;
 }
 
@@ -30,79 +19,15 @@
   border-radius: var(--radius-feature);
 }
 
-.tracking-page,
-.today-canvas {
-  padding-block: clamp(1.75rem, 4vw, 3.5rem);
-}
-
-.tracking-page {
-  display: grid;
-  gap: var(--space-6);
-}
-
-.tracking-page-header {
-  align-items: end;
-}
-
-.tracking-page-header > div {
-  gap: var(--space-2);
-}
-
-.tracking-page-header p:last-child {
-  max-width: 58ch;
-}
-
-.today-layout {
-  grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.55fr);
-  gap: var(--space-4);
-  margin-top: var(--space-8);
-}
-
-.today-primary,
-.today-secondary {
-  gap: var(--space-4);
-}
-
 .next-action-panel {
-  min-height: 12rem;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--space-6);
   border-color: color-mix(in srgb, var(--brand) 28%, var(--border));
-  border-radius: var(--radius-card);
-  background:
-    radial-gradient(circle at 92% 10%, var(--halo-mineral), transparent 17rem),
-    var(--surface);
-  padding: clamp(1.25rem, 3vw, 2rem);
-  box-shadow: none;
 }
 
 .next-action-panel h2 {
   margin-top: var(--space-2);
-  font-size: clamp(1.75rem, 3vw, 2.35rem);
-}
-
-.daily-balance,
-.rhythm-section,
-.guidance-panel,
-.tracking-key,
-.tracking-form-panel,
-.progress-panel {
-  border-radius: var(--radius-card);
-  background: var(--surface);
-  padding: var(--space-5);
-}
-
-.daily-balance h2,
-.rhythm-section h2,
-.guidance-panel h2,
-.tracking-key h2,
-.tracking-form-panel h2,
-.progress-panel > h2 {
-  font-size: 1.125rem;
 }
 
 .balance-rows {
-  gap: var(--space-4);
   margin: var(--space-4) 0 0;
   padding: 0;
   list-style: none;
@@ -113,28 +38,11 @@
   gap: var(--space-2);
 }
 
-.balance-row > div:first-child {
-  font-size: 0.8125rem;
-}
-
-.balance-row strong {
-  font-size: 0.75rem;
-}
-
-.linear-meter {
-  height: 0.4rem;
-  margin-top: 0;
-  background: var(--background-sunken);
+.balance-row > div:first-child { justify-content: space-between;
 }
 
 .rhythm-rail {
   margin-top: var(--space-4);
-}
-
-.rhythm-rail li {
-  min-height: 3.75rem;
-  gap: var(--space-3);
-  padding-block: var(--space-2);
 }
 
 .rhythm-section > .empty-state {
@@ -143,39 +51,16 @@
   padding: var(--space-4);
 }
 
-.guidance-panel {
-  min-height: 13rem;
-  background:
-    radial-gradient(circle at 12% 8%, var(--halo-mineral), transparent 13rem),
-    var(--surface);
-}
-
-.guidance-panel .eyebrow {
-  margin-top: var(--space-4);
-}
-
-.guidance-panel .text-link {
-  padding-top: var(--space-4);
-}
-
 .tracking-key ul {
-  gap: var(--space-2);
   margin-top: var(--space-4);
-}
-
-.progress-summary {
-  gap: var(--space-3);
 }
 
 .progress-summary article {
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
-  background: var(--surface);
-  padding: var(--space-5);
 }
 
 .progress-summary strong {
-  margin-top: var(--space-2);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
 }
 
@@ -183,26 +68,9 @@
   margin-top: var(--space-4);
 }
 
-.weight-visual {
-  grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 0.65fr);
-  gap: var(--space-6);
-  margin-top: var(--space-4);
-}
-
-.weight-visual svg {
-  min-height: 14rem;
-}
-
-.tracking-records,
-.notification-list {
-  gap: var(--space-3);
-}
-
 .tracking-record,
 .notification-list li {
   min-height: 6.5rem;
-  gap: var(--space-5);
-  padding: var(--space-5);
 }
 
 .tracking-record h2,
@@ -214,128 +82,25 @@
   min-height: 7rem;
   display: grid;
   place-items: center;
-  padding: var(--space-5);
-}
-
-.assistant-page {
-  width: min(calc(100% - 2rem), var(--shell));
-  grid-template-columns: 11.5rem minmax(0, 1fr) 15rem;
-  gap: var(--space-4);
-  padding-block: clamp(1.5rem, 4vw, 3rem);
-}
-
-.assistant-history,
-.assistant-context-rail {
-  top: 4.75rem;
-  gap: var(--space-3);
-}
-
-.assistant-history {
-  border-radius: var(--radius-card);
-  padding: var(--space-2);
-}
-
-.assistant-history a {
-  min-height: 2.5rem;
-  padding: 0.4rem 0.5rem;
-  font-size: 0.75rem;
-}
-
-.assistant-workspace {
-  min-height: 0;
-  grid-template-rows: auto auto auto auto auto;
-  border-radius: var(--radius-card);
-  box-shadow: none;
-}
-
-.assistant-page-header {
-  gap: var(--space-3);
-  padding: var(--space-5);
-}
-
-.assistant-page-header h1 {
-  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
-}
-
-.assistant-prompt-row {
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-5) 0;
 }
 
 .assistant-prompt-row button {
-  min-height: 2.25rem;
   border-color: transparent;
-  border-radius: var(--radius-control);
-  background: var(--brand-soft);
-  padding-inline: 0.75rem;
   font-size: 0.8125rem;
-  font-weight: 600;
 }
 
 .assistant-messages {
   min-height: 7rem;
-  gap: var(--space-4);
-  padding: var(--space-5);
 }
 
-.assistant-composer {
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-5);
-}
-
-.assistant-composer textarea {
-  min-height: 2.75rem;
-  padding: 0.65rem 0.75rem;
-}
-
-.assistant-context-rail > section {
-  gap: var(--space-2);
-  border-radius: var(--radius-card);
-  padding: var(--space-3);
-}
-
-.assistant-context-rail h2 {
-  font-size: 0.9375rem;
-}
-
-.assistant-context-rail dl div {
-  gap: var(--space-2);
-}
-
-.onboarding-shell {
-  min-height: calc(100vh - 3.75rem);
-  padding: clamp(1rem, 4vw, 2.5rem);
-}
-
-.onboarding-card {
-  width: min(100%, 44rem);
-  border-radius: var(--radius-card);
-  padding: clamp(1.25rem, 4vw, 2.5rem);
-  box-shadow: none;
+.assistant-composer textarea {resize:vertical;
 }
 
 .onboarding-card h1 {
-  font-size: clamp(2rem, 5vw, 2.75rem);
   font-weight: 500;
 }
 
-.onboarding-card form {
-  gap: var(--space-5);
-  margin-top: var(--space-6);
-}
-
-.onboarding-card section {
-  gap: var(--space-4);
-}
-
-.onboarding-actions {
-  padding-top: var(--space-4);
-}
-
 @media (max-width: 72rem) {
-  .assistant-page {
-    grid-template-columns: minmax(0, 1fr) 15rem;
-  }
 
   .assistant-history-desktop {
     display: none;
@@ -347,30 +112,12 @@
     grid-column: 1 / -1;
     order: 3;
   }
-
-  .assistant-context-rail {
-    grid-column: 2;
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 48rem) {
-  .today-layout,
-  .assistant-page {
-    grid-template-columns: 1fr;
-  }
-
-  .today-layout {
-    margin-top: var(--space-6);
-  }
 
   .next-action-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .assistant-context-rail {
-    grid-column: auto;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr; order: 1;
   }
 }
 
@@ -763,25 +510,8 @@
   grid-column: 1 / -1;
 }
 
-.planner-week {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3);
-}
-
-.planner-day {
-  display: grid;
-  grid-template-columns: 6rem minmax(0, 1fr);
-  min-height: 9rem;
-}
-
 .planner-day > header {
-  border-bottom: 0;
   border-right: 1px solid var(--border);
-}
-
-.planner-day-items {
-  min-height: 5rem;
-  padding: var(--space-3);
 }
 
 .planner-day > details {
@@ -789,7 +519,6 @@
 }
 
 .planner-add-form.compact {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-2);
 }
 
@@ -798,23 +527,9 @@
   grid-column: 1 / -1;
 }
 
-.grocery-layout {
-  grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
-  gap: var(--space-6);
-}
-
 .grocery-list-panel,
 .grocery-add-panel {
   border-radius: var(--radius-card);
-}
-
-.generate-list-action {
-  background: var(--background-sunken);
-  padding: var(--space-4);
-}
-
-.grocery-group {
-  padding: var(--space-4);
 }
 
 @media (max-width: 56rem) {
@@ -836,9 +551,6 @@
 }
 
 /* Fitness discovery follows the same compact editorial rhythm as nutrition. */
-.fitness-page {
-  gap: var(--space-8);
-}
 
 .fitness-page .training-hero {
   min-height: 12rem;
@@ -1039,21 +751,10 @@
   color: var(--brand);
 }
 
-.fitness-library {
-  gap: clamp(var(--space-6), 3vw, var(--space-8));
-}
-
 .curated-exercise-results {
   min-width: 0;
   display: grid;
   gap: var(--space-6);
-}
-
-.fitness-filter {
-  grid-template-columns: 1fr;
-  gap: var(--space-3);
-  border-radius: var(--radius-card);
-  padding: var(--space-4);
 }
 
 .fitness-filter .exercise-search {
@@ -1698,10 +1399,7 @@
 }
 
 .builder-row {
-  display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--space-4);
 }
 
 .builder-row-content {

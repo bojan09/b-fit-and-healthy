@@ -164,3 +164,16 @@ describe("curated exercise catalogue", () => {
     expect(localAssets).toEqual(referencedAssets);
   });
 });
+
+describe("workout idea localization", () => {
+  it("gives every workout idea a distinct Macedonian title and summary", async () => {
+    const { workoutIdeas, ideaCopy } = await import("@/features/fitness/workout-ideas");
+    for (const idea of workoutIdeas) {
+      const mk = ideaCopy(idea, "mk");
+      expect(mk.title.trim().length, idea.slug).toBeGreaterThan(3);
+      expect(mk.summary.trim().length, idea.slug).toBeGreaterThan(10);
+      expect(mk.title, idea.slug).not.toBe(idea.title);
+      expect(mk.summary, idea.slug).toMatch(/[Ѐ-ӿ]/);
+    }
+  });
+});
