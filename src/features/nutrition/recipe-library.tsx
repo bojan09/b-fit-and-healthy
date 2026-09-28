@@ -17,22 +17,24 @@ import type { AuthActionState } from "@/features/auth/types";
 const noExternalRecipes: DiscoveryRecipe[] = [];
 const initial: AuthActionState = { status: "idle" };
 
-const meals: Array<{ value: RecipeMeal | "all"; label: string }> = [
-  { value: "all", label: "All meals" },
-  { value: "breakfast", label: "Breakfast" },
-  { value: "lunch", label: "Lunch" },
-  { value: "dinner", label: "Dinner" },
-  { value: "snack", label: "Snacks" },
-];
+const mealValues: Array<RecipeMeal | "all"> = ["all", "breakfast", "lunch", "dinner", "snack"];
+const dietaryValues: Array<RecipeDietary | "all"> = ["all", "plant-forward", "vegetarian", "high-protein"];
 
-const dietaryOptions: Array<{ value: RecipeDietary | "all"; label: string }> = [
-  { value: "all", label: "Any style" },
-  { value: "plant-forward", label: "Plant-forward" },
-  { value: "vegetarian", label: "Vegetarian" },
-  { value: "high-protein", label: "High protein" },
-];
+const copy = {
+  en: {
+    meals: { all: "All meals", breakfast: "Breakfast", lunch: "Lunch", dinner: "Dinner", snack: "Snacks" },
+    dietary: { all: "Any style", "plant-forward": "Plant-forward", vegetarian: "Vegetarian", "high-protein": "High protein" } as Record<string, string>,
+    search: "Search recipes", placeholder: "Search by recipe, ingredient or goal", meal: "Meal", style: "Eating style", time: "Time", m15: "15 minutes", m30: "30 minutes", m45: "45 minutes", m60: "Up to 1 hour", eyebrow: "Practical ideas", recipes: "recipes", perServing: "Nutrition is shown per serving. Adjust portions to your own needs.", min: "min", protein: "protein", curated: "Locally curated", inspiration: "Provider inspiration", estimated: "Estimated nutrition", noMatch: "No matching recipes", noMatchBody: "Try a different ingredient, meal, or time range.", clear: "Clear filters", moreEyebrow: "More from connected sources", liveMatches: "live matches", reviewNote: "Open a result to review its source, ingredients, and available nutrition before saving.", idea: "Recipe idea", nutritionUnavailable: "Nutrition unavailable", cancel: "Cancel", saving: "Saving…", save: "Save recipe", category: "Category", cuisine: "Cuisine", servings: "Servings", nutrition: "Nutrition", notSupplied: "Not supplied", toTaste: "Adjust to taste", available: "Available", unavailable: "Unavailable", ingredients: "Ingredients", method: "Method",
+  },
+  mk: {
+    meals: { all: "Сите оброци", breakfast: "Појадок", lunch: "Ручек", dinner: "Вечера", snack: "Ужини" },
+    dietary: { all: "Секој стил", "plant-forward": "Претежно растително", vegetarian: "Вегетаријанско", "high-protein": "Богато со протеини" } as Record<string, string>,
+    search: "Пребарај рецепти", placeholder: "Пребарај по рецепт, состојка или цел", meal: "Оброк", style: "Стил на исхрана", time: "Време", m15: "15 минути", m30: "30 минути", m45: "45 минути", m60: "До 1 час", eyebrow: "Практични идеи", recipes: "рецепти", perServing: "Нутритивните вредности се по порција. Прилагодете ги порциите на вашите потреби.", min: "мин", protein: "протеини", curated: "Локално курирано", inspiration: "Инспирација од извор", estimated: "Проценети вредности", noMatch: "Нема соодветни рецепти", noMatchBody: "Пробајте друга состојка, оброк или време.", clear: "Исчисти филтри", moreEyebrow: "Повеќе од поврзани извори", liveMatches: "резултати во живо", reviewNote: "Отворете резултат за да ги прегледате изворот, состојките и нутритивните податоци пред зачувување.", idea: "Идеја за рецепт", nutritionUnavailable: "Нема нутритивни податоци", cancel: "Откажи", saving: "Се зачувува…", save: "Зачувај рецепт", category: "Категорија", cuisine: "Кујна", servings: "Порции", nutrition: "Нутритивни вредности", notSupplied: "Не е наведено", toTaste: "По вкус", available: "Достапно", unavailable: "Недостапно", ingredients: "Состојки", method: "Подготовка",
+  },
+} as const;
 
 export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[]; locale: Locale }) {
+  const t = copy[locale];
   const [query, setQuery] = useState("");
   const [meal, setMeal] = useState<RecipeMeal | "all">("all");
   const [dietary, setDietary] = useState<RecipeDietary | "all">("all");
@@ -65,44 +67,44 @@ export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[];
       <div className="recipe-discovery">
         <div className="recipe-search">
           <Search aria-hidden="true" />
-          <label className="sr-only" htmlFor="recipe-query">Search recipes</label>
+          <label className="sr-only" htmlFor="recipe-query">{t.search}</label>
           <input
             id="recipe-query"
             type="search"
-            placeholder="Search by recipe, ingredient or goal"
+            placeholder={t.placeholder}
             value={query}
             onChange={(event) => updateQuery(event.target.value)}
           />
         </div>
         <fieldset className="recipe-meal-filter">
-          <legend className="sr-only">Meal</legend>
-          {meals.map((option) => (
+          <legend className="sr-only">{t.meal}</legend>
+          {mealValues.map((value) => (
             <button
-              aria-pressed={meal === option.value}
-              className={meal === option.value ? "is-active" : ""}
-              key={option.value}
-              onClick={() => setMeal(option.value)}
+              aria-pressed={meal === value}
+              className={meal === value ? "is-active" : ""}
+              key={value}
+              onClick={() => setMeal(value)}
               type="button"
             >
-              {option.label}
+              {t.meals[value]}
             </button>
           ))}
         </fieldset>
         <div className="recipe-refinements">
           <SlidersHorizontal aria-hidden="true" />
           <label>
-            <span>Eating style</span>
+            <span>{t.style}</span>
             <select value={dietary} onChange={(event) => setDietary(event.target.value as RecipeDietary | "all")}>
-              {dietaryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              {dietaryValues.map((value) => <option key={value} value={value}>{t.dietary[value]}</option>)}
             </select>
           </label>
           <label>
-            <span>Time</span>
+            <span>{t.time}</span>
             <select value={maxMinutes} onChange={(event) => setMaxMinutes(Number(event.target.value))}>
-              <option value="15">15 minutes</option>
-              <option value="30">30 minutes</option>
-              <option value="45">45 minutes</option>
-              <option value="60">Up to 1 hour</option>
+              <option value="15">{t.m15}</option>
+              <option value="30">{t.m30}</option>
+              <option value="45">{t.m45}</option>
+              <option value="60">{t.m60}</option>
             </select>
           </label>
         </div>
@@ -111,10 +113,10 @@ export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[];
 
       <div className="recipe-results-heading">
         <div>
-          <p className="eyebrow">Practical ideas</p>
-          <h2 id="recipe-library-title">{results.length} recipes</h2>
+          <p className="eyebrow">{t.eyebrow}</p>
+          <h2 id="recipe-library-title">{results.length} {t.recipes}</h2>
         </div>
-        <p>Nutrition is shown per serving. Adjust portions to your own needs.</p>
+        <p>{t.perServing}</p>
       </div>
 
       {results.length ? (
@@ -122,24 +124,24 @@ export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[];
           {results.map((recipe) => (
             <Link href={`/recipes/${recipe.slug}`} className={`recipe-card recipe-meal-${recipe.meal}`} key={recipe.slug}>
               <div className="recipe-card-topline">
-                <span>{recipe.meal}</span>
-                <span><Clock aria-hidden="true" />{recipe.totalMinutes} min</span>
+                <span>{t.meals[recipe.meal]}</span>
+                <span><Clock aria-hidden="true" />{recipe.totalMinutes} {t.min}</span>
               </div>
               <div className="recipe-card-body">
                 <h3>{recipe.title[locale]}</h3>
                 <p>{recipe.summary[locale]}</p>
                 <div className="recipe-tags">
-                  {recipe.dietary.slice(0, 2).map((tag) => <span key={tag}>{tag.replace("-", " ")}</span>)}
+                  {recipe.dietary.slice(0, 2).map((tag) => <span key={tag}>{t.dietary[tag] ?? tag.replaceAll("-", " ")}</span>)}
                 </div>
               </div>
               <div className="recipe-card-meta">
-                <span><strong>{recipe.nutrition.proteinG} g</strong> protein</span>
+                <span><strong>{recipe.nutrition.proteinG} g</strong> {t.protein}</span>
                 <span><strong>{recipe.nutrition.energyKcal}</strong> kcal</span>
                 <ArrowRight aria-hidden="true" />
               </div>
               <div className="recipe-card-trust">
-                <span>{recipe.provenance === "verified-local" ? "Locally curated" : "Provider inspiration"}</span>
-                <span>Estimated nutrition</span>
+                <span>{recipe.provenance === "verified-local" ? t.curated : t.inspiration}</span>
+                <span>{t.estimated}</span>
               </div>
             </Link>
           ))}
@@ -147,14 +149,14 @@ export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[];
       ) : (
         <div className="empty-state recipe-empty">
           <Search aria-hidden="true" />
-          <h3>No matching recipes</h3>
-          <p>Try a different ingredient, meal, or time range.</p>
-          <button className="button button-secondary" type="button" onClick={() => {
+          <h3>{t.noMatch}</h3>
+          <p>{t.noMatchBody}</p>
+          <button className="ui-button ui-button-secondary" type="button" onClick={() => {
             updateQuery("");
             setMeal("all");
             setDietary("all");
             setMaxMinutes(60);
-          }}>Clear filters</button>
+          }}>{t.clear}</button>
         </div>
       )}
 
@@ -162,10 +164,10 @@ export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[];
         <section className="provider-discovery-results" aria-labelledby="provider-recipes-title">
           <div className="recipe-results-heading">
             <div>
-              <p className="eyebrow">More from connected sources</p>
-              <h2 id="provider-recipes-title">{providerResults.length} live matches</h2>
+              <p className="eyebrow">{t.moreEyebrow}</p>
+              <h2 id="provider-recipes-title">{providerResults.length} {t.liveMatches}</h2>
             </div>
-            <p>Open a result to review its source, ingredients, and available nutrition before saving.</p>
+            <p>{t.reviewNote}</p>
           </div>
           <div className="provider-card-grid">
             {providerResults.map((recipe) => (
@@ -180,8 +182,8 @@ export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[];
               >
                 <span className="provider-card-kicker">{recipe.attribution}</span>
                 <strong>{recipe.title}</strong>
-                <span>{[recipe.cuisine, recipe.category].filter(Boolean).join(" · ") || "Recipe idea"}</span>
-                <small>{recipe.nutrition ? `${recipe.nutrition.energyKcal ?? "—"} kcal` : "Nutrition unavailable"}</small>
+                <span>{[recipe.cuisine, recipe.category].filter(Boolean).join(" · ") || t.idea}</span>
+                <small>{recipe.nutrition ? `${recipe.nutrition.energyKcal ?? "—"} kcal` : t.nutritionUnavailable}</small>
               </button>
             ))}
           </div>
@@ -195,9 +197,9 @@ export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[];
         returnFocus={returnFocus}
         footer={selected ? (
           <>
-            <button className="ui-button ui-button-secondary" type="button" onClick={() => setSelected(null)}>Cancel</button>
+            <button className="ui-button ui-button-secondary" type="button" onClick={() => setSelected(null)}>{t.cancel}</button>
             <button className="ui-button ui-button-primary" form="recipe-review-form" disabled={saving}>
-              {saving ? "Saving…" : "Save recipe"}
+              {saving ? t.saving : t.save}
             </button>
           </>
         ) : null}
@@ -207,17 +209,17 @@ export function RecipeLibrary({ recipes, locale }: { recipes: readonly Recipe[];
             <input type="hidden" name="item" value={JSON.stringify(selected)} />
             <p className="discovery-source">{selected.attribution} · {selected.quality}</p>
             <dl className="discovery-facts">
-              <div><dt>Category</dt><dd>{selected.category ?? "Not supplied"}</dd></div>
-              <div><dt>Cuisine</dt><dd>{selected.cuisine ?? "Not supplied"}</dd></div>
-              <div><dt>Servings</dt><dd>{selected.servings ?? "Adjust to taste"}</dd></div>
-              <div><dt>Nutrition</dt><dd>{selected.nutrition ? "Available" : "Unavailable"}</dd></div>
+              <div><dt>{t.category}</dt><dd>{selected.category ?? t.notSupplied}</dd></div>
+              <div><dt>{t.cuisine}</dt><dd>{selected.cuisine ?? t.notSupplied}</dd></div>
+              <div><dt>{t.servings}</dt><dd>{selected.servings ?? t.toTaste}</dd></div>
+              <div><dt>{t.nutrition}</dt><dd>{selected.nutrition ? t.available : t.unavailable}</dd></div>
             </dl>
             <section className="discovery-review-section">
-              <h3>Ingredients</h3>
+              <h3>{t.ingredients}</h3>
               <ul>{selected.ingredients.map((ingredient, index) => <li key={`${ingredient.name}-${index}`}>{ingredient.measure} {ingredient.name}</li>)}</ul>
             </section>
             <section className="discovery-review-section">
-              <h3>Method</h3>
+              <h3>{t.method}</h3>
               <ol>{selected.instructions.map((step, index) => <li key={index}>{step}</li>)}</ol>
             </section>
           </form>

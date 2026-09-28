@@ -15,7 +15,7 @@ export function CatalogueImageFallback({ kind, className }: CatalogueImageFallba
       role="presentation"
       style={{
         alignItems: "center",
-        background: "linear-gradient(135deg, var(--surface, #edf2eb), var(--muted, #d6e0d3))",
+        background: "linear-gradient(135deg, var(--surface), var(--surface-hover))",
         display: "flex",
         height: "100%",
         justifyContent: "center",

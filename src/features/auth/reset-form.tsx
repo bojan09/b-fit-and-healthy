@@ -18,15 +18,15 @@ export function ResetForm({ locale, next }: { locale: Locale; next: string }) {
   return (
     <div className="auth-card">
       <header>
-        <p className="eyebrow">Account recovery</p>
+        <p className="eyebrow">{c.recovery}</p>
         <h2>{c.reset}</h2>
-        <p>Choose a unique password with at least 10 characters.</p>
+        <p>{c.passwordHint}</p>
       </header>
       <form action={action} className="auth-fields">
         <input type="hidden" name="next" value={next} />
         <Field
           label={c.password}
-          description="Use at least 10 characters."
+          description={c.passwordHint}
           error={state.fieldErrors?.password?.[0]}
         >
           <input
@@ -59,7 +59,7 @@ export function ResetForm({ locale, next }: { locale: Locale; next: string }) {
           className="auth-wide"
           disabled={pending}
         >
-          {pending ? "Please wait…" : c.reset}
+          {pending ? c.wait : c.reset}
         </Button>
       </form>
     </div>

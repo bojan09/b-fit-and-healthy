@@ -4,6 +4,12 @@ import Image from "next/image";
 import { useState } from "react";
 import type { DisplayMedia, MediaFallbackKind } from "@/features/media/catalogue-media";
 import { CatalogueImageFallback } from "./catalogue-image-fallback";
+import { useOptionalLocale } from "@/components/providers/locale-provider";
+
+const attributionCopy = {
+  en: { label: "Image attribution", source: "Source:", creator: "Creator:", licence: "Licence:" },
+  mk: { label: "Извор на сликата", source: "Извор:", creator: "Автор:", licence: "Лиценца:" },
+} as const;
 
 export type CatalogueImageProps = {
   media: DisplayMedia | null;
@@ -30,6 +36,7 @@ export function CatalogueImage({
   "data-testid": testId,
   objectFit = "cover",
 }: CatalogueImageProps) {
+  const t = attributionCopy[useOptionalLocale()];
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const hasImageError = Boolean(media?.src && failedSrc === media.src);
   const shouldShowFallback = media === null || hasImageError;
@@ -52,10 +59,10 @@ export function CatalogueImage({
         )}
       </div>
       {showAttribution && media ? (
-        <aside aria-label="Image attribution">
-          <span>Source: <ProvenanceLink href={media.sourceUrl}>{media.sourceName}</ProvenanceLink></span>
-          {media.creator ? <span> Creator: {media.creator}</span> : null}
-          <span> Licence: <ProvenanceLink href={media.licenseUrl}>{media.licenseName}</ProvenanceLink></span>
+        <aside aria-label={t.label}>
+          <span>{t.source} <ProvenanceLink href={media.sourceUrl}>{media.sourceName}</ProvenanceLink></span>
+          {media.creator ? <span> {t.creator} {media.creator}</span> : null}
+          <span> {t.licence} <ProvenanceLink href={media.licenseUrl}>{media.licenseName}</ProvenanceLink></span>
         </aside>
       ) : null}
     </div>

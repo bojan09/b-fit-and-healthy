@@ -113,11 +113,11 @@
   padding: var(--space-5);
 }
 
-.anatomy-directory > div:not(.anatomy-empty) {
+.anatomy-directory > div:not(.anatomy-empty):not(.anatomy-tools) {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.anatomy-directory > div > button {
+.anatomy-directory > div:not(.anatomy-tools) > button {
   min-height: 4.25rem;
   background: transparent;
 }
@@ -128,14 +128,14 @@
     grid-template-columns: 1fr;
   }
 
-  .anatomy-directory > div:not(.anatomy-empty) {
+  .anatomy-directory > div:not(.anatomy-empty):not(.anatomy-tools) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 42rem) {
   .anatomy-panel dl,
-  .anatomy-directory > div:not(.anatomy-empty) {
+  .anatomy-directory > div:not(.anatomy-empty):not(.anatomy-tools) {
     grid-template-columns: 1fr;
   }
 

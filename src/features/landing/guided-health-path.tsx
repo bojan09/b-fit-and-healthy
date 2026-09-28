@@ -1,5 +1,4 @@
-"use client";
-
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
   Apple,
@@ -8,7 +7,6 @@ import {
   Dumbbell,
   type LucideIcon,
 } from "lucide-react";
-import { useMotionProfile } from "@/features/motion/use-motion-profile";
 import type { Locale } from "@/lib/i18n/config";
 
 type PathStep = {
@@ -69,20 +67,17 @@ const content: Record<Locale, PathStep[]> = {
 };
 
 export function GuidedHealthPath({ locale }: { locale: Locale }) {
-  const motion = useMotionProfile();
-
   return (
     <nav
       className="guided-health-path"
       aria-label={
         locale === "en" ? "Connected health path" : "Поврзан пат за здравје"
       }
-      data-motion={motion}
     >
       <ol>
         {content[locale].map(
           ({ id, href, label, detail, Icon }, index) => (
-            <li key={id} className={index === 0 ? "is-next" : undefined}>
+            <li key={id} className={index === 0 ? "is-next" : undefined} style={{ "--i": index } as CSSProperties}>
               <Link href={href}>
                 <span className="path-index">0{index + 1}</span>
                 <span className="path-icon">

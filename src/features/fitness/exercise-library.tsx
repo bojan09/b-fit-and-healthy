@@ -32,10 +32,16 @@ import {
   effectiveExerciseQuery,
   type ExerciseSearchCriteria,
 } from "@/features/fitness/exercise-search";
+import { fitnessLabel } from "@/features/fitness/labels";
 
 const noExternalExercises: DiscoveryExercise[] = [];
 const initial: AuthActionState = { status: "idle" };
 const CONNECTED_PAGE_SIZE = 12;
+const CURATED_PAGE_SIZE = 24;
+const copy = {
+  en: { search: "Search", placeholder: "Exercise, muscle or movement", filters: "Filters", equipment: "Equipment", allEquipment: "All equipment", muscle: "Muscle", allMuscles: "All muscles", type: "Type", exerciseType: "Exercise type", allTypes: "All types", clear: "Clear filters", local: "local", connected: "connected", exercise: "exercise", exercises: "exercises", sourcesNote: "Curated guidance with commercially permitted connected sources", localEyebrow: "Locally maintained guidance", curatedTitle: "Curated by B Fit & Healthy", match: "match", matches: "matches", curatedNote: "Reviewed exercise guidance with dedicated detail pages.", noCurated: "No curated matches. Showing connected library results.", noMatchTitle: "No exercises match those filters.", noMatchBody: "Clear the filters or try a broader search.", connectedEyebrow: "Connected movement libraries", connectedTitle: "Connected libraries", liveMatches: "live matches", connectedNote: "Review technique, target muscles, and source before saving a movement.", review: (title: string, provider: string) => `Review ${title} from ${provider}`, general: "General movement", noEquipment: "No equipment listed", instructions: "Instructions available", noInstructions: "Instructions not supplied", errCurated: "Connected search is unavailable. Matching curated exercises remain usable.", errNone: "Connected search is unavailable. Try again or broaden the search.", okCurated: "No connected matches. Curated exercises remain available.", okNone: "No exercises found in curated or connected libraries.", partialCurated: "No connected matches in the available sources. Curated exercises remain available.", partialNone: "No matches were available from the connected sources that responded.", loading: "Checking connected libraries for matches.", idle: "Search or choose a filter to check connected libraries.", showMore: (n: number) => `Show ${n} more`, cancel: "Cancel", saving: "Saving…", save: "Save exercise", primaryMuscles: "Primary muscles", notSupplied: "Not supplied", difficulty: "Difficulty", license: "License", source: "Source and attribution", viewLicense: "View license", openSource: "Open original source", howTo: "How to perform it", safety: "Safety note" },
+  mk: { search: "Пребарај", placeholder: "Вежба, мускул или движење", filters: "Филтри", equipment: "Опрема", allEquipment: "Сета опрема", muscle: "Мускул", allMuscles: "Сите мускули", type: "Тип", exerciseType: "Тип на вежба", allTypes: "Сите типови", clear: "Исчисти филтри", local: "локални", connected: "поврзани", exercise: "вежба", exercises: "вежби", sourcesNote: "Курирани упатства со комерцијално дозволени поврзани извори", localEyebrow: "Локално одржувани упатства", curatedTitle: "Избор на B Fit & Healthy", match: "резултат", matches: "резултати", curatedNote: "Проверени упатства за вежби со посебни страници.", noCurated: "Нема курирани резултати. Се прикажуваат резултати од поврзани библиотеки.", noMatchTitle: "Нема соодветни вежби.", noMatchBody: "Исчистете ги филтрите или пробајте пошироко пребарување.", connectedEyebrow: "Поврзани библиотеки со движења", connectedTitle: "Поврзани библиотеки", liveMatches: "резултати во живо", connectedNote: "Прегледајте ја техниката, мускулите и изворот пред да зачувате движење.", review: (title: string, provider: string) => `Прегледај ${title} од ${provider}`, general: "Општо движење", noEquipment: "Нема наведена опрема", instructions: "Има упатства", noInstructions: "Нема упатства", errCurated: "Поврзаното пребарување е недостапно. Курираните вежби се достапни.", errNone: "Поврзаното пребарување е недостапно. Обидете се повторно или проширете го пребарувањето.", okCurated: "Нема поврзани резултати. Курираните вежби се достапни.", okNone: "Нема вежби во курираните или поврзаните библиотеки.", partialCurated: "Нема поврзани резултати во достапните извори. Курираните вежби се достапни.", partialNone: "Нема резултати од поврзаните извори што одговорија.", loading: "Се проверуваат поврзаните библиотеки.", idle: "Пребарајте или изберете филтер за да ги проверите поврзаните библиотеки.", showMore: (n: number) => `Прикажи уште ${n}`, cancel: "Откажи", saving: "Се зачувува…", save: "Зачувај вежба", primaryMuscles: "Главни мускули", notSupplied: "Не е наведено", difficulty: "Тежина", license: "Лиценца", source: "Извор и атрибуција", viewLicense: "Види лиценца", openSource: "Отвори оригинален извор", howTo: "Како се изведува", safety: "Безбедносна напомена" },
+} as const;
 const providerLabels: Record<DiscoveryExercise["provider"], string> = {
   local: "B Fit & Healthy",
   usda: "USDA",
@@ -48,6 +54,8 @@ const providerLabels: Record<DiscoveryExercise["provider"], string> = {
 };
 
 export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
+  const t = copy[locale];
+  const [curatedLimit, setCuratedLimit] = useState(CURATED_PAGE_SIZE);
   const [query, setQuery] = useState("");
   const [equipment, setEquipment] = useState("");
   const [muscle, setMuscle] = useState("");
@@ -113,6 +121,7 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
   const activeFilterCount = [equipment, muscle, type].filter(Boolean).length;
   const updateQuery = (value: string) => {
     setQuery(value);
+    setCuratedLimit(CURATED_PAGE_SIZE);
     setVisibleConnectedCount(CONNECTED_PAGE_SIZE);
   };
   const clear = () => {
@@ -129,16 +138,12 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
       <div className="fitness-filter">
         <label className="exercise-search">
           <Search aria-hidden="true" />
-          <span>{locale === "mk" ? "Пребарај" : "Search"}</span>
+          <span>{t.search}</span>
           <input
             type="search"
             value={query}
             onChange={(event) => updateQuery(event.target.value)}
-            placeholder={
-              locale === "mk"
-                ? "Вежба, мускул или движење"
-                : "Exercise, muscle or movement"
-            }
+            placeholder={t.placeholder}
           />
         </label>
         <button
@@ -149,58 +154,61 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
           onClick={() => setFiltersExpanded((expanded) => !expanded)}
         >
           <SlidersHorizontal aria-hidden="true" />
-          Filters{activeFilterCount ? ` (${activeFilterCount})` : ""}
+          {t.filters}{activeFilterCount ? ` (${activeFilterCount})` : ""}
         </button>
         <div
           id={filterRegionId}
           className={`exercise-filter-row exercise-filter-region${filtersExpanded ? " is-open" : ""}`}
         >
           <label>
-            <span>{locale === "mk" ? "Опрема" : "Equipment"}</span>
+            <span>{t.equipment}</span>
             <select
-              aria-label="Equipment"
+              aria-label={t.equipment}
               value={equipment}
               onChange={(event) => {
                 setEquipment(event.target.value);
+                setCuratedLimit(CURATED_PAGE_SIZE);
                 setVisibleConnectedCount(CONNECTED_PAGE_SIZE);
               }}
             >
-              <option value="">{locale === "mk" ? "Сета опрема" : "All equipment"}</option>
-              {equipmentOptions.map((item) => <option key={item}>{item}</option>)}
+              <option value="">{t.allEquipment}</option>
+              {equipmentOptions.map((item) => <option key={item} value={item}>{fitnessLabel(item, locale)}</option>)}
             </select>
           </label>
           <label>
-            <span>Muscle</span>
+            <span>{t.muscle}</span>
             <select
-              aria-label="Muscle"
+              aria-label={t.muscle}
               value={muscle}
               onChange={(event) => {
                 setMuscle(event.target.value);
+                setCuratedLimit(CURATED_PAGE_SIZE);
                 setVisibleConnectedCount(CONNECTED_PAGE_SIZE);
               }}
             >
-              <option value="">All muscles</option>
-              {muscleOptions.map((item) => <option key={item}>{item.replaceAll("-", " ")}</option>)}
+              <option value="">{t.allMuscles}</option>
+              {muscleOptions.map((item) => <option key={item} value={item}>{fitnessLabel(item, locale)}</option>)}
             </select>
           </label>
           <label>
-            <span>Type</span>
+            <span>{t.type}</span>
             <select
-              aria-label="Exercise type"
+              aria-label={t.exerciseType}
               value={type}
               onChange={(event) => {
                 setType(event.target.value as Exercise["exerciseType"] | "");
+                setCuratedLimit(CURATED_PAGE_SIZE);
                 setVisibleConnectedCount(CONNECTED_PAGE_SIZE);
               }}
             >
-              <option value="">All types</option>
-              <option value="strength">Strength</option>
-              <option value="core">Core</option>
-              <option value="mobility">Mobility</option>
+              <option value="">{t.allTypes}</option>
+              <option value="strength">{fitnessLabel("strength", locale)}</option>
+              <option value="core">{fitnessLabel("core", locale)}</option>
+              <option value="mobility">{fitnessLabel("mobility", locale)}</option>
             </select>
           </label>
           <button type="button" className="text-action" onClick={clear}>
-            {locale === "mk" ? "Исчисти филтри" : "Clear filters"}
+            {t.clear}
           </button>
         </div>
       </div>
@@ -211,10 +219,10 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
       />
       <div className="exercise-results-heading">
         <strong>
-          {results.length} local · {providerResults.length} connected{" "}
-          {providerResults.length === 1 ? "exercise" : "exercises"}
+          {results.length} {t.local} · {providerResults.length} {t.connected}{" "}
+          {providerResults.length === 1 ? t.exercise : t.exercises}
         </strong>
-        <span>Curated guidance with commercially permitted connected sources</span>
+        <span>{t.sourcesNote}</span>
       </div>
       <section
         className="curated-exercise-results"
@@ -222,15 +230,15 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
       >
         <div className="recipe-results-heading">
           <div>
-            <p className="eyebrow">Locally maintained guidance</p>
-            <h2 id="curated-exercises-title">Curated by B Fit & Healthy</h2>
-            <p>{results.length} {results.length === 1 ? "match" : "matches"}</p>
+            <p className="eyebrow">{t.localEyebrow}</p>
+            <h2 id="curated-exercises-title">{t.curatedTitle}</h2>
+            <p>{results.length} {results.length === 1 ? t.match : t.matches}</p>
           </div>
-          <p>Reviewed exercise guidance with dedicated detail pages.</p>
+          <p>{t.curatedNote}</p>
         </div>
       {results.length ? (
         <div className="exercise-grid">
-          {results.map((exercise) => (
+          {results.slice(0, curatedLimit).map((exercise) => (
             <Link
               aria-label={locale === "mk" ? exercise.titleMk : exercise.titleEn}
               className="exercise-card"
@@ -245,11 +253,11 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
                 objectFit="contain"
               />
               <div>
-                <p className="eyebrow">{exercise.exerciseType} · {exercise.difficulty}</p>
-                <span className="movement-badge">{exercise.movementPattern.replaceAll("-", " ")}</span>
+                <p className="eyebrow">{fitnessLabel(exercise.exerciseType, locale)} · {fitnessLabel(exercise.difficulty, locale)}</p>
+                <span className="movement-badge">{fitnessLabel(exercise.movementPattern, locale)}</span>
                 <h2>{locale === "mk" ? exercise.titleMk : exercise.titleEn}</h2>
                 <p>{locale === "mk" ? exercise.summaryMk : exercise.summaryEn}</p>
-                <ul className="tag-row">{exercise.equipment.map((item) => <li key={item}>{item}</li>)}</ul>
+                <ul className="tag-row">{exercise.equipment.map((item) => <li key={item}>{fitnessLabel(item, locale)}</li>)}</ul>
               </div>
               <ArrowRight aria-hidden="true" />
             </Link>
@@ -258,23 +266,32 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
       ) : (
         <div className="product-empty">
           {providerResults.length ? (
-            <p>No curated matches. Showing connected library results.</p>
+            <p>{t.noCurated}</p>
           ) : null}
-          <h2>{locale === "mk" ? "Нема соодветни вежби." : "No exercises match those filters."}</h2>
-          <p>{locale === "mk" ? "Исчистете ги филтрите или пробајте пошироко пребарување." : "Clear the filters or try a broader search."}</p>
-          <button type="button" onClick={clear}>Clear filters</button>
+          <h2>{t.noMatchTitle}</h2>
+          <p>{t.noMatchBody}</p>
+          <button type="button" className="text-action" onClick={clear}>{t.clear}</button>
         </div>
       )}
+      {results.length > curatedLimit ? (
+        <button
+          type="button"
+          className="text-action exercise-show-more"
+          onClick={() => setCuratedLimit((count) => count + CURATED_PAGE_SIZE)}
+        >
+          {t.showMore(Math.min(CURATED_PAGE_SIZE, results.length - curatedLimit))}
+        </button>
+      ) : null}
       </section>
 
       <section className="provider-discovery-results" aria-labelledby="connected-exercises-title">
           <div className="recipe-results-heading">
             <div>
-              <p className="eyebrow">Connected movement libraries</p>
-              <h2 id="connected-exercises-title">Connected libraries</h2>
-              <p>{providerResults.length} live matches</p>
+              <p className="eyebrow">{t.connectedEyebrow}</p>
+              <h2 id="connected-exercises-title">{t.connectedTitle}</h2>
+              <p>{providerResults.length} {t.liveMatches}</p>
             </div>
-            <p>Review technique, target muscles, and source before saving a movement.</p>
+            <p>{t.connectedNote}</p>
           </div>
           <div className="provider-card-grid">
             {visibleProviderResults.map((exercise) => (
@@ -282,7 +299,7 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
                 className="provider-card"
                 type="button"
                 key={exercise.id}
-                aria-label={`Review ${exercise.title} from ${providerLabels[exercise.provider]}`}
+                aria-label={t.review(exercise.title, providerLabels[exercise.provider])}
                 onClick={(event) => {
                   setReturnFocus(event.currentTarget);
                   setSelected(exercise);
@@ -293,15 +310,15 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
                   <span>{exercise.license.name}</span>
                 </span>
                 <strong>{exercise.title}</strong>
-                <span>{exercise.primaryMuscles.join(", ") || "General movement"}</span>
-                <small>{exercise.equipment.join(", ") || "No equipment listed"}</small>
+                <span>{exercise.primaryMuscles.join(", ") || t.general}</span>
+                <small>{exercise.equipment.join(", ") || t.noEquipment}</small>
                 {exercise.difficulty ? (
                   <span>{exercise.difficulty}</span>
                 ) : null}
                 <small>
                   {exercise.instructions.length
-                    ? "Instructions available"
-                    : "Instructions not supplied"}
+                    ? t.instructions
+                    : t.noInstructions}
                 </small>
                 <small>{exercise.license.attribution}</small>
                 {exercise.attribution !== exercise.license.attribution ? (
@@ -315,25 +332,25 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
               {providerSearch.status === "error" ? (
                 <p>
                   {results.length
-                    ? "Connected search is unavailable. Matching curated exercises remain usable."
-                    : "Connected search is unavailable. Try again or broaden the search."}
+                    ? t.errCurated
+                    : t.errNone}
                 </p>
               ) : providerSearch.status === "success" ? (
                 <p>
                   {results.length
-                    ? "No connected matches. Curated exercises remain available."
-                    : "No exercises found in curated or connected libraries."}
+                    ? t.okCurated
+                    : t.okNone}
                 </p>
               ) : providerSearch.status === "partial" ? (
                 <p>
                   {results.length
-                    ? "No connected matches in the available sources. Curated exercises remain available."
-                    : "No matches were available from the connected sources that responded."}
+                    ? t.partialCurated
+                    : t.partialNone}
                 </p>
               ) : providerSearch.status === "loading" ? (
-                <p>Checking connected libraries for matches.</p>
+                <p>{t.loading}</p>
               ) : (
-                <p>Search or choose a filter to check connected libraries.</p>
+                <p>{t.idle}</p>
               )}
             </div>
           ) : null}
@@ -345,7 +362,7 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
                 count + CONNECTED_PAGE_SIZE
               )}
             >
-              Show {Math.min(CONNECTED_PAGE_SIZE, remainingProviderResults)} more
+              {t.showMore(Math.min(CONNECTED_PAGE_SIZE, remainingProviderResults))}
             </button>
           ) : null}
       </section>
@@ -357,8 +374,8 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
         returnFocus={returnFocus}
         footer={selected ? (
           <>
-            <button className="ui-button ui-button-secondary" type="button" onClick={() => setSelected(null)}>Cancel</button>
-            <button className="ui-button ui-button-primary" form="exercise-review-form" disabled={saving}>{saving ? "Saving…" : "Save exercise"}</button>
+            <button className="ui-button ui-button-secondary" type="button" onClick={() => setSelected(null)}>{t.cancel}</button>
+            <button className="ui-button ui-button-primary" form="exercise-review-form" disabled={saving}>{saving ? t.saving : t.save}</button>
           </>
         ) : null}
       >
@@ -369,30 +386,30 @@ export function ExerciseLibrary({ locale }: { locale: "en" | "mk" }) {
               {providerLabels[selected.provider]} · {selected.quality}
             </p>
             <dl className="discovery-facts">
-              <div><dt>Primary muscles</dt><dd>{selected.primaryMuscles.join(", ") || "Not supplied"}</dd></div>
-              <div><dt>Equipment</dt><dd>{selected.equipment.join(", ") || "Not supplied"}</dd></div>
-              <div><dt>Difficulty</dt><dd>{selected.difficulty ?? "Not supplied"}</dd></div>
-              <div><dt>License</dt><dd>{selected.license.name}</dd></div>
+              <div><dt>{t.primaryMuscles}</dt><dd>{selected.primaryMuscles.join(", ") || t.notSupplied}</dd></div>
+              <div><dt>{t.equipment}</dt><dd>{selected.equipment.join(", ") || t.notSupplied}</dd></div>
+              <div><dt>{t.difficulty}</dt><dd>{selected.difficulty ?? t.notSupplied}</dd></div>
+              <div><dt>{t.license}</dt><dd>{selected.license.name}</dd></div>
             </dl>
             <section className="discovery-review-section">
-              <h3>Source and attribution</h3>
+              <h3>{t.source}</h3>
               <p>{selected.license.attribution}</p>
               {selected.license.url ? (
                 <a href={selected.license.url} target="_blank" rel="noreferrer">
-                  View license
+                  {t.viewLicense}
                 </a>
               ) : null}
               {selected.sourceUrl ? (
                 <a href={selected.sourceUrl} target="_blank" rel="noreferrer">
-                  Open original source
+                  {t.openSource}
                 </a>
               ) : null}
             </section>
             <section className="discovery-review-section">
-              <h3>How to perform it</h3>
+              <h3>{t.howTo}</h3>
               <ol>{selected.instructions.map((step, index) => <li key={index}>{step}</li>)}</ol>
             </section>
-            {selected.safety ? <section className="discovery-review-section"><h3>Safety note</h3><p>{selected.safety}</p></section> : null}
+            {selected.safety ? <section className="discovery-review-section"><h3>{t.safety}</h3><p>{selected.safety}</p></section> : null}
           </form>
         ) : null}
       </ReviewSheet>

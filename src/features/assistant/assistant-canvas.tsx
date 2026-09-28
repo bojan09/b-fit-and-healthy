@@ -107,16 +107,16 @@ export function AssistantCanvas({ locale, conversations, initialConversation, co
       <form className="assistant-composer" onSubmit={submit}>
         <label htmlFor="assistant-message">{c.composer}</label>
         <div><textarea ref={composer} id="assistant-message" value={value} maxLength={2000} rows={2} placeholder={c.placeholder} onChange={(event) => setValue(event.target.value)} disabled={pending} />
-          {pending ? <button type="button" className="button button-secondary" onClick={() => controller.current?.abort()}><Square />{c.stop}</button> : <button type="submit" className="button button-primary" disabled={!value.trim()}><Send />{c.send}</button>}
+          {pending ? <button type="button" className="ui-button ui-button-secondary" onClick={() => controller.current?.abort()}><Square />{c.stop}</button> : <button type="submit" className="ui-button ui-button-primary" disabled={!value.trim()}><Send />{c.send}</button>}
         </div><span>{value.length} / 2,000</span>
       </form>
       <p className="assistant-limitation"><ShieldCheck />{c.limitations}</p>
     </section>
     <aside className="assistant-context-rail" aria-label={c.context}>
-      <section><p className="eyebrow">{c.context}</p><h2>{c.today}</h2>{context ? <dl><div><dt>Energy</dt><dd>{context.today.energyKcal.toLocaleString()} kcal</dd></div><div><dt>Protein</dt><dd>{context.today.proteinG} g</dd></div><div><dt>Water</dt><dd>{context.today.waterMl.toLocaleString()} ml</dd></div><div><dt>Movement</dt><dd>{context.today.movementMinutes} min</dd></div></dl> : <p>{locale === "mk" ? "Нема достапен контекст." : "No context is available yet."}</p>}</section>
+      <section><p className="eyebrow">{c.context}</p><h2>{c.today}</h2>{context ? <dl><div><dt>{locale === "mk" ? "Енергија" : "Energy"}</dt><dd>{context.today.energyKcal.toLocaleString()} kcal</dd></div><div><dt>{locale === "mk" ? "Протеини" : "Protein"}</dt><dd>{context.today.proteinG} g</dd></div><div><dt>{locale === "mk" ? "Вода" : "Water"}</dt><dd>{context.today.waterMl.toLocaleString()} ml</dd></div><div><dt>{locale === "mk" ? "Движење" : "Movement"}</dt><dd>{context.today.movementMinutes} min</dd></div></dl> : <p>{locale === "mk" ? "Нема достапен контекст." : "No context is available yet."}</p>}</section>
       <section><TrendingUp /><h2>{c.trends}</h2>{context ? <p>{context.trends.workoutsCompleted} {locale === "mk" ? "тренинзи ·" : "workouts ·"} {context.trends.habitCompletionRate ?? 0}% {locale === "mk" ? "навики" : "habits"}</p> : <p>—</p>}</section>
       <section><Target /><h2>{locale === "mk" ? "Активни цели" : "Active goals"}</h2><p>{context?.goals.join(" · ") || (locale === "mk" ? "Нема поставени цели" : "No goals set")}</p></section>
-      <section className="assistant-privacy-card"><ShieldCheck /><h2>{c.privacy}</h2><p>{c.retention}</p>{initialConversation && <form action={deleteAssistantConversationAction}><input type="hidden" name="conversationId" value={initialConversation.id} /><button className="button button-ghost">{c.delete}</button></form>}</section>
+      <section className="assistant-privacy-card"><ShieldCheck /><h2>{c.privacy}</h2><p>{c.retention}</p>{initialConversation && <form action={deleteAssistantConversationAction}><input type="hidden" name="conversationId" value={initialConversation.id} /><button className="ui-button ui-button-ghost">{c.delete}</button></form>}</section>
     </aside>
   </main>;
 }

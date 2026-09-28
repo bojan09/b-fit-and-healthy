@@ -57,7 +57,8 @@ export const publicContent = {
         signUp: "Sign up"
       },
       today: {
-        greeting: "Good morning, Alex",
+        greeting: "Good to see you, Alex",
+        balanceTitle: "Daily balance",
         subtitle: "Here's what your day looks like at a glance.",
         habitsTitle: "Today's habits"
       },
@@ -278,7 +279,8 @@ export const publicContent = {
         signUp: "Регистрирај се"
       },
       today: {
-        greeting: "Добро утро, Алекс",
+        greeting: "Добро е што сте тука, Алекс",
+        balanceTitle: "Дневна рамнотежа",
         subtitle: "Еве како изгледа твојот ден накратко.",
         habitsTitle: "Денешни навики"
       },

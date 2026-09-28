@@ -26,11 +26,11 @@ export default async function DemoTodayPage() {
       </header>
       <div className="demo-today-layout">
         <DailyBalance
-          title={c.today.habitsTitle}
+          title={c.today.balanceTitle}
           rows={[
             { label: energyLabel, value: "1,570 / 2,200 kcal", ratio: 0.71 },
             { label: waterLabel, value: "1.4 / 2.5 L", ratio: 0.56 },
-            { label: c.today.habitsTitle, value: "2 / 4", ratio: 0.5 }
+            { label: locale === "mk" ? "Навики" : "Habits", value: "2 / 4", ratio: 0.5 }
           ]}
         />
         <DemoHabitList habits={demoHabits} locale={locale} title={c.today.habitsTitle} />

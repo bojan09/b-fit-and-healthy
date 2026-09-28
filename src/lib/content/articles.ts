@@ -24,11 +24,27 @@ export const getArticle = cache(async (locale: Locale, slug: string): Promise<Ar
   }
 });
 
-export const getArticles = cache(async (locale: Locale): Promise<Article[]> => {
+// Articles ship with the deployment and never change at runtime, so production
+// parses each locale once per server instance instead of on every request.
+// Development keeps re-reading so edits to the markdown show up immediately.
+const corpus = new Map<Locale, Promise<Article[]>>();
+
+async function loadArticles(locale: Locale): Promise<Article[]> {
   const slugs = await getArticleSlugs();
   const articles = await Promise.all(slugs.map((slug) => getArticle(locale, slug)));
   return articles.filter((article): article is Article => Boolean(article))
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+}
+
+export const getArticles = cache(async (locale: Locale): Promise<Article[]> => {
+  if (process.env.NODE_ENV !== "production") return loadArticles(locale);
+  let pending = corpus.get(locale);
+  if (!pending) {
+    pending = loadArticles(locale);
+    pending.catch(() => corpus.delete(locale));
+    corpus.set(locale, pending);
+  }
+  return pending;
 });
 
 export async function getArticleCategories(locale: Locale) {

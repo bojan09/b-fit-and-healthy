@@ -1,6 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useOptionalLocale } from "@/components/providers/locale-provider";
+
+const messages = {
+  en: { unavailable: "Search is temporarily unavailable.", partial: "Some sources are unavailable. Showing the results we could verify.", offline: "Live sources are unavailable. Local results remain available." },
+  mk: { unavailable: "Пребарувањето е привремено недостапно.", partial: "Некои извори се недостапни. Се прикажуваат резултатите што можевме да ги потврдиме.", offline: "Изворите во живо се недостапни. Локалните резултати се достапни." },
+} as const;
 
 export type DiscoverySearchStatus =
   | "idle"
@@ -33,6 +39,7 @@ export function useDiscoverySearch<T>({
   minLength?: number;
   delay?: number;
 }) {
+  const text = messages[useOptionalLocale()];
   const [query, setQuery] = useState("");
   const [responseState, setResponseState] = useState<
     DiscoveryResponseState<T>
@@ -86,7 +93,7 @@ export function useDiscoverySearch<T>({
             key: requestKey,
             results: localResults,
             status: "error",
-            message: body.message ?? "Search is temporarily unavailable.",
+            message: body.message ?? text.unavailable,
           });
           return;
         }
@@ -95,7 +102,7 @@ export function useDiscoverySearch<T>({
           results: body.results ?? localResults,
           status: body.partial ? "partial" : "success",
           message: body.partial
-            ? "Some sources are unavailable. Showing the results we could verify."
+            ? text.partial
             : null,
         });
       } catch {
@@ -106,7 +113,7 @@ export function useDiscoverySearch<T>({
           key: requestKey,
           results: localResults,
           status: "error",
-          message: "Live sources are unavailable. Local results remain available.",
+          message: text.offline,
         });
       }
     }, delay);
@@ -122,6 +129,7 @@ export function useDiscoverySearch<T>({
     localResults,
     requestKey,
     retryGeneration,
+    text,
     trimmedQuery,
   ]);
 

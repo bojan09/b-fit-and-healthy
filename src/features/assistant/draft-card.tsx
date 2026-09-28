@@ -29,9 +29,9 @@ export function DraftCard({ locale, draft, messageId, onRequestChanges, applied 
     <ul>{details(draft).map((detail) => <li key={detail}>{detail}</li>)}</ul>
     {state.message && <p className={`form-status ${state.status}`} role="status">{state.message}</p>}
     <div className="assistant-draft-actions">
-      {mutable && !applied && <form action={action}><input type="hidden" name="messageId" value={messageId} /><button className="button button-primary" disabled={pending}><Check />{pending ? (locale === "mk" ? "Се зачувува…" : "Saving…") : (locale === "mk" ? "Потврди и зачувај" : "Confirm and save")}</button></form>}
-      {!applied && <button type="button" className="button button-secondary" onClick={() => onRequestChanges(draft)}><FilePenLine />{locale === "mk" ? "Побарај промени" : "Ask for changes"}</button>}
-      {!applied && <form action={dismissAssistantDraftAction}><input type="hidden" name="messageId" value={messageId} /><button className="button button-ghost" aria-label={locale === "mk" ? "Отфрли го предлогот" : "Discard draft"}><Trash2 />{locale === "mk" ? "Отфрли" : "Discard"}</button></form>}
+      {mutable && !applied && <form action={action}><input type="hidden" name="messageId" value={messageId} /><button className="ui-button ui-button-primary" disabled={pending}><Check />{pending ? (locale === "mk" ? "Се зачувува…" : "Saving…") : (locale === "mk" ? "Потврди и зачувај" : "Confirm and save")}</button></form>}
+      {!applied && <button type="button" className="ui-button ui-button-secondary" onClick={() => onRequestChanges(draft)}><FilePenLine />{locale === "mk" ? "Побарај промени" : "Ask for changes"}</button>}
+      {!applied && <form action={dismissAssistantDraftAction}><input type="hidden" name="messageId" value={messageId} /><button className="ui-button ui-button-ghost" aria-label={locale === "mk" ? "Отфрли го предлогот" : "Discard draft"}><Trash2 />{locale === "mk" ? "Отфрли" : "Discard"}</button></form>}
       {applied && <span className="assistant-draft-applied"><Check />{locale === "mk" ? "Зачувано" : "Saved"}</span>}
     </div>
   </section>;

@@ -11,8 +11,77 @@ export async function loadTraining(userId: string) {
   ]);
   return { templates: templates.data ?? [], plans: plans.data ?? [], active: active.data, recent: recent.data ?? [], unavailable: Boolean(templates.error) };
 }
-export async function loadTemplate(userId: string, id: string) { const supabase = await createClient(); const [template, rows] = await Promise.all([supabase.from("workout_templates").select("*").eq("id", id).eq("user_id", userId).maybeSingle(), supabase.from("workout_template_exercises").select("*").eq("template_id", id).eq("user_id", userId).order("position")]); const ids=(rows.data??[]).map(row=>row.exercise_id).filter((value): value is string => Boolean(value));const catalogue=ids.length?await supabase.from("exercises").select("id,slug,title_en,title_mk").in("id",ids):{data:[]};return { template: template.data, exercises: rows.data ?? [], exerciseCatalogue:catalogue.data??[], unavailable: Boolean(template.error) }; }
-export async function loadPlanner(userId: string, from: string, to: string) { const supabase = await createClient(); const result = await supabase.from("planned_workouts").select("*").eq("user_id", userId).gte("planned_on", from).lte("planned_on", to).order("planned_on"); return { plans: result.data ?? [], unavailable: Boolean(result.error) }; }
-export async function loadSession(userId: string, id: string) { const supabase = await createClient(); const session = await supabase.from("workout_sessions").select("*").eq("id", id).eq("user_id", userId).maybeSingle(); const exercises = await supabase.from("workout_session_exercises").select("*").eq("session_id", id).eq("user_id", userId).order("position"); const sets = await supabase.from("workout_sets").select("*").eq("session_id", id).eq("user_id", userId).order("position"); return { session: session.data, exercises: exercises.data ?? [], sets: sets.data ?? [], unavailable: Boolean(session.error) }; }
-export async function loadHistory(userId: string) { const supabase = await createClient(); const result = await supabase.from("workout_sessions").select("*").eq("user_id", userId).eq("status", "complete").order("finished_at", { ascending: false }); return { sessions: result.data ?? [], unavailable: Boolean(result.error) }; }
-export async function loadRecordSessions(userId: string) { const supabase=await createClient(); const sessions=await supabase.from("workout_sessions").select("*").eq("user_id",userId).eq("status","complete").order("finished_at",{ascending:false}); const output=[]; for(const session of sessions.data??[]){const exerciseRows=await supabase.from("workout_session_exercises").select("id,exercise_id,name_en_snapshot").eq("session_id",session.id).eq("user_id",userId);const names=new Map((exerciseRows.data??[]).map(row=>[row.id,{id:row.exercise_id??row.id,name:row.name_en_snapshot}]));const sets=await supabase.from("workout_sets").select("*").eq("session_id",session.id).eq("user_id",userId);output.push({id:session.id,status:session.status,finishedAt:session.finished_at,sets:(sets.data??[]).map(set=>({exerciseId:names.get(set.session_exercise_id)?.id??set.session_exercise_id,exerciseName:names.get(set.session_exercise_id)?.name??"Exercise",reps:set.reps,loadKg:set.load_kg,isComplete:set.is_complete,isBodyweight:set.is_bodyweight}))});}return output; }
+
+export async function loadTemplate(userId: string, id: string) {
+  const supabase = await createClient();
+  const [template, rows] = await Promise.all([
+    supabase.from("workout_templates").select("*").eq("id", id).eq("user_id", userId).maybeSingle(),
+    supabase.from("workout_template_exercises").select("*").eq("template_id", id).eq("user_id", userId).order("position"),
+  ]);
+  const ids = (rows.data ?? []).map((row) => row.exercise_id).filter((value): value is string => Boolean(value));
+  const catalogue = ids.length
+    ? await supabase.from("exercises").select("id,slug,title_en,title_mk").in("id", ids)
+    : { data: [] };
+  return { template: template.data, exercises: rows.data ?? [], exerciseCatalogue: catalogue.data ?? [], unavailable: Boolean(template.error) };
+}
+
+export async function loadPlanner(userId: string, from: string, to: string) {
+  const supabase = await createClient();
+  const result = await supabase.from("planned_workouts").select("*").eq("user_id", userId)
+    .gte("planned_on", from).lte("planned_on", to).order("planned_on");
+  return { plans: result.data ?? [], unavailable: Boolean(result.error) };
+}
+
+export async function loadSession(userId: string, id: string) {
+  const supabase = await createClient();
+  const [session, exercises, sets] = await Promise.all([
+    supabase.from("workout_sessions").select("*").eq("id", id).eq("user_id", userId).maybeSingle(),
+    supabase.from("workout_session_exercises").select("*").eq("session_id", id).eq("user_id", userId).order("position"),
+    supabase.from("workout_sets").select("*").eq("session_id", id).eq("user_id", userId).order("position"),
+  ]);
+  return { session: session.data, exercises: exercises.data ?? [], sets: sets.data ?? [], unavailable: Boolean(session.error) };
+}
+
+export async function loadHistory(userId: string) {
+  const supabase = await createClient();
+  const result = await supabase.from("workout_sessions").select("*").eq("user_id", userId)
+    .eq("status", "complete").order("finished_at", { ascending: false });
+  return { sessions: result.data ?? [], unavailable: Boolean(result.error) };
+}
+
+/** Completed sessions with their sets, fetched in three queries regardless of history length. */
+export async function loadRecordSessions(userId: string, locale: "en" | "mk" = "en") {
+  const supabase = await createClient();
+  const sessions = await supabase.from("workout_sessions").select("id,status,finished_at").eq("user_id", userId)
+    .eq("status", "complete").order("finished_at", { ascending: false });
+  const sessionIds = (sessions.data ?? []).map((session) => session.id);
+  if (!sessionIds.length) return [];
+  const [exerciseRows, setRows] = await Promise.all([
+    supabase.from("workout_session_exercises").select("id,exercise_id,name_en_snapshot,name_mk_snapshot")
+      .in("session_id", sessionIds).eq("user_id", userId),
+    supabase.from("workout_sets").select("*").in("session_id", sessionIds).eq("user_id", userId),
+  ]);
+  const names = new Map((exerciseRows.data ?? []).map((row) => [row.id, {
+    id: row.exercise_id ?? row.id,
+    name: locale === "mk" ? row.name_mk_snapshot : row.name_en_snapshot,
+  }]));
+  const setsBySession = new Map<string, NonNullable<typeof setRows.data>>();
+  for (const set of setRows.data ?? []) {
+    const list = setsBySession.get(set.session_id) ?? [];
+    list.push(set);
+    setsBySession.set(set.session_id, list);
+  }
+  return (sessions.data ?? []).map((session) => ({
+    id: session.id,
+    status: session.status,
+    finishedAt: session.finished_at,
+    sets: (setsBySession.get(session.id) ?? []).map((set) => ({
+      exerciseId: names.get(set.session_exercise_id)?.id ?? set.session_exercise_id,
+      exerciseName: names.get(set.session_exercise_id)?.name ?? "Exercise",
+      reps: set.reps,
+      loadKg: set.load_kg,
+      isComplete: set.is_complete,
+      isBodyweight: set.is_bodyweight,
+    })),
+  }));
+}

@@ -22,6 +22,6 @@ test('README documents the production workflow and current motion boundary', () 
   assert.match(readme, /http:\/\/localhost:3000/);
   assert.match(readme, /prototype.+visual reference/is);
   assert.match(readme, /Phase 1.+foundation/is);
-  assert.match(readme, /Phase 9.+GSAP.+Three\.js/is);
+  assert.match(readme, /Motion and 3D are CSS-only/);
   assert.match(readme, /SVG atlas remains the active renderer/is);
 });

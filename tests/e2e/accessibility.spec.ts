@@ -44,7 +44,7 @@ test("mobile navigation remains accessible when opened", async (
   const violations = await analyzeAccessibility(page, testInfo);
   expect(violations.length, formatAxeViolations(violations)).toBe(0);
   await expect(
-    page.getByRole("navigation", { name: "Primary" }).last(),
+    page.getByRole("navigation", { name: "Mobile" }),
   ).toBeVisible();
 });
 

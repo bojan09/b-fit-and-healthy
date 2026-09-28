@@ -11,7 +11,7 @@ test('production package pins the approved Phase 1 stack and quality commands', 
   assert.ok(exists('package.json'), 'missing production package.json');
   const pkg = JSON.parse(read('package.json'));
 
-  assert.equal(pkg.scripts.dev, 'next dev --webpack --port 3000');
+  assert.equal(pkg.scripts.dev, 'next dev --turbopack --port 3000');
   for (const script of ['build', 'start', 'lint', 'typecheck', 'test']) {
     assert.ok(pkg.scripts[script], `missing ${script} script`);
   }
@@ -25,7 +25,7 @@ test('production package pins the approved Phase 1 stack and quality commands', 
 test('App Router exposes accessible foundation, state, and offline routes', () => {
   for (const file of [
     'src/app/layout.tsx',
-    'src/app/(marketing)/page.tsx',
+    'src/app/[locale]/(marketing)/page.tsx',
     'src/app/~offline/page.tsx',
     'src/app/loading.tsx',
     'src/app/error.tsx',
@@ -33,9 +33,13 @@ test('App Router exposes accessible foundation, state, and offline routes', () =
   ]) assert.ok(exists(file), `missing ${file}`);
 
   const layout = read('src/app/layout.tsx');
-  assert.match(layout, /<html[^>]+lang=\{locale\}/);
+  // Root layout reads no request data; area layouts provide the locale.
+  assert.doesNotMatch(layout, /getLocale|cookies\(/);
+  assert.match(read('src/app/[locale]/layout.tsx'), /generateStaticParams/);
   assert.match(read('src/lib/i18n/config.ts'), /defaultLocale:\s*Locale\s*=\s*"en"/);
-  assert.match(layout, /SkipLink/);
+  const provider = read('src/components/providers/locale-provider.tsx');
+  assert.match(provider, /documentElement\.lang/);
+  assert.match(provider, /SkipLink/);
   assert.match(layout, /ThemeProvider/);
 });
 

@@ -4,8 +4,7 @@ import Link from "next/link";
 import { ArrowRight, RotateCcw, Search, X } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { AnatomyRenderer } from "@/features/anatomy/anatomy-renderer";
-import { useAnatomyMotion } from "@/features/anatomy/anatomy-motion";
-import { getAnatomyRegions, getMuscle, getMusclesForView, searchMuscles, type MuscleView } from "@/features/anatomy/data";
+import { getAnatomyRegions, getMuscle, getMusclesForView, regionLabel, searchMuscles, type MuscleView } from "@/features/anatomy/data";
 import type { Locale } from "@/lib/i18n/config";
 
 export function AnatomyExplorer({ locale }: { locale: Locale }) {
@@ -13,9 +12,7 @@ export function AnatomyExplorer({ locale }: { locale: Locale }) {
   const [selected, setSelected] = useState("pectorals");
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("all");
-  const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  useAnatomyMotion(rootRef, view, selected);
 
   const muscle = getMuscle(selected) ?? getMusclesForView(view)[0];
   const results = useMemo(() => searchMuscles(query, region), [query, region]);
@@ -41,22 +38,7 @@ export function AnatomyExplorer({ locale }: { locale: Locale }) {
   };
 
   return (
-    <div ref={rootRef} className="anatomy-encyclopedia">
-      <div className="anatomy-tools">
-        <label>
-          <span>{locale === "en" ? "Search muscles" : "Пребарај мускули"}</span>
-          <div><Search aria-hidden="true" /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={locale === "en" ? "Name, region, or scientific name" : "Име, регион или научно име"} /></div>
-        </label>
-        <label>
-          <span>{locale === "en" ? "Body region" : "Регион на телото"}</span>
-          <select aria-label={locale === "en" ? "Body region" : "Регион на телото"} value={region} onChange={(event) => setRegion(event.target.value)}>
-            <option value="all">{locale === "en" ? "All regions" : "Сите региони"}</option>
-            {regions.map((item) => <option value={item} key={item}>{item.replaceAll("-", " ")}</option>)}
-          </select>
-        </label>
-        <button type="button" className="text-action" onClick={clear}><X aria-hidden="true" />{locale === "en" ? "Clear filters" : "Исчисти филтри"}</button>
-        <p aria-live="polite">{results.length} {locale === "en" ? "muscles" : "мускули"}</p>
-      </div>
+    <div className="anatomy-encyclopedia">
 
       <div className="anatomy-explorer">
         <div ref={stageRef} className="anatomy-stage">
@@ -69,8 +51,8 @@ export function AnatomyExplorer({ locale }: { locale: Locale }) {
           </div>
           <p className="stage-hint"><RotateCcw aria-hidden="true" size={16} />{locale === "en" ? "Choose a highlighted muscle or use the directory." : "Избери означен мускул или користи го именикот."}</p>
         </div>
-        <div className="anatomy-panel" data-anatomy-panel aria-live="polite">
-          <p className="eyebrow">{muscle.region}</p>
+        <div className="anatomy-panel" data-anatomy-panel aria-live="polite" key={muscle.id}>
+          <p className="eyebrow">{regionLabel(muscle.region, locale)}</p>
           <h2>{muscle.name[locale]}</h2>
           <p className="scientific-name">{muscle.scientific}</p>
           <p className="anatomy-summary">{muscle.summary[locale]}</p>
@@ -90,11 +72,26 @@ export function AnatomyExplorer({ locale }: { locale: Locale }) {
           <div><p className="eyebrow">{locale === "en" ? "Encyclopedia" : "Енциклопедија"}</p><h2 id="muscle-directory">{locale === "en" ? "Muscle directory" : "Именик на мускули"}</h2></div>
           <p>{locale === "en" ? "Select any entry to locate it on the atlas." : "Избери запис за да го лоцираш на атласот."}</p>
         </header>
+        <div className="anatomy-tools">
+          <label>
+            <span>{locale === "en" ? "Search muscles" : "Пребарај мускули"}</span>
+            <div><Search aria-hidden="true" /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={locale === "en" ? "Name, region, or scientific name" : "Име, регион или научно име"} /></div>
+          </label>
+          <label>
+            <span>{locale === "en" ? "Body region" : "Регион на телото"}</span>
+            <select aria-label={locale === "en" ? "Body region" : "Регион на телото"} value={region} onChange={(event) => setRegion(event.target.value)}>
+              <option value="all">{locale === "en" ? "All regions" : "Сите региони"}</option>
+              {regions.map((item) => <option value={item} key={item}>{regionLabel(item, locale)}</option>)}
+            </select>
+          </label>
+          <button type="button" className="text-action" onClick={clear}><X aria-hidden="true" />{locale === "en" ? "Clear filters" : "Исчисти филтри"}</button>
+          <p aria-live="polite">{results.length} {locale === "en" ? "muscles" : "мускули"}</p>
+        </div>
         {results.length ? (
           <div>{results.map((item) => (
             <button type="button" key={item.id} onClick={() => choose(item.id)} aria-pressed={selected === item.id}>
               <span><strong>{item.name[locale]}</strong><small>{item.scientific}</small></span>
-              <em>{item.region}</em>
+              <em>{regionLabel(item.region, locale)}</em>
               <ArrowRight aria-hidden="true" />
             </button>
           ))}</div>

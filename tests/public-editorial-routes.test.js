@@ -15,7 +15,7 @@ test("authentication uses the shared accessible field primitive", () => {
 });
 
 test("articles expose a dedicated reading column and separated supporting content", () => {
-  const page = read("src/app/(marketing)/blog/[slug]/page.tsx");
+  const page = read("src/app/[locale]/(marketing)/blog/[slug]/page.tsx");
   const styles = read("src/styles/public.css");
 
   assert.match(page, /className="article-reading-column"/);
@@ -35,7 +35,7 @@ test("public compositions use compact editorial sections", () => {
 });
 
 test("featured blog navigation stays inside the Next.js router", () => {
-  const blog = read("src/app/(marketing)/blog/page.tsx");
+  const blog = read("src/app/[locale]/(marketing)/blog/page.tsx");
 
   assert.match(blog, /import\s+Link\s+from\s*"next\/link"/);
   assert.doesNotMatch(blog, /<a\s+href=\{`\/blog\//);

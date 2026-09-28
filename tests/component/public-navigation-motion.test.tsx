@@ -1,8 +1,6 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const scoped = vi.hoisted(() => vi.fn());
-vi.mock("@/features/motion/use-gsap-scope", () => ({ useGsapScope: scoped }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
 vi.mock("@/components/providers/locale-provider", () => ({
   useLocale: () => ({ locale: "en" }),
@@ -23,6 +21,7 @@ describe("public navigation motion", () => {
     fireEvent.click(menu);
     expect(screen.getAllByRole("link", { name: "Features" })).toHaveLength(2);
     expect(screen.getByRole("link", { name: "Sign in" })).toBeInTheDocument();
-    expect(scoped).toHaveBeenCalled();
+    expect(screen.getByRole("navigation", { name: "Main" })).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Mobile" })).toBeInTheDocument();
   });
 });
