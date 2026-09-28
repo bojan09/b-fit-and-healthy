@@ -46,11 +46,6 @@
 }
 
 /* Anatomy turntable: front and back atlases are two faces of one 3D card. */
-.anatomy-renderer-shell {
-  width: 100%;
-  display: grid;
-  place-items: center;
-}
 .anatomy-turntable {
   position: relative;
   width: 100%;

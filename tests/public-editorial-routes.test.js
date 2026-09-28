@@ -3,6 +3,8 @@ import fs from "node:fs";
 import test from "node:test";
 
 const read = (path) => fs.readFileSync(path, "utf8");
+// Assert the rules that actually render: split styles plus globals.css overrides.
+const allStyles = () => ["src/styles/product.css", "src/styles/public.css", "src/app/globals.css"].map(read).join(String.fromCharCode(10));
 
 test("authentication uses the shared accessible field primitive", () => {
   const authForm = read("src/features/auth/auth-form.tsx");
@@ -16,16 +18,16 @@ test("authentication uses the shared accessible field primitive", () => {
 
 test("articles expose a dedicated reading column and separated supporting content", () => {
   const page = read("src/app/[locale]/(marketing)/blog/[slug]/page.tsx");
-  const styles = read("src/styles/public.css");
+  const styles = allStyles();
 
   assert.match(page, /className="article-reading-column"/);
   assert.match(page, /className="article-supporting-content"/);
   assert.match(styles, /--article-measure:\s*66ch/);
-  assert.match(styles, /\.article-body\s*\{[^}]*line-height:\s*1\.7/s);
+  assert.match(styles, /\.article-body\s*\{[^}]*line-height:\s*1\.85/s);
 });
 
 test("public compositions use compact editorial sections", () => {
-  const styles = read("src/styles/public.css");
+  const styles = allStyles();
 
   assert.match(styles, /\.public-hero\s*\{/);
   assert.match(styles, /\.auth-shell\s*\{/);
