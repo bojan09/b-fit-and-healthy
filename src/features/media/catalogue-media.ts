@@ -94,6 +94,9 @@ export function fallbackKindForMedia(context: { kind: "exercise" | "recipe"; cat
 }
 
 export function catalogueMediaForDisplay(media: CatalogueMedia, locale: Locale): DisplayMedia {
-  const { width: _width, height: _height, alt, ...provenance } = media;
-  return { ...provenance, alt: alt[locale] };
+  const { alt, ...rest } = media;
+  const provenance: Record<string, unknown> = { ...rest };
+  delete provenance.width;
+  delete provenance.height;
+  return { ...(provenance as Omit<DisplayMedia, "alt">), alt: alt[locale] };
 }

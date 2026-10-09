@@ -12,14 +12,15 @@ export function ActionFeedback({
   className?: string;
 }) {
   const Icon = status === "success" ? CheckCircle2 : AlertCircle;
-  return <div
-    key={`${status}:${message}`}
-    className={`action-feedback ${className} ${status}`.trim()}
-    data-action-status={status}
-    role="status"
-    aria-live="polite"
-  >
-    <Icon aria-hidden="true" />
-    <span>{message}</span>
+  // The live region stays mounted; only the inner node remounts to replay the CSS pulse/shake.
+  return <div role={status === "error" ? "alert" : "status"} aria-live={status === "error" ? "assertive" : "polite"} className="action-feedback-region">
+    <div
+      key={`${status}:${message}`}
+      className={`action-feedback ${className} ${status}`.trim()}
+      data-action-status={status}
+    >
+      <Icon aria-hidden="true" />
+      <span>{message}</span>
+    </div>
   </div>;
 }

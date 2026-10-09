@@ -21,15 +21,16 @@ export function AuthForm({ mode, locale, next = "/today" }: { mode: Mode; locale
   const emailOnly = mode === "magic-link" || mode === "forgot-password";
 
   return <div className="auth-card">
-    <header><p className="eyebrow">B Fit &amp; Healthy</p><h2>{title}</h2><p>{mode === "sign-in" ? c.signInIntro : "A secure, focused step back into your health workspace."}</p></header>
-    {mode === "sign-in" && <form action={googleOAuthAction}><input type="hidden" name="next" value={next} /><Button type="submit" variant="secondary" className="auth-wide"><CircleUserRound aria-hidden="true" />{c.google}</Button></form>}
-    {mode === "sign-in" && <div className="auth-divider"><span>or</span></div>}
+    <header><p className="eyebrow">B Fit &amp; Healthy</p><h2>{title}</h2><p>{mode === "sign-in" ? c.signInIntro : c.secureIntro}</p></header>
+    {(mode === "sign-in" || mode === "sign-up") && <form action={googleOAuthAction}><input type="hidden" name="next" value={next} /><Button type="submit" variant="secondary" className="auth-wide"><CircleUserRound aria-hidden="true" />{c.google}</Button></form>}
+    {(mode === "sign-in" || mode === "sign-up") && <div className="auth-divider"><span>{c.or}</span></div>}
     <form action={action} className="auth-fields">
       <input type="hidden" name="next" value={next} />
       {mode === "sign-up" && <Field label={c.displayName} error={state.fieldErrors?.displayName?.[0]}><input name="displayName" autoComplete="name" required minLength={2} /></Field>}
       <Field label={c.email} error={state.fieldErrors?.email?.[0]}><input name="email" type="email" autoComplete="email" required /></Field>
       {!emailOnly && <Field label={c.password} description={mode === "sign-up" ? c.passwordHint : undefined} error={state.fieldErrors?.password?.[0]}><input name="password" type="password" autoComplete={mode === "sign-up" ? "new-password" : "current-password"} required minLength={mode === "sign-up" ? 10 : 1} /></Field>}
       {mode === "sign-up" && <><Field label={c.confirmPassword} error={state.fieldErrors?.confirmPassword?.[0]}><input name="confirmPassword" type="password" autoComplete="new-password" required minLength={10} /></Field><input type="hidden" name="locale" value={locale} /></>}
+      {mode === "sign-up" && <p className="auth-consent">{c.consentPrefix} <Link href="/terms">{c.terms}</Link> {c.consentAnd} <Link href="/privacy">{c.privacy}</Link>.</p>}
       {state.message && <p className={`form-notice ${state.status}`} role="status" aria-live="polite">{state.message}</p>}
       <Button type="submit" size="lg" className="auth-wide" disabled={pending}>{pending ? c.wait : submit}<ArrowRight aria-hidden="true" /></Button>
     </form>

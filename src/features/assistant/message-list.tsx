@@ -13,13 +13,15 @@ export function MessageList({ locale, messages, pending, onRequestChanges }: {
   onRequestChanges: (draft: AssistantDraft) => void;
 }) {
   const c = getAssistantContent(locale);
-  return <div className="assistant-messages" aria-live="polite" aria-busy={pending}>
+  return <div className="assistant-messages" aria-busy={pending}>
     {messages.map((message) => <article key={message.id} className={`assistant-message ${message.role}`}>
       <div className="assistant-message-author">{message.role === "user" ? <UserRound /> : <Bot />}<span>{message.role === "user" ? c.user : c.assistant}</span></div>
       <p>{message.content}</p>
       {message.draft && <DraftCard locale={locale} draft={message.draft} messageId={message.id} applied={Boolean(message.appliedAt)} onRequestChanges={onRequestChanges} />}
     </article>)}
     {pending && <p className="assistant-thinking" role="status">{c.thinking}</p>}
+    {/* Announce once when a reply is complete, not on every streamed chunk. */}
+    <p className="sr-only" role="status">{!pending && messages.at(-1)?.role === "assistant" ? c.replyReady : ""}</p>
   </div>;
 }
 
