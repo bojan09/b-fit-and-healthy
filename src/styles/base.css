@@ -6,6 +6,8 @@ html { min-width: 20rem; scroll-behavior: smooth;
 
 body {
   min-height: 100vh;
+
+  min-height: 100dvh;
   margin: 0;
   font-size: 1rem;
   line-height: 1.6;

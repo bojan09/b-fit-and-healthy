@@ -1,4 +1,5 @@
 const test = require('node:test');
+const { readAllStyles } = require('./helpers/styles');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -156,6 +157,6 @@ test('shared buttons use the coordinated Voltage tokens in both themes', () => {
 test('ambient field sits below interactive content and never tracks the pointer', () => {
   const css = read('src/styles/motion.css');
   assert.match(css, /\.ambient-field\s*\{[^}]*z-index:\s*0;/s);
-  assert.match(read('src/app/globals.css'), /body\s*>\s*:not\(\.ambient-field\):not\(\.skip-link\)\s*\{[^}]*z-index:\s*1;/s);
+  assert.match(readAllStyles(), /body\s*>\s*:not\(\.ambient-field\):not\(\.skip-link\)\s*\{[^}]*z-index:\s*1;/s);
   assert.doesNotMatch(read('src/app/layout.tsx'), /AmbientPointer/);
 });
