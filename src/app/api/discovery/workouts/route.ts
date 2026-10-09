@@ -13,6 +13,7 @@ import {
 import { discoveryQuerySchema } from "@/features/discovery/schemas";
 import { searchMuscleWikiWorkouts } from "@/features/fitness/providers/musclewiki";
 import { createClient } from "@/lib/supabase/server";
+import { enforceRateLimit, rateLimitedResponse, rateLimits } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
   const supabase = await createClient();
@@ -20,6 +21,9 @@ export async function GET(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ results: [] }, { status: 401 });
+  const limit = await enforceRateLimit(supabase, "discovery", user.id, rateLimits.discovery);
+  if (!limit.allowed) return rateLimitedResponse(limit.retryAfter, { results: [] });
+
   const parsed = discoveryQuerySchema.safeParse(
     Object.fromEntries(new URL(request.url).searchParams),
   );

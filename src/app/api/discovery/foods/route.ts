@@ -17,6 +17,7 @@ import {
   searchOpenFoodFactsBrands,
 } from "@/features/nutrition/providers/open-food-facts";
 import { createClient } from "@/lib/supabase/server";
+import { enforceRateLimit, rateLimitedResponse, rateLimits } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
   const supabase = await createClient();
@@ -29,6 +30,11 @@ export async function GET(request: Request) {
       { status: 401 },
     );
   }
+
+  const limit = await enforceRateLimit(supabase, "discovery", user.id, rateLimits.discovery);
+
+  if (!limit.allowed) return rateLimitedResponse(limit.retryAfter, { results: [] });
+
 
   const parsed = discoveryQuerySchema.safeParse(
     Object.fromEntries(new URL(request.url).searchParams),

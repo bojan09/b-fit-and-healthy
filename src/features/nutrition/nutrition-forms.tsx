@@ -10,13 +10,32 @@ import { ActionFeedback } from "@/features/motion/action-feedback";
 
 const initial: AuthActionState = { status: "idle" };
 type FoodResult = { id: string; name: string; brand: string | null; servingGrams: number; energyKcal: number; proteinG: number; carbohydrateG: number; fatG: number; fibreG: number; isFavourite?: boolean };
-const formText = { en: { searching: "Searching…", meal: "Meal", name: "Name", serving: "Serving (g)", saveFood: "Save custom food", saving: "Saving…", manual: "Manual meal", add: "Add", item: "Add item", quantity: "Quantity", unit: "Unit", category: "Category", favourite: "Favourite", yourFoods: "Your foods" }, mk: { searching: "Се пребарува…", meal: "Оброк", name: "Име", serving: "Порција (g)", saveFood: "Зачувај храна", saving: "Се зачувува…", manual: "Рачен оброк", add: "Додај", item: "Додај ставка", quantity: "Количина", unit: "Единица", category: "Категорија", favourite: "Омилено", yourFoods: "Ваша храна" } } as const;
+const formText = { en: { searching: "Searching…", meal: "Meal", name: "Name", serving: "Serving (g)", saveFood: "Save custom food", saving: "Saving…", manual: "Manual meal", add: "Add", item: "Add item", quantity: "Quantity", unit: "Unit", category: "Category", favourite: "Favourite", yourFoods: "Your foods", slowDown: "Too many searches. Try again in a moment.", searchFailed: "Search is unavailable right now. Try again." }, mk: { searching: "Се пребарува…", meal: "Оброк", name: "Име", serving: "Порција (g)", saveFood: "Зачувај храна", saving: "Се зачувува…", manual: "Рачен оброк", add: "Додај", item: "Додај ставка", quantity: "Количина", unit: "Единица", category: "Категорија", favourite: "Омилено", yourFoods: "Ваша храна", slowDown: "Премногу пребарувања. Обидете се повторно за момент.", searchFailed: "Пребарувањето не е достапно. Обидете се повторно." } } as const;
 
 function Status({ state }: { state: AuthActionState }) { return state.message ? <ActionFeedback className="form-status" status={state.status} message={state.message} /> : null; }
 
 export function FoodSearchForm({ date, labels, locale, savedFoods = [] }: { date: string; labels: { search: string; add: string; source: string }; locale: Locale; savedFoods?: FoodResult[] }) {
   const t = formText[locale]; const [query, setQuery] = useState(""); const [results, setResults] = useState<FoodResult[]>(savedFoods); const [notice, setNotice] = useState(savedFoods.length ? t.yourFoods : ""); const [loading, setLoading] = useState(false); const [state, action, pending] = useActionState(addMealEntryAction, initial);
-  async function search(event: React.FormEvent) { event.preventDefault(); if (query.trim().length < 2) return; setLoading(true); const response = await fetch(`/api/foods/search?q=${encodeURIComponent(query)}`); const data = await response.json(); setResults(data.results ?? []); setNotice(data.attribution ?? data.message ?? ""); setLoading(false); }
+  async function search(event: React.FormEvent) {
+    event.preventDefault();
+    if (query.trim().length < 2) return;
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/foods/search?q=${encodeURIComponent(query)}`);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setResults([]);
+        setNotice(response.status === 429 ? t.slowDown : data.message ?? t.searchFailed);
+        return;
+      }
+      setResults(data.results ?? []);
+      setNotice(data.attribution ?? data.message ?? "");
+    } catch {
+      setNotice(t.searchFailed);
+    } finally {
+      setLoading(false);
+    }
+  }
   return <div className="food-search-panel">
     <form className="food-search-row" onSubmit={search}><label className="sr-only" htmlFor="food-query">{labels.search}</label><input id="food-query" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={locale === "mk" ? "Овес, леќа, јогурт…" : "Oats, lentils, yoghurt…"} minLength={2} /><button className="ui-button ui-button-secondary" disabled={loading}><Search aria-hidden="true" />{loading ? t.searching : labels.search}</button></form>
     {notice && <p className="source-note">{notice}</p>}

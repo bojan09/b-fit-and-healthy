@@ -8,6 +8,11 @@ import type { AuthActionState } from "@/features/auth/types";
 import type { DiscoveryExercise } from "@/features/discovery/types";
 
 async function authorized() { const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect("/sign-in"); return { supabase, user }; }
+/** Surfaces failed writes in server logs instead of dropping them; returns true when the write failed. */
+function writeFailed(label: string, error: { message: string } | null) {
+  if (error) console.error(`fitness.${label}`, error.message);
+  return Boolean(error);
+}
 const refresh = () => ["/today","/training","/training/planner","/workouts","/workout-history","/personal-records"].forEach((path) => revalidatePath(path));
 
 export async function createTemplateAction(formData: FormData) {
@@ -244,11 +249,12 @@ export async function scheduleWorkoutAction(formData: FormData) {
   const parsed = scheduleSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return;
   const { supabase, user } = await authorized();
-  await supabase.from("planned_workouts").insert({
+  const scheduled = await supabase.from("planned_workouts").insert({
     user_id: user.id,
     template_id: parsed.data.templateId,
     planned_on: parsed.data.plannedOn,
   });
+  writeFailed("schedule", scheduled.error);
   refresh();
 }
 
@@ -257,7 +263,8 @@ export async function updatePlanStatusAction(formData: FormData) {
   const status = formData.get("status");
   if (!id.success || (status !== "planned" && status !== "skipped")) return;
   const { supabase, user } = await authorized();
-  await supabase.from("planned_workouts").update({ status }).eq("id", id.data).eq("user_id", user.id);
+  const updated = await supabase.from("planned_workouts").update({ status }).eq("id", id.data).eq("user_id", user.id);
+  writeFailed("planStatus", updated.error);
   refresh();
 }
 
@@ -350,13 +357,14 @@ export async function updateSetAction(formData: FormData) {
   const parsed = setSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return;
   const { supabase, user } = await authorized();
-  await supabase.from("workout_sets").update({
+  const saved = await supabase.from("workout_sets").update({
     reps: parsed.data.reps ?? null,
     load_kg: parsed.data.loadKg ?? null,
     rpe: parsed.data.rpe === "" ? null : parsed.data.rpe,
     is_bodyweight: parsed.data.bodyweight === "on",
     is_complete: parsed.data.complete === "on",
   }).eq("id", parsed.data.setId).eq("session_id", parsed.data.sessionId).eq("user_id", user.id);
+  if (writeFailed("updateSet", saved.error)) redirect(`/session/${parsed.data.sessionId}?error=storage`);
   revalidatePath(`/session/${parsed.data.sessionId}`);
 }
 
@@ -368,12 +376,13 @@ export async function addSetAction(formData: FormData) {
   const previous = await supabase.from("workout_sets").select("position")
     .eq("session_id", sessionId.data).eq("session_exercise_id", exerciseId.data).eq("user_id", user.id)
     .order("position", { ascending: false }).limit(1).maybeSingle();
-  await supabase.from("workout_sets").insert({
+  const added = await supabase.from("workout_sets").insert({
     user_id: user.id,
     session_id: sessionId.data,
     session_exercise_id: exerciseId.data,
     position: (previous.data?.position ?? -1) + 1,
   });
+  if (writeFailed("addSet", added.error)) redirect(`/session/${sessionId.data}?error=storage`);
   revalidatePath(`/session/${sessionId.data}`);
 }
 
@@ -382,7 +391,8 @@ export async function removeSetAction(formData: FormData) {
   const sessionId = uuidSchema.safeParse(formData.get("sessionId"));
   if (!setId.success || !sessionId.success) return;
   const { supabase, user } = await authorized();
-  await supabase.from("workout_sets").delete().eq("id", setId.data).eq("session_id", sessionId.data).eq("user_id", user.id);
+  const removed = await supabase.from("workout_sets").delete().eq("id", setId.data).eq("session_id", sessionId.data).eq("user_id", user.id);
+  if (writeFailed("removeSet", removed.error)) redirect(`/session/${sessionId.data}?error=storage`);
   revalidatePath(`/session/${sessionId.data}`);
 }
 

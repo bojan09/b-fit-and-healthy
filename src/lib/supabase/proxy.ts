@@ -70,8 +70,15 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(new URL(getAccountDestination(Boolean(profile?.onboarding_complete), request.nextUrl.searchParams.get("next")), request.url));
     }
   } catch {
-    // Public foundation pages remain reviewable while configuration is repaired.
-    // Protected route components still authorize before reading user data.
+    // Public pages never reach this block. If auth cannot be verified (missing or
+    // broken configuration), protected routes fail closed instead of relying on
+    // component-level checks alone.
+    if (isProtected(pathname)) {
+      const signIn = request.nextUrl.clone();
+      signIn.pathname = "/sign-in";
+      signIn.search = "";
+      return NextResponse.redirect(signIn);
+    }
   }
 
   if (isProtected(request.nextUrl.pathname)) {
