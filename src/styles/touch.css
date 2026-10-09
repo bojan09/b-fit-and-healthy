@@ -1,0 +1,78 @@
+/* Touch ergonomics: every interactive control reaches the 44px target on touch and narrow screens. */
+@media (pointer: coarse), (max-width: 48rem) {
+  .footer-grid a:not(.brand),
+  .muscle-pills button,
+  .date-stepper a,
+  .anatomy-tools select,
+  .recipe-search,
+  .set-save,
+  .set-remove,
+  .icon-action,
+  .text-action,
+  .ui-button-ghost {
+    min-height: var(--touch-target);
+  }
+
+  .date-stepper a,
+  .icon-action,
+  .set-remove {
+    min-width: var(--touch-target);
+  }
+
+  .notification-link {
+    width: var(--touch-target);
+    min-width: var(--touch-target);
+    height: var(--touch-target);
+    min-height: var(--touch-target);
+  }
+
+  .grocery-check {
+    width: var(--touch-target);
+    height: var(--touch-target);
+  }
+}
+
+/* Destructive-action confirmation hint (ConfirmSubmitButton). */
+.confirm-hint {
+  color: var(--danger);
+  font-size: var(--text-sm);
+}
+
+.confirm-hint:empty {
+  display: none;
+}
+
+[data-armed] {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
+}
+
+.auth-consent {
+  color: var(--foreground-secondary);
+  font-size: var(--text-sm);
+}
+
+.auth-consent a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.rest-timer {
+  position: sticky;
+  top: var(--space-3);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-raised);
+  font-variant-numeric: tabular-nums;
+}
+
+.rest-timer[data-finished] {
+  border-color: var(--brand);
+}

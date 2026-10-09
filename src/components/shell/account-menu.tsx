@@ -16,6 +16,7 @@ export function AccountMenu({
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const initial = name.trim().charAt(0).toUpperCase() || "B";
   const copy =
     locale === "en"
@@ -40,7 +41,10 @@ export function AccountMenu({
       if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
     };
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     };
     document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
@@ -53,31 +57,31 @@ export function AccountMenu({
   return (
     <div className="account-menu" ref={rootRef}>
       <button
+        ref={triggerRef}
         type="button"
         className="account-menu-trigger"
         aria-expanded={open}
-        aria-haspopup="menu"
         aria-label={copy.open}
         onClick={() => setOpen((value) => !value)}
       >
         <span aria-hidden="true">{initial}</span>
       </button>
       {open ? (
-        <div className="account-menu-panel" role="menu">
+        <div className="account-menu-panel">
           <div className="account-menu-context">
             <span>{copy.signedIn}</span>
             <strong>{name}</strong>
           </div>
-          <Link role="menuitem" href="/settings#profile">
+          <Link href="/settings#profile" onClick={() => setOpen(false)}>
             <UserRound aria-hidden="true" />
             {copy.profile}
           </Link>
-          <Link role="menuitem" href="/settings#preferences">
+          <Link href="/settings#preferences" onClick={() => setOpen(false)}>
             <Settings aria-hidden="true" />
             {copy.settings}
           </Link>
           <form action={signOut}>
-            <button role="menuitem" type="submit">
+            <button type="submit">
               <LogOut aria-hidden="true" />
               {copy.signOut}
             </button>

@@ -9,20 +9,20 @@ describe("AccountMenu", () => {
   it("keeps account actions behind one compact disclosure", () => {
     render(<AccountMenu name="Stan" locale="en" signOut={signOut} />);
 
-    expect(screen.queryByRole("menuitem", { name: "Profile" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Profile" })).not.toBeInTheDocument();
     fireEvent.click(
       screen.getByRole("button", { name: "Open account menu for Stan" }),
     );
 
-    expect(screen.getByRole("menuitem", { name: "Profile" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute(
       "href",
       "/settings#profile",
     );
-    expect(screen.getByRole("menuitem", { name: "Settings" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Settings" })).toHaveAttribute(
       "href",
       "/settings#preferences",
     );
-    expect(screen.getByRole("menuitem", { name: "Sign out" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument();
   });
 
   it("closes on Escape", () => {
@@ -31,6 +31,7 @@ describe("AccountMenu", () => {
       screen.getByRole("button", { name: "Open account menu for Stan" }),
     );
     fireEvent.keyDown(document, { key: "Escape" });
-    expect(screen.queryByRole("menuitem", { name: "Profile" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Profile" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Open account menu for Stan" })).toHaveFocus();
   });
 });

@@ -1,8 +1,11 @@
+import Link from "next/link";
+
 export type BalanceRow = {
   label: string;
   value: string;
   ratio: number | null;
   note?: string;
+  noteHref?: string;
 };
 
 export function DailyBalance({
@@ -26,7 +29,7 @@ export function DailyBalance({
               <strong>{row.value}</strong>
             </div>
             {row.ratio === null ? (
-              row.note ? <p>{row.note}</p> : null
+              row.note ? <p>{row.noteHref ? <Link href={row.noteHref}>{row.note}</Link> : row.note}</p> : null
             ) : (
               <div
                 className="linear-meter"

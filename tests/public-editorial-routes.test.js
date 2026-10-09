@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
+import { createRequire } from 'node:module';
+const { readAllStyles } = createRequire(import.meta.url)('./helpers/styles.js');
 
 const read = (path) => fs.readFileSync(path, "utf8");
 // Assert the rules that actually render: split styles plus globals.css overrides.
-const allStyles = () => ["src/styles/product.css", "src/styles/public.css", "src/app/globals.css"].map(read).join(String.fromCharCode(10));
+const allStyles = () => [readAllStyles()].join(String.fromCharCode(10));
 
 test("authentication uses the shared accessible field primitive", () => {
   const authForm = read("src/features/auth/auth-form.tsx");

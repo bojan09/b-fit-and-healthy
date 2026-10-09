@@ -1,4 +1,5 @@
 const test = require("node:test");
+const { readAllStyles } = require('./helpers/styles');
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -18,7 +19,7 @@ test("motion ships no animation or 3D libraries", () => {
   }
   const sources = walk("src").filter((file) => /\.(ts|tsx|css)$/.test(file)).map(read).join("\n");
   assert.doesNotMatch(sources, /from ["'](gsap|three)["']|import\(["'](gsap|three)["']\)/);
-  assert.doesNotMatch(read("src/app/globals.css"), /tw-animate-css/);
+  assert.doesNotMatch(readAllStyles(), /tw-animate-css/);
 });
 
 test("the anatomy atlas turns in CSS 3D and keeps the hidden face inert", () => {
@@ -35,7 +36,7 @@ test("every animation is opt-in behind prefers-reduced-motion", () => {
   const css = read("src/styles/motion.css");
   assert.match(css, /@media \(prefers-reduced-motion: no-preference\)/);
   assert.match(css, /@supports \(animation-timeline: view\(\)\)/);
-  assert.match(read("src/app/globals.css"), /prefers-reduced-motion:\s*reduce/);
+  assert.match(readAllStyles(), /prefers-reduced-motion:\s*reduce/);
   assert.match(read("src/app/globals.css"), /@import "\.\.\/styles\/motion\.css";/);
 });
 

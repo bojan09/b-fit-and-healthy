@@ -3,11 +3,14 @@
 import { useState } from "react";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { getFitnessCopy } from "@/features/fitness/content";
+import { RestTimer } from "@/features/fitness/rest-timer";
 import type { Locale } from "@/lib/i18n/config";
 
 type SetRow = { id: string; reps: number | null; loadKg: number | null; isComplete: boolean; isBodyweight: boolean };
 type ExerciseRow = { id: string; name: string; target: string; sets: SetRow[] };
 type Action = (data: FormData) => void | Promise<void>;
+
+const DEFAULT_REST_SECONDS = 90;
 
 export function SessionLogger({
   sessionId,
@@ -30,6 +33,7 @@ export function SessionLogger({
 }) {
   const c = getFitnessCopy(locale);
   const [items, setItems] = useState(initial);
+  const [restStartedAt, setRestStartedAt] = useState<number | null>(null);
   const change = (exerciseIndex: number, setIndex: number, patch: Partial<SetRow>) =>
     setItems((current) => current.map((exercise, index) => index === exerciseIndex
       ? { ...exercise, sets: exercise.sets.map((set, row) => (row === setIndex ? { ...set, ...patch } : set)) }
@@ -42,6 +46,7 @@ export function SessionLogger({
 
   return (
     <div className="session-logger">
+      {restStartedAt !== null && <RestTimer key={restStartedAt} seconds={DEFAULT_REST_SECONDS} locale={locale} onDismiss={() => setRestStartedAt(null)} />}
       {items.map((exercise, exerciseIndex) => (
         <section className="session-exercise" key={exercise.id}>
           <header>
@@ -79,7 +84,7 @@ export function SessionLogger({
                   step=".5"
                   disabled={set.isBodyweight}
                   value={set.loadKg ?? ""}
-                  onChange={(event) => change(exerciseIndex, setIndex, { loadKg: Number(event.target.value) })}
+                  onChange={(event) => change(exerciseIndex, setIndex, { loadKg: event.target.value === "" ? null : Number(event.target.value) })}
                 />
                 <input
                   name="reps"
@@ -88,7 +93,7 @@ export function SessionLogger({
                   inputMode="numeric"
                   min="0"
                   value={set.reps ?? ""}
-                  onChange={(event) => change(exerciseIndex, setIndex, { reps: Number(event.target.value) })}
+                  onChange={(event) => change(exerciseIndex, setIndex, { reps: event.target.value === "" ? null : Number(event.target.value) })}
                 />
                 <input
                   name="complete"
@@ -99,6 +104,9 @@ export function SessionLogger({
                     const next = { ...set, isComplete: event.target.checked };
                     change(exerciseIndex, setIndex, { isComplete: event.target.checked });
                     onUpdate?.(next);
+                    setRestStartedAt(event.target.checked ? Date.now() : null);
+                    // Persist the tick immediately; the Save button remains for load/rep edits.
+                    if (updateAction) event.currentTarget.form?.requestSubmit();
                   }}
                 />
                 <label className="bodyweight-check">

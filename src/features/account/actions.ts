@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import type { AuthActionState } from "@/features/auth/types";
-import { accountSettingsSchema } from "@/features/account/schemas";
+import { accountSettingsSchema, dailyTargetsSchema } from "@/features/account/schemas";
 import { createClient } from "@/lib/supabase/server";
 
 export async function updateAccountSettingsAction(
@@ -52,4 +52,36 @@ export async function updateAccountSettingsAction(
   }
 
   return { status: "success", message: "Account settings updated." };
+}
+
+export async function updateDailyTargetsAction(
+  _previous: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const parsed = dailyTargetsSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return { status: "error", message: "Enter whole numbers, or leave a target empty." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { status: "error", message: "Sign in to update your targets." };
+
+  // Targets are versioned by day; saving again today replaces today's row.
+  const { error } = await supabase.from("daily_targets").upsert(
+    {
+      user_id: user.id,
+      effective_from: new Date().toISOString().slice(0, 10),
+      energy_kcal: parsed.data.energyKcal,
+      water_ml: parsed.data.waterMl,
+      protein_g: parsed.data.proteinG,
+    },
+    { onConflict: "user_id,effective_from" },
+  );
+  if (error) return { status: "error", message: "Your targets could not be saved." };
+
+  for (const path of ["/settings", "/today", "/nutrition"]) revalidatePath(path);
+  return { status: "success", message: "Daily targets saved." };
 }
