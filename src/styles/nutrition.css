@@ -573,7 +573,11 @@
 }
 .planner-day {
   min-width: 0;
+  display: flex;
   flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
 }
 .planner-day.is-today {
   border-color: var(--brand);
@@ -587,6 +591,7 @@
   border-bottom: 1px solid var(--border);
   padding: var(--space-3);
 }
+.planner-day time { display: grid; gap: var(--space-1); }
 .planner-day time span {
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -645,6 +650,9 @@
   padding: var(--space-2);
 }
 .planner-day summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--touch-target);
   cursor: pointer;
   color: var(--brand);
   font-size: 0.75rem;

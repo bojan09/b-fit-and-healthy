@@ -4,11 +4,8 @@
 @import "../styles/shell.css";
 @import "../styles/components.css";
 @import "../styles/public.css";
-@import "../styles/product.css";
 @import "../styles/anatomy.css";
-@import "../styles/responsive.css";
 @import "../styles/interaction.css";
-@import "../styles/demo.css";
 @import "../styles/motion.css";
 @import "../styles/foundation.css";
 @import "../styles/marketing.css";
@@ -18,6 +15,9 @@
 @import "../styles/fitness.css";
 @import "../styles/knowledge.css";
 @import "../styles/assistant.css";
+@import "../styles/product.css";
+@import "../styles/responsive.css";
+@import "../styles/demo.css";
 @import "../styles/overrides.css";
 @import "../styles/touch.css";
 @import "../styles/typography.css";

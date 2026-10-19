@@ -23,10 +23,12 @@ export default async function DemoLayout({ children }: { children: ReactNode }) 
         </div>
       </header>
       <div className="demo-banner">
+        <div className="shell demo-banner-inner">
         <p>{c.banner.message}</p>
         <Button asChild variant="secondary">
           <Link href="/sign-up">{c.banner.cta}</Link>
         </Button>
+        </div>
       </div>
       <main id="main-content" tabIndex={-1} className="shell demo-main">
         {children}

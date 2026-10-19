@@ -358,7 +358,7 @@
   display: grid;
   gap: var(--space-2);
 }
-.planner-day {
+.fitness-page .planner-day {
   min-height: 6rem;
   display: grid;
   grid-template-columns: 6rem 1fr;
@@ -366,18 +366,18 @@
   border-radius: var(--radius-card);
   background: var(--surface);
 }
-.planner-day time {
+.fitness-page .planner-day time {
   display: grid;
   place-content: center;
   border-right: 1px solid var(--border);
   padding: var(--space-3);
   text-align: center;
 }
-.planner-day time span {
+.fitness-page .planner-day time span {
   color: var(--foreground-muted);
   font: 700 .72rem var(--font-mono);
 }
-.planner-day>div {
+.fitness-page .planner-day>div {
   display: grid;
   align-content: center;
   gap: var(--space-2);

@@ -45,6 +45,7 @@ export function DemoMealTracker({
 
   return (
     <div className="demo-nutrition">
+      <section className="demo-nutrition-summary" aria-label={labels.total}>
       <p className="demo-nutrition-total">{labels.total}</p>
       <div className="nutrition-stat">
         <strong>{totals.kcal}</strong>
@@ -67,6 +68,9 @@ export function DemoMealTracker({
           <b>{totals.fatG}g</b>
         </div>
       </div>
+      </section>
+      <section className="demo-meals">
+      <h2>{locale === "mk" ? "Оброци" : "Meals"}</h2>
       <ul className="demo-meal-list">
         {list.map((meal) => (
           <li key={meal.id}>
@@ -88,6 +92,7 @@ export function DemoMealTracker({
           {labels.addFood}
         </Button>
       )}
+      </section>
     </div>
   );
 }
