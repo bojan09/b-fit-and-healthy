@@ -1,4 +1,3 @@
-import type { Json } from "@/types/database";
 import type { DiscoveryItem } from "@/features/discovery/types";
 
 export const DISCOVERY_SNAPSHOT_VERSION = 1;
@@ -13,7 +12,7 @@ export function toSnapshotInsert(userId: string, item: DiscoveryItem) {
     source_url: item.sourceUrl,
     attribution: item.attribution,
     schema_version: DISCOVERY_SNAPSHOT_VERSION,
-    payload: item as unknown as Json,
+    payload: item,
     retrieved_at: item.retrievedAt,
   };
 }

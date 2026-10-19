@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo_Black, Inter, JetBrains_Mono } from "next/font/google";
+import { Archivo_Black, Inter, JetBrains_Mono, Montserrat } from "next/font/google";
 import type { ReactNode } from "react";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { PwaRegister } from "@/components/pwa/pwa-register";
@@ -9,6 +9,8 @@ import { siteUrl } from "@/lib/seo/metadata";
 const sans = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-sans", display: "swap" });
 const display = Archivo_Black({ subsets: ["latin"], weight: "400", variable: "--font-display", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin", "cyrillic"], variable: "--font-mono", display: "swap" });
+// Archivo Black has no Cyrillic glyphs; Macedonian headings use Montserrat Black instead.
+const displayCyrillic = Montserrat({ subsets: ["cyrillic"], weight: "900", variable: "--font-display-cyrillic", display: "swap", preload: false });
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -45,7 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: langScript }} />
       </head>
-      <body className={`${sans.variable} ${display.variable} ${mono.variable}`}>
+      <body className={`${sans.variable} ${display.variable} ${displayCyrillic.variable} ${mono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <div className="ambient-field" aria-hidden="true" />
           {children}

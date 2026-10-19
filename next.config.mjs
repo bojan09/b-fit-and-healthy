@@ -15,7 +15,7 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.supabase.co",
+  "connect-src 'self' https://fra.cloud.appwrite.io",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
   "object-src 'none'",

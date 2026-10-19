@@ -1,0 +1,3791 @@
+{
+  "databaseId": "bfit-health",
+  "tables": [
+    {
+      "id": "profiles",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "display_name",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "avatar_path",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "locale",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "onboarding_complete",
+          "type": "boolean"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_display_name",
+          "columns": [
+            "display_name"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_avatar_path",
+          "columns": [
+            "avatar_path"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_locale",
+          "columns": [
+            "locale"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_onboarding_complete",
+          "columns": [
+            "onboarding_complete"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_profiles_0",
+          "columns": [
+            "user_id"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "user_settings",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "units",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "theme",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "timezone",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "reminders_enabled",
+          "type": "boolean"
+        },
+        {
+          "key": "weekly_summary_enabled",
+          "type": "boolean"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_units",
+          "columns": [
+            "units"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_theme",
+          "columns": [
+            "theme"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_timezone",
+          "columns": [
+            "timezone"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_reminders_enabled",
+          "columns": [
+            "reminders_enabled"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_weekly_summary_enabled",
+          "columns": [
+            "weekly_summary_enabled"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_user_settings_0",
+          "columns": [
+            "user_id"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "goals",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "kind",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "target",
+          "type": "float"
+        },
+        {
+          "key": "unit",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "starts_on",
+          "type": "varchar",
+          "size": 10
+        },
+        {
+          "key": "ends_on",
+          "type": "varchar",
+          "size": 10
+        },
+        {
+          "key": "status",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_kind",
+          "columns": [
+            "kind"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_target",
+          "columns": [
+            "target"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_unit",
+          "columns": [
+            "unit"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_starts_on",
+          "columns": [
+            "starts_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_ends_on",
+          "columns": [
+            "ends_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_status",
+          "columns": [
+            "status"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_goals_user_status_idx",
+          "columns": [
+            "user_id",
+            "status"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "daily_targets",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "effective_from",
+          "type": "varchar",
+          "size": 10
+        },
+        {
+          "key": "energy_kcal",
+          "type": "integer"
+        },
+        {
+          "key": "protein_g",
+          "type": "float"
+        },
+        {
+          "key": "carbohydrate_g",
+          "type": "float"
+        },
+        {
+          "key": "fat_g",
+          "type": "float"
+        },
+        {
+          "key": "water_ml",
+          "type": "integer"
+        },
+        {
+          "key": "movement_minutes",
+          "type": "integer"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_effective_from",
+          "columns": [
+            "effective_from"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_energy_kcal",
+          "columns": [
+            "energy_kcal"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_protein_g",
+          "columns": [
+            "protein_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_carbohydrate_g",
+          "columns": [
+            "carbohydrate_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_fat_g",
+          "columns": [
+            "fat_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_water_ml",
+          "columns": [
+            "water_ml"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_movement_minutes",
+          "columns": [
+            "movement_minutes"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_daily_targets_user_date_idx",
+          "columns": [
+            "user_id",
+            "effective_from"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_daily_targets_0",
+          "columns": [
+            "user_id",
+            "effective_from"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "water_logs",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "amount_ml",
+          "type": "integer"
+        },
+        {
+          "key": "logged_at",
+          "type": "datetime"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_amount_ml",
+          "columns": [
+            "amount_ml"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_logged_at",
+          "columns": [
+            "logged_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_water_logs_user_logged_idx",
+          "columns": [
+            "user_id",
+            "logged_at"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "body_measurements",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "recorded_on",
+          "type": "varchar",
+          "size": 10
+        },
+        {
+          "key": "weight_kg",
+          "type": "float"
+        },
+        {
+          "key": "note",
+          "type": "longtext"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_recorded_on",
+          "columns": [
+            "recorded_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_weight_kg",
+          "columns": [
+            "weight_kg"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_body_measurements_user_date_",
+          "columns": [
+            "user_id",
+            "recorded_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_body_measurement_0",
+          "columns": [
+            "user_id",
+            "recorded_on"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "habits",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "title",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "position",
+          "type": "integer"
+        },
+        {
+          "key": "is_archived",
+          "type": "boolean"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_title",
+          "columns": [
+            "title"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_position",
+          "columns": [
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_is_archived",
+          "columns": [
+            "is_archived"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_habits_user_active_idx",
+          "columns": [
+            "user_id",
+            "is_archived",
+            "position"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "habit_checkins",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "habit_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "checkin_on",
+          "type": "varchar",
+          "size": 10
+        },
+        {
+          "key": "status",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_habit_id",
+          "columns": [
+            "habit_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_checkin_on",
+          "columns": [
+            "checkin_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_status",
+          "columns": [
+            "status"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_habit_checkins_user_date_idx",
+          "columns": [
+            "user_id",
+            "checkin_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_habit_checkins_0",
+          "columns": [
+            "habit_id",
+            "checkin_on"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "notifications",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "kind",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "title",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "body",
+          "type": "longtext"
+        },
+        {
+          "key": "href",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "read_at",
+          "type": "datetime"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_kind",
+          "columns": [
+            "kind"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_title",
+          "columns": [
+            "title"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_href",
+          "columns": [
+            "href"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_read_at",
+          "columns": [
+            "read_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_notifications_user_unread_id",
+          "columns": [
+            "user_id",
+            "read_at",
+            "created_at"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "foods",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "owner_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "source",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "external_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "name",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "brand",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "serving_grams",
+          "type": "float"
+        },
+        {
+          "key": "energy_kcal",
+          "type": "float"
+        },
+        {
+          "key": "protein_g",
+          "type": "float"
+        },
+        {
+          "key": "carbohydrate_g",
+          "type": "float"
+        },
+        {
+          "key": "fat_g",
+          "type": "float"
+        },
+        {
+          "key": "fibre_g",
+          "type": "float"
+        },
+        {
+          "key": "is_public",
+          "type": "boolean"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": true,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_owner_id",
+          "columns": [
+            "owner_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_source",
+          "columns": [
+            "source"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_external_id",
+          "columns": [
+            "external_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name",
+          "columns": [
+            "name"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_brand",
+          "columns": [
+            "brand"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_serving_grams",
+          "columns": [
+            "serving_grams"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_energy_kcal",
+          "columns": [
+            "energy_kcal"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_protein_g",
+          "columns": [
+            "protein_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_carbohydrate_g",
+          "columns": [
+            "carbohydrate_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_fat_g",
+          "columns": [
+            "fat_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_fibre_g",
+          "columns": [
+            "fibre_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_is_public",
+          "columns": [
+            "is_public"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_foods_owner_name_idx",
+          "columns": [
+            "owner_id",
+            "name"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_foods_public_name_idx",
+          "columns": [
+            "is_public",
+            "name"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "food_favourites",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "food_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_food_id",
+          "columns": [
+            "food_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_food_favourites_user_idx",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "meal_entries",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "logged_on",
+          "type": "varchar",
+          "size": 10
+        },
+        {
+          "key": "meal_slot",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "food_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "food_name",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "amount_grams",
+          "type": "float"
+        },
+        {
+          "key": "energy_kcal",
+          "type": "float"
+        },
+        {
+          "key": "protein_g",
+          "type": "float"
+        },
+        {
+          "key": "carbohydrate_g",
+          "type": "float"
+        },
+        {
+          "key": "fat_g",
+          "type": "float"
+        },
+        {
+          "key": "fibre_g",
+          "type": "float"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        },
+        {
+          "key": "external_snapshot_id",
+          "type": "varchar",
+          "size": 255
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_logged_on",
+          "columns": [
+            "logged_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_meal_slot",
+          "columns": [
+            "meal_slot"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_food_id",
+          "columns": [
+            "food_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_food_name",
+          "columns": [
+            "food_name"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_amount_grams",
+          "columns": [
+            "amount_grams"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_energy_kcal",
+          "columns": [
+            "energy_kcal"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_protein_g",
+          "columns": [
+            "protein_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_carbohydrate_g",
+          "columns": [
+            "carbohydrate_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_fat_g",
+          "columns": [
+            "fat_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_fibre_g",
+          "columns": [
+            "fibre_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_external_snapshot_id",
+          "columns": [
+            "external_snapshot_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_meal_entries_user_day_idx",
+          "columns": [
+            "user_id",
+            "logged_on",
+            "meal_slot"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "recipes",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "owner_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "slug",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "title_en",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "title_mk",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "summary_en",
+          "type": "longtext"
+        },
+        {
+          "key": "summary_mk",
+          "type": "longtext"
+        },
+        {
+          "key": "prep_minutes",
+          "type": "integer"
+        },
+        {
+          "key": "cook_minutes",
+          "type": "integer"
+        },
+        {
+          "key": "servings",
+          "type": "float"
+        },
+        {
+          "key": "energy_kcal",
+          "type": "float"
+        },
+        {
+          "key": "protein_g",
+          "type": "float"
+        },
+        {
+          "key": "carbohydrate_g",
+          "type": "float"
+        },
+        {
+          "key": "fat_g",
+          "type": "float"
+        },
+        {
+          "key": "fibre_g",
+          "type": "float"
+        },
+        {
+          "key": "tags",
+          "type": "varchar",
+          "size": 255,
+          "array": true
+        },
+        {
+          "key": "is_public",
+          "type": "boolean"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": true,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_owner_id",
+          "columns": [
+            "owner_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_slug",
+          "columns": [
+            "slug"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_title_en",
+          "columns": [
+            "title_en"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_title_mk",
+          "columns": [
+            "title_mk"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_prep_minutes",
+          "columns": [
+            "prep_minutes"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_cook_minutes",
+          "columns": [
+            "cook_minutes"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_servings",
+          "columns": [
+            "servings"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_energy_kcal",
+          "columns": [
+            "energy_kcal"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_protein_g",
+          "columns": [
+            "protein_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_carbohydrate_g",
+          "columns": [
+            "carbohydrate_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_fat_g",
+          "columns": [
+            "fat_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_fibre_g",
+          "columns": [
+            "fibre_g"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_is_public",
+          "columns": [
+            "is_public"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_recipes_owner_idx",
+          "columns": [
+            "owner_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_recipes_0",
+          "columns": [
+            "slug"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "recipe_ingredients",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "recipe_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "position",
+          "type": "integer"
+        },
+        {
+          "key": "name_en",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "name_mk",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "quantity",
+          "type": "float"
+        },
+        {
+          "key": "unit",
+          "type": "varchar",
+          "size": 255
+        }
+      ],
+      "publicRead": true,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_recipe_id",
+          "columns": [
+            "recipe_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_position",
+          "columns": [
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name_en",
+          "columns": [
+            "name_en"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name_mk",
+          "columns": [
+            "name_mk"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_quantity",
+          "columns": [
+            "quantity"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_unit",
+          "columns": [
+            "unit"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_recipe_ingredients_recipe_id",
+          "columns": [
+            "recipe_id"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "recipe_steps",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "recipe_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "position",
+          "type": "integer"
+        },
+        {
+          "key": "instruction_en",
+          "type": "longtext"
+        },
+        {
+          "key": "instruction_mk",
+          "type": "longtext"
+        }
+      ],
+      "publicRead": true,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_recipe_id",
+          "columns": [
+            "recipe_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_position",
+          "columns": [
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_recipe_steps_recipe_idx",
+          "columns": [
+            "recipe_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_recipe_steps_0",
+          "columns": [
+            "recipe_id",
+            "position"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "saved_recipes",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "recipe_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_recipe_id",
+          "columns": [
+            "recipe_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_saved_recipes_user_idx",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_saved_recipes_0",
+          "columns": [
+            "user_id",
+            "recipe_id"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "meal_plan_items",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "planned_on",
+          "type": "varchar",
+          "size": 10
+        },
+        {
+          "key": "meal_slot",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "recipe_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "label",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "servings",
+          "type": "float"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        },
+        {
+          "key": "external_snapshot_id",
+          "type": "varchar",
+          "size": 255
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_planned_on",
+          "columns": [
+            "planned_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_meal_slot",
+          "columns": [
+            "meal_slot"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_recipe_id",
+          "columns": [
+            "recipe_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_label",
+          "columns": [
+            "label"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_servings",
+          "columns": [
+            "servings"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_external_snapshot_id",
+          "columns": [
+            "external_snapshot_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_meal_plan_user_day_idx",
+          "columns": [
+            "user_id",
+            "planned_on",
+            "meal_slot"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "grocery_items",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "name",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "quantity",
+          "type": "float"
+        },
+        {
+          "key": "unit",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "category",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "is_checked",
+          "type": "boolean"
+        },
+        {
+          "key": "source",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name",
+          "columns": [
+            "name"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_quantity",
+          "columns": [
+            "quantity"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_unit",
+          "columns": [
+            "unit"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_category",
+          "columns": [
+            "category"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_is_checked",
+          "columns": [
+            "is_checked"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_source",
+          "columns": [
+            "source"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_grocery_items_user_checked_i",
+          "columns": [
+            "user_id",
+            "is_checked",
+            "category"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "exercises",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "slug",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "title_en",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "title_mk",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "summary_en",
+          "type": "longtext"
+        },
+        {
+          "key": "summary_mk",
+          "type": "longtext"
+        },
+        {
+          "key": "equipment",
+          "type": "varchar",
+          "size": 255,
+          "array": true
+        },
+        {
+          "key": "difficulty",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "movement_pattern",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "exercise_type",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "instructions_en",
+          "type": "longtext"
+        },
+        {
+          "key": "instructions_mk",
+          "type": "longtext"
+        },
+        {
+          "key": "safety_en",
+          "type": "longtext"
+        },
+        {
+          "key": "safety_mk",
+          "type": "longtext"
+        },
+        {
+          "key": "is_public",
+          "type": "boolean"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": true,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_slug",
+          "columns": [
+            "slug"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_title_en",
+          "columns": [
+            "title_en"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_title_mk",
+          "columns": [
+            "title_mk"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_difficulty",
+          "columns": [
+            "difficulty"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_movement_pattern",
+          "columns": [
+            "movement_pattern"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_exercise_type",
+          "columns": [
+            "exercise_type"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_is_public",
+          "columns": [
+            "is_public"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_exercises_0",
+          "columns": [
+            "slug"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "exercise_muscles",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "exercise_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "muscle_key",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "role",
+          "type": "varchar",
+          "size": 255
+        }
+      ],
+      "publicRead": true,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_exercise_id",
+          "columns": [
+            "exercise_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_muscle_key",
+          "columns": [
+            "muscle_key"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_role",
+          "columns": [
+            "role"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "workout_programs",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "name",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "description",
+          "type": "longtext"
+        },
+        {
+          "key": "is_active",
+          "type": "boolean"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name",
+          "columns": [
+            "name"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_is_active",
+          "columns": [
+            "is_active"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "workout_templates",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "program_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "name",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "description",
+          "type": "longtext"
+        },
+        {
+          "key": "difficulty",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "expected_duration_minutes",
+          "type": "integer"
+        },
+        {
+          "key": "goal",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_program_id",
+          "columns": [
+            "program_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name",
+          "columns": [
+            "name"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_difficulty",
+          "columns": [
+            "difficulty"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_expected_duration_minutes",
+          "columns": [
+            "expected_duration_minutes"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_goal",
+          "columns": [
+            "goal"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_workout_templates_user_updat",
+          "columns": [
+            "user_id",
+            "updated_at"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "workout_template_exercises",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "template_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "exercise_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "position",
+          "type": "integer"
+        },
+        {
+          "key": "target_sets",
+          "type": "integer"
+        },
+        {
+          "key": "rep_min",
+          "type": "integer"
+        },
+        {
+          "key": "rep_max",
+          "type": "integer"
+        },
+        {
+          "key": "rest_seconds",
+          "type": "integer"
+        },
+        {
+          "key": "target_rpe",
+          "type": "float"
+        },
+        {
+          "key": "note",
+          "type": "longtext"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        },
+        {
+          "key": "target_duration_seconds",
+          "type": "integer"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_template_id",
+          "columns": [
+            "template_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_exercise_id",
+          "columns": [
+            "exercise_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_position",
+          "columns": [
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_target_sets",
+          "columns": [
+            "target_sets"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_rep_min",
+          "columns": [
+            "rep_min"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_rep_max",
+          "columns": [
+            "rep_max"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_rest_seconds",
+          "columns": [
+            "rest_seconds"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_target_rpe",
+          "columns": [
+            "target_rpe"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_target_duration_seconds",
+          "columns": [
+            "target_duration_seconds"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_workout_template_exercises_u",
+          "columns": [
+            "user_id",
+            "template_id",
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_workout_template_0",
+          "columns": [
+            "template_id",
+            "position"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "planned_workouts",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "template_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "planned_on",
+          "type": "varchar",
+          "size": 10
+        },
+        {
+          "key": "status",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_template_id",
+          "columns": [
+            "template_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_planned_on",
+          "columns": [
+            "planned_on"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_status",
+          "columns": [
+            "status"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_planned_workouts_user_date_i",
+          "columns": [
+            "user_id",
+            "planned_on"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "workout_sessions",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "template_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "planned_workout_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "name_snapshot",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "status",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "started_at",
+          "type": "datetime"
+        },
+        {
+          "key": "finished_at",
+          "type": "datetime"
+        },
+        {
+          "key": "duration_seconds",
+          "type": "integer"
+        },
+        {
+          "key": "note",
+          "type": "longtext"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_template_id",
+          "columns": [
+            "template_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_planned_workout_id",
+          "columns": [
+            "planned_workout_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name_snapshot",
+          "columns": [
+            "name_snapshot"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_status",
+          "columns": [
+            "status"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_started_at",
+          "columns": [
+            "started_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_finished_at",
+          "columns": [
+            "finished_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_duration_seconds",
+          "columns": [
+            "duration_seconds"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_workout_sessions_user_status",
+          "columns": [
+            "user_id",
+            "status",
+            "finished_at"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "workout_session_exercises",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "session_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "exercise_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "position",
+          "type": "integer"
+        },
+        {
+          "key": "name_en_snapshot",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "name_mk_snapshot",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "target_sets",
+          "type": "integer"
+        },
+        {
+          "key": "rep_min",
+          "type": "integer"
+        },
+        {
+          "key": "rep_max",
+          "type": "integer"
+        },
+        {
+          "key": "rest_seconds",
+          "type": "integer"
+        },
+        {
+          "key": "target_rpe",
+          "type": "float"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_session_id",
+          "columns": [
+            "session_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_exercise_id",
+          "columns": [
+            "exercise_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_position",
+          "columns": [
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name_en_snapshot",
+          "columns": [
+            "name_en_snapshot"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_name_mk_snapshot",
+          "columns": [
+            "name_mk_snapshot"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_target_sets",
+          "columns": [
+            "target_sets"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_rep_min",
+          "columns": [
+            "rep_min"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_rep_max",
+          "columns": [
+            "rep_max"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_rest_seconds",
+          "columns": [
+            "rest_seconds"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_target_rpe",
+          "columns": [
+            "target_rpe"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_workout_session_exercises_us",
+          "columns": [
+            "user_id",
+            "session_id",
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_workout_session__0",
+          "columns": [
+            "session_id",
+            "position"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "workout_sets",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "session_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "session_exercise_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "position",
+          "type": "integer"
+        },
+        {
+          "key": "reps",
+          "type": "integer"
+        },
+        {
+          "key": "load_kg",
+          "type": "float"
+        },
+        {
+          "key": "duration_seconds",
+          "type": "integer"
+        },
+        {
+          "key": "rpe",
+          "type": "float"
+        },
+        {
+          "key": "is_bodyweight",
+          "type": "boolean"
+        },
+        {
+          "key": "is_complete",
+          "type": "boolean"
+        },
+        {
+          "key": "note",
+          "type": "longtext"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_session_id",
+          "columns": [
+            "session_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_session_exercise_id",
+          "columns": [
+            "session_exercise_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_position",
+          "columns": [
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_reps",
+          "columns": [
+            "reps"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_load_kg",
+          "columns": [
+            "load_kg"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_duration_seconds",
+          "columns": [
+            "duration_seconds"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_rpe",
+          "columns": [
+            "rpe"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_is_bodyweight",
+          "columns": [
+            "is_bodyweight"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_is_complete",
+          "columns": [
+            "is_complete"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_workout_sets_user_session_ex",
+          "columns": [
+            "user_id",
+            "session_id",
+            "session_exercise_id",
+            "position"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_workout_sets_0",
+          "columns": [
+            "session_exercise_id",
+            "position"
+          ],
+          "type": "unique"
+        }
+      ]
+    },
+    {
+      "id": "ai_conversations",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "locale",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "title",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "expires_at",
+          "type": "datetime"
+        },
+        {
+          "key": "last_message_at",
+          "type": "datetime"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_locale",
+          "columns": [
+            "locale"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_title",
+          "columns": [
+            "title"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_expires_at",
+          "columns": [
+            "expires_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_last_message_at",
+          "columns": [
+            "last_message_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_ai_conversations_owner_activ",
+          "columns": [
+            "user_id",
+            "last_message_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_ai_conversations_expiry_idx",
+          "columns": [
+            "expires_at"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "ai_messages",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "conversation_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "role",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "content",
+          "type": "longtext"
+        },
+        {
+          "key": "draft",
+          "type": "longtext"
+        },
+        {
+          "key": "applied_at",
+          "type": "datetime"
+        },
+        {
+          "key": "status",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_conversation_id",
+          "columns": [
+            "conversation_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_role",
+          "columns": [
+            "role"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_applied_at",
+          "columns": [
+            "applied_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_status",
+          "columns": [
+            "status"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_ai_messages_conversation_cre",
+          "columns": [
+            "conversation_id",
+            "created_at"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "external_content_snapshots",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "content_type",
+          "type": "longtext"
+        },
+        {
+          "key": "provider",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "external_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "title",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "source_url",
+          "type": "longtext"
+        },
+        {
+          "key": "attribution",
+          "type": "longtext"
+        },
+        {
+          "key": "schema_version",
+          "type": "integer"
+        },
+        {
+          "key": "payload",
+          "type": "longtext"
+        },
+        {
+          "key": "retrieved_at",
+          "type": "datetime"
+        },
+        {
+          "key": "created_at",
+          "type": "datetime"
+        },
+        {
+          "key": "updated_at",
+          "type": "datetime"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_provider",
+          "columns": [
+            "provider"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_external_id",
+          "columns": [
+            "external_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_title",
+          "columns": [
+            "title"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_schema_version",
+          "columns": [
+            "schema_version"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_retrieved_at",
+          "columns": [
+            "retrieved_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_created_at",
+          "columns": [
+            "created_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_updated_at",
+          "columns": [
+            "updated_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_external_content_snapshots_u",
+          "columns": [
+            "user_id",
+            "updated_at"
+          ],
+          "type": "key"
+        }
+      ]
+    },
+    {
+      "id": "rate_limits",
+      "fields": [
+        {
+          "key": "id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "user_id",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "scope",
+          "type": "varchar",
+          "size": 255
+        },
+        {
+          "key": "window_started_at",
+          "type": "datetime"
+        },
+        {
+          "key": "request_count",
+          "type": "integer"
+        }
+      ],
+      "publicRead": false,
+      "indexes": [
+        {
+          "key": "idx_id",
+          "columns": [
+            "id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_scope",
+          "columns": [
+            "scope"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_window_started_at",
+          "columns": [
+            "window_started_at"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "idx_request_count",
+          "columns": [
+            "request_count"
+          ],
+          "type": "key"
+        },
+        {
+          "key": "uq_rate_limits_0",
+          "columns": [
+            "user_id",
+            "scope"
+          ],
+          "type": "unique"
+        }
+      ]
+    }
+  ]
+}

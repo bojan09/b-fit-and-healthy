@@ -12,9 +12,8 @@ declare const self: ServiceWorkerGlobalScope;
 const privateNetworkOnly: RuntimeCaching = {
   matcher: ({ url }) =>
     /\/auth\//.test(url.pathname) ||
-    /\/rest\/v1\//.test(url.pathname) ||
     url.pathname.startsWith("/api/") ||
-    url.hostname.endsWith(".supabase.co"),
+    url.hostname.endsWith(".cloud.appwrite.io"),
   handler: new NetworkOnly()
 };
 

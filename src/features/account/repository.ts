@@ -1,22 +1,22 @@
 import "server-only";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/appwrite/server";
 
 export async function loadAccountSettings(userId: string) {
-  const supabase = await createClient();
+  const appwrite = await createClient();
   const [profile, settings, target] = await Promise.all([
-    supabase
-      .from("profiles")
+    appwrite
+      .table("profiles")
       .select("display_name")
       .eq("user_id", userId)
       .single(),
-    supabase
-      .from("user_settings")
+    appwrite
+      .table("user_settings")
       .select("units,timezone")
       .eq("user_id", userId)
       .single(),
-    supabase
-      .from("daily_targets")
+    appwrite
+      .table("daily_targets")
       .select("energy_kcal,water_ml,protein_g")
       .eq("user_id", userId)
       .order("effective_from", { ascending: false })

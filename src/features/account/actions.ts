@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { AuthActionState } from "@/features/auth/types";
 import { accountSettingsSchema, dailyTargetsSchema } from "@/features/account/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { appwriteSessionRequest, createClient, getCurrentAppwriteUser } from "@/lib/appwrite/server";
 
 export async function updateAccountSettingsAction(
   _previous: AuthActionState,
@@ -17,22 +17,26 @@ export async function updateAccountSettingsAction(
     };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const appwrite = await createClient();
+  const user = await getCurrentAppwriteUser();
 
   if (!user) {
     return { status: "error", message: "Sign in to update your account." };
   }
 
+  try {
+    await appwriteSessionRequest("/account/name", { method: "PATCH", body: { name: parsed.data.displayName } });
+  } catch {
+    return { status: "error", message: "Your account settings could not be updated." };
+  }
+
   const [profile, settings] = await Promise.all([
-    supabase
-      .from("profiles")
+    appwrite
+      .table("profiles")
       .update({ display_name: parsed.data.displayName })
       .eq("user_id", user.id),
-    supabase
-      .from("user_settings")
+    appwrite
+      .table("user_settings")
       .update({
         units: parsed.data.units,
         timezone: parsed.data.timezone,
@@ -63,14 +67,12 @@ export async function updateDailyTargetsAction(
     return { status: "error", message: "Enter whole numbers, or leave a target empty." };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const appwrite = await createClient();
+  const user = await getCurrentAppwriteUser();
   if (!user) return { status: "error", message: "Sign in to update your targets." };
 
   // Targets are versioned by day; saving again today replaces today's row.
-  const { error } = await supabase.from("daily_targets").upsert(
+  const { error } = await appwrite.table("daily_targets").upsert(
     {
       user_id: user.id,
       effective_from: new Date().toISOString().slice(0, 10),

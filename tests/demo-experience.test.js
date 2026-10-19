@@ -12,13 +12,13 @@ function walk(dir) {
 }
 
 test("demo route is never listed as a protected prefix", () => {
-  const proxy = fs.readFileSync("src/lib/supabase/proxy.ts", "utf8");
+  const proxy = fs.readFileSync("src/lib/appwrite/proxy.ts", "utf8");
   const match = proxy.match(/protectedPrefixes = \[([\s\S]*?)\]/);
   assert.ok(match, "protectedPrefixes array not found in proxy.ts");
   assert.doesNotMatch(match[1], /"\/demo/, "/demo must never be added to protectedPrefixes");
 });
 
-test("demo route tree never imports Supabase", () => {
+test("demo route tree remains backend-independent", () => {
   const roots = ["src/app/(demo)", "src/features/demo"];
   for (const root of roots) {
     if (!fs.existsSync(root)) continue;
@@ -27,8 +27,8 @@ test("demo route tree never imports Supabase", () => {
       const content = fs.readFileSync(file, "utf8");
       assert.doesNotMatch(
         content,
-        /@\/lib\/supabase/,
-        `${file} must not import Supabase — demo data is fully static`,
+        /@\/lib\/(?:supabase|appwrite)/,
+        `${file} must remain static and backend-independent`,
       );
     }
   }

@@ -17,10 +17,10 @@ describe("Phase 3 authentication and onboarding", () => {
   it("keeps authentication mutations on the server", () => {
     const actions = read("src/features/auth/actions.ts");
     assert.match(actions, /^"use server";/);
-    assert.match(actions, /signInWithPassword/);
-    assert.match(actions, /signInWithOtp/);
-    assert.match(actions, /signInWithOAuth/);
-    assert.match(actions, /signOut/);
+    assert.match(actions, /account\/sessions\/email/);
+    assert.match(actions, /account\/tokens\/magic-url/);
+    assert.match(actions, /account\/tokens\/oauth2\/google/);
+    assert.match(actions, /account\/sessions\/current/);
     assert.match(actions, /sanitizeNextPath/);
   });
 
@@ -30,15 +30,17 @@ describe("Phase 3 authentication and onboarding", () => {
     const today = read("src/app/(product)/today/page.tsx");
     assert.match(onboarding, /aria-current=.*"step"/);
     assert.match(onboarding, /priorities/);
-    assert.match(action, /auth\.getUser/);
+    assert.match(action, /getCurrentAppwriteUser/);
     assert.match(action, /onboarding_complete/);
+    assert.match(action, /account\/prefs/);
+    assert.match(action, /account\/prefs/);
     assert.doesNotMatch(today, /1,310|2,100|74g|34min/);
   });
 
   it("documents provider and callback configuration", () => {
-    const docs = read("docs/supabase-auth-configuration.md");
+    const docs = read("docs/appwrite-setup.md");
     assert.match(docs, /localhost:3000\/auth\/callback/);
     assert.match(docs, /Google/i);
-    assert.match(docs, /Vercel/i);
+    assert.match(docs, /APPWRITE_DATABASE_ID/);
   });
 });

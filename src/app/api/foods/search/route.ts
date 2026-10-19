@@ -2,17 +2,17 @@ import { NextResponse } from "next/server";
 import { localFoods } from "@/features/nutrition/catalogue";
 import { searchUsdaFoods } from "@/features/nutrition/usda";
 import { enforceRateLimit, rateLimitedResponse, rateLimits } from "@/lib/rate-limit";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentAppwriteUser } from "@/lib/appwrite/server";
 
 const MAX_QUERY_LENGTH = 80;
 const PROVIDER_TIMEOUT_MS = 2_500;
 
 export async function GET(request: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const appwrite = await createClient();
+  const user = await getCurrentAppwriteUser();
   if (!user) return NextResponse.json({ message: "Sign in to search foods.", results: [] }, { status: 401 });
 
-  const limit = await enforceRateLimit(supabase, "discovery", user.id, rateLimits.discovery);
+  const limit = await enforceRateLimit(appwrite, "discovery", user.id, rateLimits.discovery);
   if (!limit.allowed) return rateLimitedResponse(limit.retryAfter, { results: [] });
 
   const query = (new URL(request.url).searchParams.get("q")?.trim() ?? "").slice(0, MAX_QUERY_LENGTH);

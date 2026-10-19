@@ -16,14 +16,12 @@ import {
   lookupOpenFoodFactsBarcode,
   searchOpenFoodFactsBrands,
 } from "@/features/nutrition/providers/open-food-facts";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentAppwriteUser } from "@/lib/appwrite/server";
 import { enforceRateLimit, rateLimitedResponse, rateLimits } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const appwrite = await createClient();
+  const user = await getCurrentAppwriteUser();
   if (!user) {
     return NextResponse.json(
       { message: "Sign in to search foods.", results: [] },
@@ -31,7 +29,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const limit = await enforceRateLimit(supabase, "discovery", user.id, rateLimits.discovery);
+  const limit = await enforceRateLimit(appwrite, "discovery", user.id, rateLimits.discovery);
 
   if (!limit.allowed) return rateLimitedResponse(limit.retryAfter, { results: [] });
 

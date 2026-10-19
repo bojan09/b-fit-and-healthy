@@ -6,7 +6,7 @@ import { buildSafetyResponse, buildSystemPrompt, classifySafety } from "@/featur
 import { consumeAssistantLimit } from "@/features/assistant/rate-limit";
 import { generateStructuredDraft, streamCoachCompletion } from "@/features/assistant/groq";
 import { encodeAssistantEvent, inferDraftKind, safeAssistantError } from "@/features/assistant/stream-domain";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentAppwriteUser } from "@/lib/appwrite/server";
 import { getLocale } from "@/lib/i18n/server";
 import type { AssistantDraft, AssistantStreamEvent } from "@/features/assistant/types";
 
@@ -35,8 +35,7 @@ function streamResponse(run: (emit: (event: AssistantStreamEvent) => void) => Pr
 }
 
 export async function POST(request: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getCurrentAppwriteUser();
   if (!user) return NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401 });
 
   let body: unknown;
@@ -73,24 +72,26 @@ export async function POST(request: Request) {
         conversationId = created.id;
         expiresAt = created.expires_at;
       }
-      emit({ type: "meta", conversationId, expiresAt });
-      await appendMessage({ conversationId, userId: user.id, role: "user", content: parsed.data.message });
+      if (!conversationId) throw new Error("ASSISTANT_CONVERSATION_ID_MISSING");
+      const activeConversationId = conversationId;
+      emit({ type: "meta", conversationId: activeConversationId, expiresAt });
+      await appendMessage({ conversationId: activeConversationId, userId: user.id, role: "user", content: parsed.data.message });
 
       const category = classifySafety(parsed.data.message);
       if (category !== "general") {
         const content = buildSafetyResponse(category, locale);
         emit({ type: "token", value: content });
-        const saved = await appendMessage({ conversationId, userId: user.id, role: "assistant", content });
+        const saved = await appendMessage({ conversationId: activeConversationId, userId: user.id, role: "assistant", content });
         emit({ type: "done", messageId: saved.id });
         return;
       }
 
       const [context, conversation] = await Promise.all([
         buildAssistantContext(user.id, locale),
-        getConversation(user.id, conversationId),
+        getConversation(user.id, activeConversationId),
       ]);
       const systemPrompt = buildSystemPrompt(locale, context);
-      const history = (conversation?.messages ?? []).slice(-12).map((message) => ({
+      const history = (conversation?.messages ?? []).slice(-12).map((message: { role: string; content: string }) => ({
         role: message.role as "user" | "assistant",
         content: message.content,
       }));
@@ -112,7 +113,7 @@ export async function POST(request: Request) {
       }
       const visibleContent = content.trim() || (locale === "mk" ? "Подготвив предлог за преглед." : "I prepared a proposal for review.");
       const saved = await appendMessage({
-        conversationId,
+        conversationId: activeConversationId,
         userId: user.id,
         role: "assistant",
         content: visibleContent,

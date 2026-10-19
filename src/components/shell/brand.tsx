@@ -4,7 +4,7 @@ import { resolveBrandDestination } from "@/components/shell/brand-destination";
 /**
  * Pure presentational mark. Public surfaces link home; the product header passes
  * `authenticated` so the mark returns to Today. No auth lookup happens here, so
- * public pages never wait on a Supabase round trip just to render the logo.
+ * public pages never wait on a Appwrite request just to render the logo.
  */
 export function Brand({ authenticated = false }: { authenticated?: boolean }) {
   return (

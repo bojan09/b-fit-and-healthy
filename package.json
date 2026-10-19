@@ -18,13 +18,13 @@
     "test:e2e:smoke": "node --env-file-if-exists=.env.local ./node_modules/@playwright/test/cli.js test --grep @smoke --project=chromium-desktop",
     "test:e2e": "node --env-file-if-exists=.env.local ./node_modules/@playwright/test/cli.js test --project=chromium-desktop --project=chromium-tablet --project=chromium-mobile",
     "test:e2e:all": "node --env-file-if-exists=.env.local ./node_modules/@playwright/test/cli.js test",
-    "verify:production": "npm run test && npm run typecheck && npm run lint && npm run build && npm run test:e2e:all"
+    "verify:production": "npm run test && npm run typecheck && npm run lint && npm run build && npm run test:e2e:all",
+    "appwrite:setup": "node --env-file-if-exists=.env.local scripts/setup-appwrite.mjs",
+    "appwrite:cleanup:assistant": "node --env-file-if-exists=.env.local scripts/cleanup-expired-assistant-data.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "1.3.0",
     "@serwist/next": "9.5.11",
-    "@supabase/ssr": "0.12.3",
-    "@supabase/supabase-js": "2.110.7",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "gray-matter": "4.0.3",

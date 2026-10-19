@@ -76,3 +76,51 @@
 .rest-timer[data-finished] {
   border-color: var(--brand);
 }
+
+/* Public-site controls: 44px targets through tablet widths and on touch devices. */
+@media (pointer: coarse), (max-width: 68rem) {
+  .header-actions .ui-button,
+  .public-account-actions .ui-button {
+    min-height: var(--touch-target);
+    height: var(--touch-target);
+  }
+
+  .header-actions .ui-button[aria-label*="Theme"],
+  .header-actions .ui-button[aria-label*="Тема"] {
+    width: var(--touch-target);
+    min-width: var(--touch-target);
+  }
+
+  .brand {
+    min-width: var(--touch-target);
+    min-height: var(--touch-target);
+  }
+}
+
+@media (pointer: coarse), (max-width: 48rem) {
+  .text-link,
+  .stretched-link,
+  .auth-links a,
+  .auth-consent a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+  }
+
+  .auth-links {
+    gap: var(--space-1);
+  }
+
+  .anatomy-tools input,
+  .knowledge-tools input {
+    min-height: var(--touch-target);
+  }
+}
+
+@media (pointer: coarse), (max-width: 48rem) {
+  .knowledge-card :is(h2, h3) a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+  }
+}

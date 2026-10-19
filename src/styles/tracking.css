@@ -499,8 +499,22 @@
   .product-nav a {
     padding-inline: var(--space-2);
   }
+  /* Visually hidden, not display:none, so icon-only links keep their accessible name. */
   .product-nav a span {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+  .product-nav a {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    justify-content: center;
   }
   .account-context {
     display: none;
@@ -839,5 +853,16 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+@media (max-width: 68rem) {
+  .product-nav .product-more-nav div a span {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
   }
 }

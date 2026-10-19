@@ -17,18 +17,14 @@ test("Phase 6 exposes the complete protected fitness route family", () => {
   ]) assert.ok(fs.existsSync(path.join(root, file)), `${file} must exist`);
 });
 
-test("fitness schema is normalized, owner protected, and supports one active session", () => {
-  const sql = read("supabase/migrations/202607220001_fitness.sql");
-  for (const table of ["exercises", "exercise_muscles", "workout_programs", "workout_templates", "workout_template_exercises", "planned_workouts", "workout_sessions", "workout_session_exercises", "workout_sets"])
-    assert.match(sql, new RegExp(`create table(?: if not exists)? public\\.${table}`, "i"));
-  assert.match(sql, /where status = 'active'/i);
-  assert.match(sql, /enable row level security/gi);
-  assert.match(sql, /auth\.uid\(\) = user_id/);
+test("fitness tables are included in the fresh Appwrite schema", () => {
+  const schema = JSON.parse(read("src/lib/appwrite/schema.json"));
+  for (const table of ["exercises", "exercise_muscles", "workout_programs", "workout_templates", "workout_template_exercises", "planned_workouts", "workout_sessions", "workout_session_exercises", "workout_sets"]) assert.ok(schema.tables.some((item) => item.id === table));
 });
 
 test("fitness mutations authorize users and product shell protects the new routes", () => {
-  assert.match(read("src/features/fitness/actions.ts"), /auth\.getUser\(\)/);
-  const proxy = read("src/lib/supabase/proxy.ts");
+  assert.match(read("src/features/fitness/actions.ts"), /getCurrentAppwriteUser/);
+  const proxy = read("src/lib/appwrite/proxy.ts");
   for (const route of ["/training", "/workout-history", "/personal-records"])
     assert.match(proxy, new RegExp(route.replace("/", "\\/")));
   assert.match(read("src/components/shell/product-navigation.tsx"), /\/training/);

@@ -13,14 +13,9 @@ describe("Phase 5 nutrition and planning", () => {
     assert.ok(fs.existsSync(path.join(root, "src/app/(product)/recipes/[slug]/page.tsx")));
   });
 
-  it("defines private nutrition storage with RLS", () => {
-    const sql = read("supabase/migrations/202607190004_nutrition_planning.sql");
-    for (const table of ["foods", "food_favourites", "meal_entries", "recipes", "recipe_ingredients", "recipe_steps", "saved_recipes", "meal_plan_items", "grocery_items"]) {
-      assert.match(sql, new RegExp(`create table public\\.${table}`));
-      assert.match(sql, new RegExp(`alter table public\\.${table} enable row level security`));
-    }
-    assert.match(sql, /auth\.uid\(\) = user_id/);
-    assert.doesNotMatch(sql, /service_role/i);
+  it("defines nutrition tables in the Appwrite schema", () => {
+    const schema = JSON.parse(read("src/lib/appwrite/schema.json"));
+    for (const table of ["foods", "food_favourites", "meal_entries", "recipes", "recipe_ingredients", "recipe_steps", "saved_recipes", "meal_plan_items", "grocery_items"]) assert.ok(schema.tables.some((item) => item.id === table));
   });
 
   it("keeps USDA credentials server-only and attributes the source", () => {

@@ -9,7 +9,7 @@ import type {
 
 const mocks = vi.hoisted(() => ({
   createClient: vi.fn(),
-  getUser: vi.fn(),
+  getCurrentAppwriteUser: vi.fn(),
   revalidatePath: vi.fn(),
   saveDiscoverySnapshot: vi.fn(),
 }));
@@ -17,9 +17,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock("next/cache", () => ({
   revalidatePath: mocks.revalidatePath,
 }));
-vi.mock("@/lib/supabase/server", () => ({
-  createClient: mocks.createClient,
-}));
+vi.mock("@/lib/appwrite/server", () => ({ createClient: mocks.createClient, getCurrentAppwriteUser: mocks.getCurrentAppwriteUser }));
 vi.mock("@/features/discovery/repository", () => ({
   saveDiscoverySnapshot: mocks.saveDiscoverySnapshot,
 }));
@@ -150,10 +148,8 @@ async function submit(item: DiscoveryItem) {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mocks.getUser.mockResolvedValue({ data: { user: { id: "user-1" } } });
-  mocks.createClient.mockResolvedValue({
-    auth: { getUser: mocks.getUser },
-  });
+  mocks.getCurrentAppwriteUser.mockResolvedValue({ $id: "user-1", id: "user-1", email: "ana@example.com", name: "Ana" });
+  mocks.createClient.mockResolvedValue({});
   mocks.saveDiscoverySnapshot.mockResolvedValue(undefined);
 });
 

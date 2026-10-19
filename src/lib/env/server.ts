@@ -5,6 +5,8 @@ export { parseServerEnv, type ServerEnv };
 
 export function getServerEnv(): ServerEnv {
   return parseServerEnv({
+    APPWRITE_API_KEY: process.env.APPWRITE_API_KEY,
+    APPWRITE_DATABASE_ID: process.env.APPWRITE_DATABASE_ID,
     GROQ_API_KEY: process.env.GROQ_API_KEY,
     GROQ_MODEL: process.env.GROQ_MODEL,
     USDA_FDC_API_KEY: process.env.USDA_FDC_API_KEY,

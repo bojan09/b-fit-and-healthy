@@ -20,4 +20,5 @@
 @import "../styles/assistant.css";
 @import "../styles/overrides.css";
 @import "../styles/touch.css";
+@import "../styles/typography.css";
 @custom-variant dark (&:is(.dark *));

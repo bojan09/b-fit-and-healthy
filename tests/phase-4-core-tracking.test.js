@@ -6,19 +6,16 @@ const root = path.resolve(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
 describe("Phase 4 core tracking", () => {
-  it("defines owner-only tracking storage", () => {
-    const sql = read("supabase/migrations/202607190003_core_tracking.sql");
-    for (const table of ["water_logs", "body_measurements", "habits", "habit_checkins", "notifications"]) {
-      assert.match(sql, new RegExp(`create table public\\.${table}`));
-      assert.match(sql, new RegExp(`alter table public\\.${table} enable row level security`));
-    }
-    assert.match(sql, /auth\.uid\(\) = user_id/);
+  it("defines owner-only tracking tables in the Appwrite schema", () => {
+    const schema = JSON.parse(read("src/lib/appwrite/schema.json"));
+    for (const table of ["water_logs", "body_measurements", "habits", "habit_checkins", "notifications"]) assert.ok(schema.tables.some((item) => item.id === table));
+    assert.match(read("scripts/setup-appwrite.mjs"), /rowSecurity: true/);
   });
 
   it("keeps all tracking mutations server-authorized", () => {
     const actions = read("src/features/tracking/actions.ts");
     assert.match(actions, /^"use server";/);
-    assert.match(actions, /auth\.getUser/);
+    assert.match(actions, /getCurrentAppwriteUser/);
     assert.match(actions, /revalidatePath\("\/today"\)/);
     assert.doesNotMatch(actions, /service.role|SERVICE_ROLE/i);
   });
@@ -27,7 +24,7 @@ describe("Phase 4 core tracking", () => {
     for (const route of ["today", "habits", "goals", "progress", "notifications"]) {
       assert.ok(fs.existsSync(path.join(root, `src/app/(product)/${route}/page.tsx`)), route);
     }
-    assert.match(read("src/lib/supabase/proxy.ts"), /"\/goals"/);
+    assert.match(read("src/lib/appwrite/proxy.ts"), /"\/goals"/);
   });
 
   it("uses the Guided Daily Canvas without prototype health values", () => {
