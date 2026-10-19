@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/proxy";
+import { updateAppwriteSession } from "@/lib/appwrite/proxy";
 
 export async function proxy(request: NextRequest) {
-  return updateSession(request);
+  return updateAppwriteSession(request);
 }
 
 export const config = {

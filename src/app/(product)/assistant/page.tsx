@@ -27,7 +27,7 @@ export default async function AssistantPage({ searchParams }: { searchParams: Pr
         locale: found.locale,
         expiresAt: found.expires_at,
         lastMessageAt: found.last_message_at,
-        messages: found.messages.map((message) => ({
+        messages: found.messages.map((message: { id: string; role: string; content: string; draft: unknown; status: string; applied_at: string | null }) => ({
           id: message.id,
           role: message.role,
           content: message.content,

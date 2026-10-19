@@ -8,6 +8,7 @@ import type { AssistantContext, AssistantConversationDetail, AssistantConversati
 import { getAssistantContent } from "@/features/assistant/content";
 import { ConversationList } from "@/features/assistant/conversation-list";
 import { MessageList } from "@/features/assistant/message-list";
+import { ConfirmSubmitButton } from "@/components/ui/confirm-submit-button";
 import { deleteAssistantConversationAction } from "@/features/assistant/draft-actions";
 
 function eventPayload(block: string): AssistantStreamEvent | null {
@@ -116,7 +117,7 @@ export function AssistantCanvas({ locale, conversations, initialConversation, co
       <section><p className="eyebrow">{c.context}</p><h2>{c.today}</h2>{context ? <dl><div><dt>{locale === "mk" ? "Енергија" : "Energy"}</dt><dd>{context.today.energyKcal.toLocaleString()} kcal</dd></div><div><dt>{locale === "mk" ? "Протеини" : "Protein"}</dt><dd>{context.today.proteinG} g</dd></div><div><dt>{locale === "mk" ? "Вода" : "Water"}</dt><dd>{context.today.waterMl.toLocaleString()} ml</dd></div><div><dt>{locale === "mk" ? "Движење" : "Movement"}</dt><dd>{context.today.movementMinutes} min</dd></div></dl> : <p>{locale === "mk" ? "Нема достапен контекст." : "No context is available yet."}</p>}</section>
       <section><TrendingUp /><h2>{c.trends}</h2>{context ? <p>{context.trends.workoutsCompleted} {locale === "mk" ? "тренинзи ·" : "workouts ·"} {context.trends.habitCompletionRate ?? 0}% {locale === "mk" ? "навики" : "habits"}</p> : <p>—</p>}</section>
       <section><Target /><h2>{locale === "mk" ? "Активни цели" : "Active goals"}</h2><p>{context?.goals.join(" · ") || (locale === "mk" ? "Нема поставени цели" : "No goals set")}</p></section>
-      <section className="assistant-privacy-card"><ShieldCheck /><h2>{c.privacy}</h2><p>{c.retention}</p>{initialConversation && <form action={deleteAssistantConversationAction}><input type="hidden" name="conversationId" value={initialConversation.id} /><button className="ui-button ui-button-ghost">{c.delete}</button></form>}</section>
+      <section className="assistant-privacy-card"><ShieldCheck /><h2>{c.privacy}</h2><p>{c.retention}</p>{initialConversation && <form action={deleteAssistantConversationAction}><input type="hidden" name="conversationId" value={initialConversation.id} /><ConfirmSubmitButton className="ui-button ui-button-ghost" message={locale === "mk" ? "Да се избрише разговорот?" : "Delete this conversation?"}>{c.delete}</ConfirmSubmitButton></form>}</section>
     </aside>
   </main>;
 }

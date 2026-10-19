@@ -25,7 +25,7 @@ export function DemoWorkoutSession({
   const doneCount = exercises.filter((exercise) => exercise.done).length;
 
   return (
-    <div className="feature-visual training-visual demo-training-visual">
+    <div className="demo-training-visual">
       <div className="training-visual-header">
         <strong>{session.title[locale]}</strong>
         <span>{session.duration[locale]} · {doneCount}/{exercises.length} {labels.complete}</span>

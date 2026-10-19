@@ -1,0 +1,67 @@
+/* Macedonian headings: Archivo Black has no Cyrillic, so use Montserrat Black. */
+:lang(mk) :is(h1, h2, h3) {
+  font-family: var(--font-display-cyrillic), var(--font-sans), "Segoe UI", sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+/* Long words must wrap rather than widen the page. */
+h1 {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+:is(h2, h3) {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* Hero: size by viewport height as well as width so the calls to action stay in
+   the first screen on laptop-height windows, and leave room for long words. */
+.public-hero h1 {
+  max-width: 16ch;
+  font-size: clamp(2.8rem, min(6vw, 8vh), 5.25rem);
+}
+
+/* Phones: cap hero headings so a long word fits a 320px viewport. The two `:not([...])` terms raise specificity above the single-class
+   font-size rules declared in earlier sheets. */
+@media (max-width: 30rem) {
+  main h1:not([data-fit-off]):not([hidden]) {
+    font-size: clamp(1.5rem, 7.4vw, 2.25rem);
+    line-height: 1.08;
+    max-width: 100%;
+  }
+  :lang(mk) main h1:not([data-fit-off]):not([hidden]) {
+    font-size: clamp(1.375rem, 6.6vw, 2rem);
+  }
+}
+
+/* The featured-article grid must be allowed to shrink below its content. */
+.featured-article > div:first-child {
+  min-width: 0;
+}
+@media (max-width: 48rem) {
+  .featured-article {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .featured-mark {
+    display: none;
+  }
+}
+
+/* Demo header: the banner below already carries the sign-up call to action, so
+   the header copy yields on the narrowest phones instead of overflowing. */
+@media (max-width: 22rem) {
+  .demo-header-inner {
+    gap: var(--space-2);
+  }
+  .demo-header-inner > .ui-button {
+    display: none;
+  }
+}
+
+/* Entrance animations translate elements sideways for a moment; clip, rather than
+   scroll, anything that briefly pokes past the viewport. `clip` keeps sticky headers working. */
+body {
+  overflow-x: clip;
+}

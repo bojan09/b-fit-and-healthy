@@ -1,15 +1,15 @@
 import "server-only";
 
 import type { Locale } from "@/lib/i18n/config";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/appwrite/server";
 import { summarizeAssistantContext } from "@/features/assistant/context-domain";
 import { localDateInTimezone } from "@/features/tracking/domain";
 
 export async function buildAssistantContext(userId: string, locale: Locale, now = new Date()) {
-  const supabase = await createClient();
+  const appwrite = await createClient();
   const [profile, settings] = await Promise.all([
-    supabase.from("profiles").select("display_name").eq("user_id", userId).single(),
-    supabase.from("user_settings").select("units,timezone").eq("user_id", userId).single(),
+    appwrite.table("profiles").select("display_name").eq("user_id", userId).single(),
+    appwrite.table("user_settings").select("units,timezone").eq("user_id", userId).single(),
   ]);
   if (profile.error || settings.error || !profile.data || !settings.data) throw new Error("ASSISTANT_CONTEXT_UNAVAILABLE");
   const timezone = settings.data.timezone;
@@ -20,16 +20,16 @@ export async function buildAssistantContext(userId: string, locale: Locale, now 
     targets, goals, meals, water, habits, checkins,
     sessions, measurements,
   ] = await Promise.all([
-    supabase.from("daily_targets").select("energy_kcal,protein_g,water_ml,movement_minutes")
+    appwrite.table("daily_targets").select("energy_kcal,protein_g,water_ml,movement_minutes")
       .eq("user_id", userId).order("effective_from", { ascending: false }).limit(1).maybeSingle(),
-    supabase.from("goals").select("kind,target,unit").eq("user_id", userId).eq("status", "active").limit(10),
-    supabase.from("meal_entries").select("logged_on,energy_kcal,protein_g").eq("user_id", userId).gte("logged_on", sinceDate),
-    supabase.from("water_logs").select("amount_ml,logged_at").eq("user_id", userId).gte("logged_at", sinceTime),
-    supabase.from("habits").select("id").eq("user_id", userId).eq("is_archived", false),
-    supabase.from("habit_checkins").select("habit_id,checkin_on,status").eq("user_id", userId).gte("checkin_on", sinceDate),
-    supabase.from("workout_sessions").select("id,finished_at,duration_seconds").eq("user_id", userId)
+    appwrite.table("goals").select("kind,target,unit").eq("user_id", userId).eq("status", "active").limit(10),
+    appwrite.table("meal_entries").select("logged_on,energy_kcal,protein_g").eq("user_id", userId).gte("logged_on", sinceDate),
+    appwrite.table("water_logs").select("amount_ml,logged_at").eq("user_id", userId).gte("logged_at", sinceTime),
+    appwrite.table("habits").select("id").eq("user_id", userId).eq("is_archived", false),
+    appwrite.table("habit_checkins").select("habit_id,checkin_on,status").eq("user_id", userId).gte("checkin_on", sinceDate),
+    appwrite.table("workout_sessions").select("id,finished_at,duration_seconds").eq("user_id", userId)
       .eq("status", "complete").gte("finished_at", sinceTime),
-    supabase.from("body_measurements").select("recorded_on,weight_kg").eq("user_id", userId)
+    appwrite.table("body_measurements").select("recorded_on,weight_kg").eq("user_id", userId)
       .gte("recorded_on", sinceDate).order("recorded_on"),
   ]);
   const errors = [targets, goals, meals, water, habits, checkins, sessions, measurements]

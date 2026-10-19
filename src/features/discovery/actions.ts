@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { AuthActionState } from "@/features/auth/types";
 import { discoveryImportSchema } from "@/features/discovery/import-policy";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentAppwriteUser } from "@/lib/appwrite/server";
 
 export async function importDiscoveryItemAction(
   _previous: AuthActionState,
@@ -26,10 +26,7 @@ export async function importDiscoveryItemAction(
     return { status: "error", message: "The selected item is incomplete." };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentAppwriteUser();
   if (!user) return { status: "error", message: "Sign in to save this item." };
 
   try {

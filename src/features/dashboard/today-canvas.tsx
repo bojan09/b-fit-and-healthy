@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { DailyBalance } from "@/features/dashboard/daily-balance";
 import { GuidancePanel } from "@/features/dashboard/guidance-panel";
 import { RhythmRail } from "@/features/dashboard/rhythm-rail";
+import { SetupChecklist } from "@/features/dashboard/setup-checklist";
 import { WaterForm } from "@/features/tracking/tracking-form";
 import { kgToLb, mlToFluidOunces } from "@/features/tracking/domain";
 import { getTrackingContent } from "@/features/tracking/content";
@@ -125,6 +126,7 @@ export function TodayCanvas({
                     ? "Поставете цел за енергија во поставките."
                     : "Set an energy target in settings."
                   : undefined,
+                noteHref: energyRatio === null ? "/settings#targets" : undefined,
               },
               {
                 label: c.today.water,
@@ -133,6 +135,7 @@ export function TodayCanvas({
                   : water(summary.waterMl),
                 ratio: summary.waterRatio,
                 note: c.today.noTarget,
+                noteHref: summary.waterRatio === null ? "/settings#targets" : undefined,
               },
               {
                 label: c.today.habits,
@@ -193,6 +196,15 @@ export function TodayCanvas({
         </div>
 
         <div className="today-secondary">
+          <SetupChecklist
+            locale={locale}
+            signals={{
+              hasTargets: summary.energyTargetKcal !== null || summary.waterTargetMl !== null,
+              hasHabits: summary.totalHabits > 0,
+              hasMeals: summary.energyKcal > 0,
+              hasGoals: summary.activeGoals > 0,
+            }}
+          />
           <GuidancePanel
             eyebrow={c.today.guidance}
             title={actionCopy}

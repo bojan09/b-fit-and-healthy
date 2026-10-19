@@ -2,23 +2,9 @@ import "server-only";
 
 import { cache } from "react";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentAppwriteUser } from "@/lib/appwrite/server";
 
-const readCurrentUser = cache(async () => {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-});
-
-const readProfile = cache(async (userId: string) => {
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_id", userId)
-    .maybeSingle();
-  return data;
-});
+const readCurrentUser = cache(getCurrentAppwriteUser);
 
 export async function requireUser() {
   const user = await readCurrentUser();
@@ -27,7 +13,13 @@ export async function requireUser() {
 }
 
 export async function getCurrentProfile(userId?: string) {
-  const id = userId ?? (await readCurrentUser())?.id;
-  if (!id) return null;
-  return readProfile(id);
+  const user = await readCurrentUser();
+  if (!user || (userId && userId !== user.$id)) return null;
+  const prefs = user.prefs ?? {};
+  return {
+    user_id: user.$id,
+    display_name: user.name,
+    locale: typeof prefs.locale === "string" ? prefs.locale : "en",
+    onboarding_complete: prefs.onboarding_complete === true,
+  };
 }

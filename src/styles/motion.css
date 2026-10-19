@@ -388,7 +388,7 @@
   to { opacity: 1; transform: none; }
 }
 @keyframes unfold-up {
-  from { opacity: 0; transform: rotateX(-38deg) translate3d(0, 28px, -40px); }
+  from { opacity: 0.35; transform: rotateX(-38deg) translate3d(0, 28px, -40px); }
   to { opacity: 1; transform: none; }
 }
 /* Entrances animate the individual translate/rotate properties so they never

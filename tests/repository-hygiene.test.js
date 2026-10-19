@@ -11,7 +11,7 @@ test('local credentials are ignored and browser code contains no server-only sec
   assert.match(ignore, /^\.env\.local$/m);
   const browserSources = [
     'src/lib/env/public.ts',
-    'src/lib/supabase/client.ts'
+    'src/lib/appwrite/rest.ts'
   ].map(read).join('\n');
   assert.doesNotMatch(browserSources, /SERVICE_ROLE|GROQ_API_KEY|USDA_FDC_API_KEY/);
 });

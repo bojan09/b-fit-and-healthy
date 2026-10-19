@@ -3,6 +3,7 @@
 import { CalendarDays, Dumbbell, Soup, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useOptionalLocale } from "@/components/providers/locale-provider";
 
 const destinations = [
   { href: "/demo/today", key: "today", icon: CalendarDays },
@@ -15,8 +16,9 @@ type Labels = { today: string; nutrition: string; training: string; progress: st
 
 export function DemoNav({ labels }: { labels: Labels }) {
   const pathname = usePathname();
+  const locale = useOptionalLocale();
   return (
-    <nav className="product-nav demo-nav" aria-label="Demo navigation">
+    <nav className="product-nav demo-nav" aria-label={locale === "mk" ? "Навигација на демо" : "Demo navigation"}>
       {destinations.map(({ href, key, icon: Icon }) => (
         <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined}>
           <Icon aria-hidden="true" />

@@ -1,4 +1,5 @@
 const assert = require("node:assert/strict");
+const { readAllStyles } = require('./helpers/styles');
 const fs = require("node:fs");
 const test = require("node:test");
 
@@ -20,7 +21,7 @@ test("Voltage design system is centralized", () => {
 });
 
 test("global styles are split by responsibility", () => {
-  const globalStyles = read("src/app/globals.css");
+  const globalStyles = readAllStyles();
   for (const stylesheet of [
     "tokens",
     "base",

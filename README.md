@@ -1,12 +1,12 @@
 # B Fit & Healthy
 
-B Fit & Healthy is an English-first, bilingual health and fitness product built with Next.js App Router, TypeScript, Tailwind CSS, customized shadcn/ui primitives, Supabase, and Serwist. The approved Sky Dusk visual system remains the design foundation.
+B Fit & Healthy is an English-first, bilingual health and fitness product built with Next.js App Router, TypeScript, Tailwind CSS, customized shadcn/ui primitives, Appwrite, and Serwist. The approved Sky Dusk visual system remains the design foundation.
 
 ## Current delivery status
 
 Phase 1 established the production foundation; Phases 2–4 added the public experience, authentication/onboarding, and real-data Guided Daily Canvas. Phase 5 adds private nutrition logging, recipes, meal planning, groceries, and USDA-backed search. Phase 6 adds the exercise library, workout planning, active sessions, history, and personal records. Phase 7 adds the Anatomy encyclopedia, richer SVG atlas, content relationships, and bilingual knowledge depth. Phase 8 adds the private Groq AI Coach with minimized context, 30-day history, safety boundaries, and reviewable drafts.
 
-Motion and 3D are CSS-only: no GSAP, Three.js, or animation libraries ship to the browser. The accessible SVG atlas remains the active renderer and turns between front and back as a CSS 3D card; scroll reveals use `animation-timeline: view()` and every effect is disabled under `prefers-reduced-motion`. Provider-backed features require their documented Supabase migrations and valid server credentials.
+Motion and 3D are CSS-only: no GSAP, Three.js, or animation libraries ship to the browser. The accessible SVG atlas remains the active renderer and turns between front and back as a CSS 3D card; scroll reveals use `animation-timeline: view()` and every effect is disabled under `prefers-reduced-motion`. Provider-backed features require an Appwrite database setup and valid server credentials.
 
 See `docs/motion-and-three-operations.md` for the CSS motion system, 3D surfaces, and reduced-motion behavior.
 
@@ -38,12 +38,16 @@ The production build uses webpack because the current Serwist integration is con
 
 - `src/app/` — Next.js App Router pages, metadata, manifest, and service-worker source
 - `src/components/` — product-owned components and customized UI primitives
-- `src/lib/` — environment, locale, content, SEO, and Supabase boundaries
+- `src/lib/` — environment, locale, content, SEO, and Appwrite boundaries
 - `content/articles/` — paired English and Macedonian Markdown sources
-- `supabase/migrations/` — versioned schema and ownership policies
-- `supabase/tests/` — database and RLS contracts
+- `src/lib/appwrite/schema.json` — TablesDB schema manifest
+- `scripts/setup-appwrite.mjs` — repeatable database bootstrap
 - `tests/` — production repository contracts and unit tests
 - `.worktrees/active-dusk-refinement/prototype/` — archived vanilla visual reference
 - `.worktrees/pre-next-root-20260719/` — preserved pre-relocation root material
 
-The service worker never caches Supabase, authentication, API, or private navigation responses. Protected data must remain server-authorized and user-owned through row-level security.
+The service worker never caches Appwrite, authentication, API, or private navigation responses. Protected data must remain server-authorized and user-owned through Appwrite row-level security.
+
+## Backend setup
+
+See [Appwrite setup](docs/appwrite-setup.md) for the fresh database and Google sign-in configuration.

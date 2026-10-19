@@ -1,65 +1,64 @@
 import "server-only";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/appwrite/server";
+import { exercises as curatedExercises } from "@/features/fitness/catalogue";
 
 export async function loadTraining(userId: string) {
-  const supabase = await createClient();
+  const appwrite = await createClient();
   const [templates, plans, active, recent] = await Promise.all([
-    supabase.from("workout_templates").select("*").eq("user_id", userId).order("updated_at", { ascending: false }),
-    supabase.from("planned_workouts").select("*").eq("user_id", userId).gte("planned_on", new Date().toISOString().slice(0,10)).order("planned_on").limit(7),
-    supabase.from("workout_sessions").select("*").eq("user_id", userId).eq("status", "active").maybeSingle(),
-    supabase.from("workout_sessions").select("*").eq("user_id", userId).eq("status", "complete").order("finished_at", { ascending: false }).limit(5),
+    appwrite.table("workout_templates").select("*").eq("user_id", userId).order("updated_at", { ascending: false }),
+    appwrite.table("planned_workouts").select("*").eq("user_id", userId).gte("planned_on", new Date().toISOString().slice(0,10)).order("planned_on").limit(7),
+    appwrite.table("workout_sessions").select("*").eq("user_id", userId).eq("status", "active").maybeSingle(),
+    appwrite.table("workout_sessions").select("*").eq("user_id", userId).eq("status", "complete").order("finished_at", { ascending: false }).limit(5),
   ]);
   return { templates: templates.data ?? [], plans: plans.data ?? [], active: active.data, recent: recent.data ?? [], unavailable: Boolean(templates.error) };
 }
 
 export async function loadTemplate(userId: string, id: string) {
-  const supabase = await createClient();
+  const appwrite = await createClient();
   const [template, rows] = await Promise.all([
-    supabase.from("workout_templates").select("*").eq("id", id).eq("user_id", userId).maybeSingle(),
-    supabase.from("workout_template_exercises").select("*").eq("template_id", id).eq("user_id", userId).order("position"),
+    appwrite.table("workout_templates").select("*").eq("id", id).eq("user_id", userId).maybeSingle(),
+    appwrite.table("workout_template_exercises").select("*").eq("template_id", id).eq("user_id", userId).order("position"),
   ]);
   const ids = (rows.data ?? []).map((row) => row.exercise_id).filter((value): value is string => Boolean(value));
-  const catalogue = ids.length
-    ? await supabase.from("exercises").select("id,slug,title_en,title_mk").in("id", ids)
-    : { data: [] };
-  return { template: template.data, exercises: rows.data ?? [], exerciseCatalogue: catalogue.data ?? [], unavailable: Boolean(template.error) };
+  const catalogue = curatedExercises.filter((exercise) => ids.includes(exercise.id)).map((exercise) => ({ id: exercise.id, slug: exercise.slug, title_en: exercise.titleEn, title_mk: exercise.titleMk }));
+  return { template: template.data, exercises: rows.data ?? [], exerciseCatalogue: catalogue, unavailable: Boolean(template.error) };
 }
 
 export async function loadPlanner(userId: string, from: string, to: string) {
-  const supabase = await createClient();
-  const result = await supabase.from("planned_workouts").select("*").eq("user_id", userId)
+  const appwrite = await createClient();
+  const result = await appwrite.table("planned_workouts").select("*").eq("user_id", userId)
     .gte("planned_on", from).lte("planned_on", to).order("planned_on");
   return { plans: result.data ?? [], unavailable: Boolean(result.error) };
 }
 
 export async function loadSession(userId: string, id: string) {
-  const supabase = await createClient();
+  const appwrite = await createClient();
   const [session, exercises, sets] = await Promise.all([
-    supabase.from("workout_sessions").select("*").eq("id", id).eq("user_id", userId).maybeSingle(),
-    supabase.from("workout_session_exercises").select("*").eq("session_id", id).eq("user_id", userId).order("position"),
-    supabase.from("workout_sets").select("*").eq("session_id", id).eq("user_id", userId).order("position"),
+    appwrite.table("workout_sessions").select("*").eq("id", id).eq("user_id", userId).maybeSingle(),
+    appwrite.table("workout_session_exercises").select("*").eq("session_id", id).eq("user_id", userId).order("position"),
+    appwrite.table("workout_sets").select("*").eq("session_id", id).eq("user_id", userId).order("position"),
   ]);
   return { session: session.data, exercises: exercises.data ?? [], sets: sets.data ?? [], unavailable: Boolean(session.error) };
 }
 
 export async function loadHistory(userId: string) {
-  const supabase = await createClient();
-  const result = await supabase.from("workout_sessions").select("*").eq("user_id", userId)
+  const appwrite = await createClient();
+  const result = await appwrite.table("workout_sessions").select("*").eq("user_id", userId)
     .eq("status", "complete").order("finished_at", { ascending: false });
   return { sessions: result.data ?? [], unavailable: Boolean(result.error) };
 }
 
 /** Completed sessions with their sets, fetched in three queries regardless of history length. */
 export async function loadRecordSessions(userId: string, locale: "en" | "mk" = "en") {
-  const supabase = await createClient();
-  const sessions = await supabase.from("workout_sessions").select("id,status,finished_at").eq("user_id", userId)
+  const appwrite = await createClient();
+  const sessions = await appwrite.table("workout_sessions").select("id,status,finished_at").eq("user_id", userId)
     .eq("status", "complete").order("finished_at", { ascending: false });
   const sessionIds = (sessions.data ?? []).map((session) => session.id);
   if (!sessionIds.length) return [];
   const [exerciseRows, setRows] = await Promise.all([
-    supabase.from("workout_session_exercises").select("id,exercise_id,name_en_snapshot,name_mk_snapshot")
+    appwrite.table("workout_session_exercises").select("id,exercise_id,name_en_snapshot,name_mk_snapshot")
       .in("session_id", sessionIds).eq("user_id", userId),
-    supabase.from("workout_sets").select("*").in("session_id", sessionIds).eq("user_id", userId),
+    appwrite.table("workout_sets").select("*").in("session_id", sessionIds).eq("user_id", userId),
   ]);
   const names = new Map((exerciseRows.data ?? []).map((row) => [row.id, {
     id: row.exercise_id ?? row.id,

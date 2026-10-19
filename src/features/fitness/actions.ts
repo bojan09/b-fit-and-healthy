@@ -1,25 +1,30 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentAppwriteUser } from "@/lib/appwrite/server";
 import { scheduleSchema, setSchema, templateSchema, uuidSchema } from "@/features/fitness/schemas";
 import { discoveryWorkoutSchema } from "@/features/discovery/schemas";
 import type { AuthActionState } from "@/features/auth/types";
 import type { DiscoveryExercise } from "@/features/discovery/types";
+import { exercises as curatedExercises } from "@/features/fitness/catalogue";
 
-async function authorized() { const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect("/sign-in"); return { supabase, user }; }
+async function authorized() { const appwrite = await createClient(); const user = await getCurrentAppwriteUser(); if (!user) redirect("/sign-in"); return { appwrite, user }; }
+/** Surfaces failed writes in server logs instead of dropping them; returns true when the write failed. */
+function writeFailed(label: string, error: { message: string } | null) {
+  if (error) console.error(`fitness.${label}`, error.message);
+  return Boolean(error);
+}
 const refresh = () => ["/today","/training","/training/planner","/workouts","/workout-history","/personal-records"].forEach((path) => revalidatePath(path));
 
 export async function createTemplateAction(formData: FormData) {
   const parsed = templateSchema.safeParse(Object.fromEntries(formData)); if (!parsed.success) redirect("/workouts/new?error=invalid");
-  const { supabase, user } = await authorized();
+  const { appwrite, user } = await authorized();
   const slugs = [...new Set(parsed.data.prescriptions.map((row) => row.exerciseSlug))];
-  const found = await supabase.from("exercises").select("id,slug").in("slug", slugs);
-  const bySlug = new Map((found.data ?? []).map((row) => [row.slug, row.id]));
-  if (found.error || slugs.some((slug) => !bySlug.has(slug))) {
+  const bySlug = new Map(curatedExercises.filter((exercise) => slugs.includes(exercise.slug)).map((exercise) => [exercise.slug, exercise.id]));
+  if (slugs.some((slug) => !bySlug.has(slug))) {
     redirect("/workouts/new?error=invalid");
   }
-  const template = await supabase.from("workout_templates").insert({ user_id: user.id, name: parsed.data.name, description: parsed.data.description, expected_duration_minutes: parsed.data.duration }).select("id").single();
+  const template = await appwrite.table("workout_templates").insert({ user_id: user.id, name: parsed.data.name, description: parsed.data.description, expected_duration_minutes: parsed.data.duration }).select("id").single();
   if (template.error || !template.data) redirect("/workouts/new?error=storage");
   const rows = parsed.data.prescriptions.map((prescription, position) => ({
     user_id: user.id,
@@ -32,9 +37,10 @@ export async function createTemplateAction(formData: FormData) {
     target_duration_seconds: prescription.durationSeconds,
     rest_seconds: prescription.restSeconds,
   }));
-  const inserted = await supabase.from("workout_template_exercises").insert(rows);
+  const inserted = await appwrite.table("workout_template_exercises").insert(rows);
   if (inserted.error) {
-    await supabase.from("workout_templates").delete().eq("id", template.data.id).eq("user_id", user.id);
+    await appwrite.table("workout_template_exercises").delete().eq("template_id", template.data.id).eq("user_id", user.id);
+    await appwrite.table("workout_templates").delete().eq("id", template.data.id).eq("user_id", user.id);
     redirect("/workouts/new?error=storage");
   }
   refresh();
@@ -60,7 +66,7 @@ export async function importDiscoveryWorkoutAction(
     return { status: "error", message: "This workout has no usable exercises." };
   }
 
-  const { supabase, user } = await authorized();
+  const { appwrite, user } = await authorized();
   const workout = parsed.data;
   const exerciseLicense = workout.provider === "local"
     ? {
@@ -90,8 +96,8 @@ export async function importDiscoveryWorkoutAction(
       "@/features/discovery/repository"
     );
     await saveDiscoverySnapshot(user.id, workout);
-    const template = await supabase
-      .from("workout_templates")
+    const template = await appwrite
+      .table("workout_templates")
       .insert({
         user_id: user.id,
         name: workout.title,
@@ -141,10 +147,11 @@ export async function importDiscoveryWorkoutAction(
         rest_seconds: movement.restSeconds,
       };
     }));
-    const inserted = await supabase.from("workout_template_exercises").insert(rows);
+    const inserted = await appwrite.table("workout_template_exercises").insert(rows);
     if (inserted.error) {
-      await supabase
-        .from("workout_templates")
+      await appwrite.table("workout_template_exercises").delete().eq("template_id", template.data.id).eq("user_id", user.id);
+      await appwrite
+        .table("workout_templates")
         .delete()
         .eq("id", template.data.id)
         .eq("user_id", user.id);
@@ -166,14 +173,13 @@ export async function updateTemplateAction(formData: FormData) {
   const editPath = `/workouts/${id.data}/edit`;
   const parsed = templateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) redirect(`${editPath}?error=invalid`);
-  const { supabase, user } = await authorized();
+  const { appwrite, user } = await authorized();
   const slugs = [...new Set(parsed.data.prescriptions.map((row) => row.exerciseSlug))];
-  const found = await supabase.from("exercises").select("id,slug").in("slug", slugs);
-  const bySlug = new Map((found.data ?? []).map((row) => [row.slug, row.id]));
-  if (found.error || slugs.some((slug) => !bySlug.has(slug))) redirect(`${editPath}?error=invalid`);
+  const bySlug = new Map(curatedExercises.filter((exercise) => slugs.includes(exercise.slug)).map((exercise) => [exercise.slug, exercise.id]));
+  if (slugs.some((slug) => !bySlug.has(slug))) redirect(`${editPath}?error=invalid`);
 
-  const updated = await supabase
-    .from("workout_templates")
+  const updated = await appwrite
+    .table("workout_templates")
     .update({
       name: parsed.data.name,
       description: parsed.data.description,
@@ -185,10 +191,10 @@ export async function updateTemplateAction(formData: FormData) {
 
   // PostgREST has no multi-statement transactions: keep a backup so a failed
   // insert restores the previous exercise list instead of leaving it empty.
-  const backup = await supabase.from("workout_template_exercises").select("*")
+  const backup = await appwrite.table("workout_template_exercises").select("*")
     .eq("template_id", id.data).eq("user_id", user.id);
   if (backup.error) redirect(`${editPath}?error=storage`);
-  const removed = await supabase.from("workout_template_exercises").delete()
+  const removed = await appwrite.table("workout_template_exercises").delete()
     .eq("template_id", id.data).eq("user_id", user.id);
   if (removed.error) redirect(`${editPath}?error=storage`);
 
@@ -203,10 +209,10 @@ export async function updateTemplateAction(formData: FormData) {
     target_duration_seconds: prescription.durationSeconds,
     rest_seconds: prescription.restSeconds,
   }));
-  const inserted = await supabase.from("workout_template_exercises").insert(rows);
+  const inserted = await appwrite.table("workout_template_exercises").insert(rows);
   if (inserted.error) {
     if (backup.data?.length) {
-      await supabase.from("workout_template_exercises").insert(
+      await appwrite.table("workout_template_exercises").insert(
         backup.data.map((row) => ({
           id: row.id,
           user_id: row.user_id,
@@ -233,9 +239,21 @@ export async function updateTemplateAction(formData: FormData) {
 export async function deleteTemplateAction(formData: FormData) {
   const id = uuidSchema.safeParse(formData.get("id"));
   if (!id.success) return;
-  const { supabase, user } = await authorized();
-  const removed = await supabase.from("workout_templates").delete().eq("id", id.data).eq("user_id", user.id);
-  if (removed.error) redirect(`/workouts/${id.data}?error=storage`);
+  const { appwrite, user } = await authorized();
+  const plans = await appwrite.table("planned_workouts").select("id").eq("template_id", id.data).eq("user_id", user.id);
+  if (plans.error) redirect("/workouts/" + id.data + "?error=storage");
+  for (const plan of plans.data ?? []) {
+    const detached = await appwrite.table("workout_sessions").update({ planned_workout_id: null }).eq("planned_workout_id", plan.id).eq("user_id", user.id);
+    if (detached.error) redirect("/workouts/" + id.data + "?error=storage");
+  }
+  const [sessions, planned, exercises] = await Promise.all([
+    appwrite.table("workout_sessions").update({ template_id: null }).eq("template_id", id.data).eq("user_id", user.id),
+    appwrite.table("planned_workouts").delete().eq("template_id", id.data).eq("user_id", user.id),
+    appwrite.table("workout_template_exercises").delete().eq("template_id", id.data).eq("user_id", user.id),
+  ]);
+  if (sessions.error || planned.error || exercises.error) redirect("/workouts/" + id.data + "?error=storage");
+  const removed = await appwrite.table("workout_templates").delete().eq("id", id.data).eq("user_id", user.id);
+  if (removed.error) redirect("/workouts/" + id.data + "?error=storage");
   refresh();
   redirect("/workouts");
 }
@@ -243,12 +261,13 @@ export async function deleteTemplateAction(formData: FormData) {
 export async function scheduleWorkoutAction(formData: FormData) {
   const parsed = scheduleSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return;
-  const { supabase, user } = await authorized();
-  await supabase.from("planned_workouts").insert({
+  const { appwrite, user } = await authorized();
+  const scheduled = await appwrite.table("planned_workouts").insert({
     user_id: user.id,
     template_id: parsed.data.templateId,
     planned_on: parsed.data.plannedOn,
   });
+  writeFailed("schedule", scheduled.error);
   refresh();
 }
 
@@ -256,8 +275,9 @@ export async function updatePlanStatusAction(formData: FormData) {
   const id = uuidSchema.safeParse(formData.get("id"));
   const status = formData.get("status");
   if (!id.success || (status !== "planned" && status !== "skipped")) return;
-  const { supabase, user } = await authorized();
-  await supabase.from("planned_workouts").update({ status }).eq("id", id.data).eq("user_id", user.id);
+  const { appwrite, user } = await authorized();
+  const updated = await appwrite.table("planned_workouts").update({ status }).eq("id", id.data).eq("user_id", user.id);
+  writeFailed("planStatus", updated.error);
   refresh();
 }
 
@@ -269,14 +289,14 @@ export async function updatePlanStatusAction(formData: FormData) {
 export async function startSessionAction(formData: FormData) {
   const templateId = uuidSchema.safeParse(formData.get("templateId"));
   if (!templateId.success) return;
-  const { supabase, user } = await authorized();
-  const existing = await supabase.from("workout_sessions").select("id")
+  const { appwrite, user } = await authorized();
+  const existing = await appwrite.table("workout_sessions").select("id")
     .eq("user_id", user.id).eq("status", "active").maybeSingle();
   if (existing.data) redirect(`/session/${existing.data.id}`);
 
   const [template, templateRows] = await Promise.all([
-    supabase.from("workout_templates").select("*").eq("id", templateId.data).eq("user_id", user.id).single(),
-    supabase.from("workout_template_exercises").select("*").eq("template_id", templateId.data)
+    appwrite.table("workout_templates").select("*").eq("id", templateId.data).eq("user_id", user.id).single(),
+    appwrite.table("workout_template_exercises").select("*").eq("template_id", templateId.data)
       .eq("user_id", user.id).order("position"),
   ]);
   if (!template.data || templateRows.error) redirect(`/workouts/${templateId.data}?error=storage`);
@@ -284,24 +304,19 @@ export async function startSessionAction(formData: FormData) {
 
   const exerciseIds = [...new Set(plan.map((row) => row.exercise_id).filter((value): value is string => Boolean(value)))];
   const snapshotIds = [...new Set(plan.map((row) => row.external_snapshot_id).filter((value): value is string => Boolean(value)))];
-  const [catalogue, snapshots] = await Promise.all([
-    exerciseIds.length
-      ? supabase.from("exercises").select("id,title_en,title_mk").in("id", exerciseIds)
-      : Promise.resolve({ data: [] as { id: string; title_en: string; title_mk: string }[] }),
-    snapshotIds.length
-      ? supabase.from("external_content_snapshots").select("id,title").in("id", snapshotIds).eq("user_id", user.id)
-      : Promise.resolve({ data: [] as { id: string; title: string }[] }),
-  ]);
-  const titles = new Map((catalogue.data ?? []).map((row) => [row.id, row]));
+  const snapshots = snapshotIds.length
+    ? await appwrite.table("external_content_snapshots").select("id,title").in("id", snapshotIds).eq("user_id", user.id)
+    : { data: [] as { id: string; title: string }[] };
+  const titles = new Map(curatedExercises.filter((exercise) => exerciseIds.includes(exercise.id)).map((exercise) => [exercise.id, { id: exercise.id, title_en: exercise.titleEn, title_mk: exercise.titleMk }]));
   const snapshotTitles = new Map((snapshots.data ?? []).map((row) => [row.id, row.title]));
 
-  const session = await supabase.from("workout_sessions")
+  const session = await appwrite.table("workout_sessions")
     .insert({ user_id: user.id, template_id: template.data.id, name_snapshot: template.data.name })
     .select("id").single();
   if (!session.data) redirect(`/workouts/${templateId.data}?error=storage`);
   const sessionId = session.data.id;
   const abort = async () => {
-    await supabase.from("workout_sessions").delete().eq("id", sessionId).eq("user_id", user.id);
+    await appwrite.table("workout_sessions").delete().eq("id", sessionId).eq("user_id", user.id);
     redirect(`/workouts/${templateId.data}?error=storage`);
   };
 
@@ -324,7 +339,7 @@ export async function startSessionAction(formData: FormData) {
         target_rpe: row.target_rpe,
       };
     });
-    const created = await supabase.from("workout_session_exercises").insert(exerciseRows).select("id,position");
+    const created = await appwrite.table("workout_session_exercises").insert(exerciseRows).select("id,position");
     if (created.error || !created.data) await abort();
     const idByPosition = new Map((created.data ?? []).map((row) => [row.position, row.id]));
     const sets = plan.flatMap((row) => {
@@ -338,7 +353,7 @@ export async function startSessionAction(formData: FormData) {
       }));
     });
     if (sets.length) {
-      const insertedSets = await supabase.from("workout_sets").insert(sets);
+      const insertedSets = await appwrite.table("workout_sets").insert(sets);
       if (insertedSets.error) await abort();
     }
   }
@@ -349,14 +364,15 @@ export async function startSessionAction(formData: FormData) {
 export async function updateSetAction(formData: FormData) {
   const parsed = setSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return;
-  const { supabase, user } = await authorized();
-  await supabase.from("workout_sets").update({
+  const { appwrite, user } = await authorized();
+  const saved = await appwrite.table("workout_sets").update({
     reps: parsed.data.reps ?? null,
     load_kg: parsed.data.loadKg ?? null,
     rpe: parsed.data.rpe === "" ? null : parsed.data.rpe,
     is_bodyweight: parsed.data.bodyweight === "on",
     is_complete: parsed.data.complete === "on",
   }).eq("id", parsed.data.setId).eq("session_id", parsed.data.sessionId).eq("user_id", user.id);
+  if (writeFailed("updateSet", saved.error)) redirect(`/session/${parsed.data.sessionId}?error=storage`);
   revalidatePath(`/session/${parsed.data.sessionId}`);
 }
 
@@ -364,16 +380,17 @@ export async function addSetAction(formData: FormData) {
   const sessionId = uuidSchema.safeParse(formData.get("sessionId"));
   const exerciseId = uuidSchema.safeParse(formData.get("sessionExerciseId"));
   if (!sessionId.success || !exerciseId.success) return;
-  const { supabase, user } = await authorized();
-  const previous = await supabase.from("workout_sets").select("position")
+  const { appwrite, user } = await authorized();
+  const previous = await appwrite.table("workout_sets").select("position")
     .eq("session_id", sessionId.data).eq("session_exercise_id", exerciseId.data).eq("user_id", user.id)
     .order("position", { ascending: false }).limit(1).maybeSingle();
-  await supabase.from("workout_sets").insert({
+  const added = await appwrite.table("workout_sets").insert({
     user_id: user.id,
     session_id: sessionId.data,
     session_exercise_id: exerciseId.data,
     position: (previous.data?.position ?? -1) + 1,
   });
+  if (writeFailed("addSet", added.error)) redirect(`/session/${sessionId.data}?error=storage`);
   revalidatePath(`/session/${sessionId.data}`);
 }
 
@@ -381,25 +398,26 @@ export async function removeSetAction(formData: FormData) {
   const setId = uuidSchema.safeParse(formData.get("setId"));
   const sessionId = uuidSchema.safeParse(formData.get("sessionId"));
   if (!setId.success || !sessionId.success) return;
-  const { supabase, user } = await authorized();
-  await supabase.from("workout_sets").delete().eq("id", setId.data).eq("session_id", sessionId.data).eq("user_id", user.id);
+  const { appwrite, user } = await authorized();
+  const removed = await appwrite.table("workout_sets").delete().eq("id", setId.data).eq("session_id", sessionId.data).eq("user_id", user.id);
+  if (writeFailed("removeSet", removed.error)) redirect(`/session/${sessionId.data}?error=storage`);
   revalidatePath(`/session/${sessionId.data}`);
 }
 
 export async function finishSessionAction(formData: FormData) {
   const id = uuidSchema.safeParse(formData.get("id"));
   if (!id.success) return;
-  const { supabase, user } = await authorized();
+  const { appwrite, user } = await authorized();
   const [completed, current] = await Promise.all([
-    supabase.from("workout_sets").select("id", { count: "exact", head: true })
+    appwrite.table("workout_sets").select("id", { count: "exact", head: true })
       .eq("session_id", id.data).eq("user_id", user.id).eq("is_complete", true),
-    supabase.from("workout_sessions").select("started_at").eq("id", id.data).eq("user_id", user.id).single(),
+    appwrite.table("workout_sessions").select("started_at").eq("id", id.data).eq("user_id", user.id).single(),
   ]);
   if (!completed.count) redirect(`/session/${id.data}?error=no-sets`);
   const duration = current.data
     ? Math.max(0, Math.round((Date.now() - new Date(current.data.started_at).getTime()) / 1000))
     : null;
-  const finished = await supabase.from("workout_sessions")
+  const finished = await appwrite.table("workout_sessions")
     .update({ status: "complete", finished_at: new Date().toISOString(), duration_seconds: duration })
     .eq("id", id.data).eq("user_id", user.id);
   if (finished.error) redirect(`/session/${id.data}?error=storage`);
@@ -410,8 +428,8 @@ export async function finishSessionAction(formData: FormData) {
 export async function discardSessionAction(formData: FormData) {
   const id = uuidSchema.safeParse(formData.get("id"));
   if (!id.success) return;
-  const { supabase, user } = await authorized();
-  await supabase.from("workout_sessions")
+  const { appwrite, user } = await authorized();
+  await appwrite.table("workout_sessions")
     .update({ status: "discarded", finished_at: new Date().toISOString() })
     .eq("id", id.data).eq("user_id", user.id);
   refresh();

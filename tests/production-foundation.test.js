@@ -15,8 +15,7 @@ test('production package pins the approved Phase 1 stack and quality commands', 
   for (const script of ['build', 'start', 'lint', 'typecheck', 'test']) {
     assert.ok(pkg.scripts[script], `missing ${script} script`);
   }
-  for (const dependency of ['next', 'react', 'react-dom', '@supabase/ssr',
-    '@supabase/supabase-js', '@serwist/next', 'serwist', 'zod']) {
+  for (const dependency of ['next', 'react', 'react-dom', '@serwist/next', 'serwist', 'zod']) {
     assert.ok(pkg.dependencies[dependency] || pkg.devDependencies[dependency],
       `missing ${dependency}`);
   }
@@ -27,7 +26,7 @@ test('App Router exposes accessible foundation, state, and offline routes', () =
     'src/app/layout.tsx',
     'src/app/[locale]/(marketing)/page.tsx',
     'src/app/~offline/page.tsx',
-    'src/app/loading.tsx',
+    'src/app/(product)/loading.tsx',
     'src/app/error.tsx',
     'src/app/not-found.tsx'
   ]) assert.ok(exists(file), `missing ${file}`);
@@ -54,20 +53,13 @@ test('Voltage design tokens and customized UI primitives are production-owned', 
   assert.ok(exists('src/components/ui/card.tsx'));
 });
 
-test('Supabase SSR boundaries validate environment and never expose service role', () => {
-  for (const file of [
-    'src/lib/env/server.ts',
-    'src/lib/env/public.ts',
-    'src/lib/supabase/client.ts',
-    'src/lib/supabase/server.ts',
-    'src/lib/supabase/proxy.ts',
-    'src/proxy.ts'
-  ]) assert.ok(exists(file), `missing ${file}`);
-
-  const client = read('src/lib/supabase/client.ts');
+test('Appwrite boundaries keep API keys server-only and use session-scoped REST', () => {
+  for (const file of ['src/lib/env/server.ts', 'src/lib/env/public.ts', 'src/lib/appwrite/rest.ts', 'src/lib/appwrite/server.ts', 'src/lib/appwrite/proxy.ts', 'src/proxy.ts']) assert.ok(exists(file), `missing ${file}`);
   const publicEnv = read('src/lib/env/public.ts');
-  assert.doesNotMatch(`${client}\n${publicEnv}`, /SERVICE_ROLE|GROQ_API_KEY|USDA_FDC_API_KEY/);
-  assert.match(read('src/lib/supabase/server.ts'), /createServerClient/);
+  const rest = read('src/lib/appwrite/rest.ts');
+  assert.doesNotMatch(`${rest}\n${publicEnv}`, /APPWRITE_API_KEY|GROQ_API_KEY|USDA_FDC_API_KEY/);
+  assert.match(rest, /X-Appwrite-Project/);
+  assert.match(rest, /X-Appwrite-Session/);
 });
 
 test('Vercel uses the Next.js adapter instead of a stale static dist directory', () => {
@@ -75,17 +67,14 @@ test('Vercel uses the Next.js adapter instead of a stale static dist directory',
   const config = JSON.parse(read('vercel.json'));
   assert.equal(config.framework, 'nextjs');
   assert.equal(config.outputDirectory, null);
-  assert.equal(exists('.env.example'), false, 'do not ship a local environment template');
+  assert.ok(exists('.env.example'), 'provide a safe Appwrite environment template');
 });
 
-test('initial database migration enables RLS and ownership policies', () => {
-  const migration = read('supabase/migrations/202607190001_foundation.sql');
-  for (const table of ['profiles', 'user_settings', 'goals', 'daily_targets']) {
-    assert.match(migration, new RegExp(`create table public\\.${table}`, 'i'));
-    assert.match(migration, new RegExp(`alter table public\\.${table} enable row level security`, 'i'));
-  }
-  assert.match(migration, /auth\.uid\(\)\s*=\s*user_id/i);
-  assert.ok(exists('supabase/tests/foundation_rls.sql'));
+test('fresh Appwrite schema includes core tables and owner-scoped setup', () => {
+  const schema = JSON.parse(read('src/lib/appwrite/schema.json'));
+  for (const table of ['profiles', 'user_settings', 'goals', 'daily_targets']) assert.ok(schema.tables.some((item) => item.id === table));
+  assert.match(read('scripts/setup-appwrite.mjs'), /rowSecurity: true/);
+  assert.match(read('scripts/setup-appwrite.mjs'), /create\("users"\)/);
 });
 
 test('PWA foundation defines manifest, offline fallback, and private network-only caching', () => {
@@ -94,7 +83,8 @@ test('PWA foundation defines manifest, offline fallback, and private network-onl
   }
   const sw = read('src/app/sw.ts');
   assert.match(sw, /NetworkOnly/);
-  assert.match(sw, /\/auth\/|\/rest\/v1\/|\/api\//);
+  assert.match(sw, /\/auth\/|\/api\//);
+  assert.match(sw, /cloud\.appwrite\.io/);
   assert.match(sw, /~offline/);
   assert.ok(exists('public/icons/icon-192.png'));
   assert.ok(exists('public/icons/icon-512.png'));
@@ -105,7 +95,7 @@ test('the application shell sends a restrictive baseline Content Security Policy
   const config = read('next.config.mjs');
   assert.match(config, /Content-Security-Policy/);
   assert.match(config, /frame-ancestors 'none'/);
-  assert.match(config, /connect-src 'self' https:\/\/\*\.supabase\.co/);
+  assert.match(config, /connect-src 'self' https:\/\/fra\.cloud\.appwrite\.io/);
   assert.match(config, /object-src 'none'/);
 });
 

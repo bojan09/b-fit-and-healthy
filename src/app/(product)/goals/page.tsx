@@ -32,7 +32,7 @@ export default async function GoalsPage() {
             <article className="tracking-record" key={goal.id}>
               <div>
                 <span className={`status-pill ${goal.status}`}>
-                  {c.status[goal.status]}
+                  {c.status[goal.status as keyof typeof c.status]}
                 </span>
                 <h2>{goal.kind}</h2>
                 <p>

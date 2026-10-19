@@ -14,7 +14,7 @@ export const dictionaries = {
     offlineBody: "The public shell is available. Private records are never served from an unsafe shared cache.",
     retry: "Try again",
     notFound: "Page not found",
-    notFoundBody: "This foundation route does not exist.",
+    notFoundBody: "We could not find that page. It may have moved, or the link may be mistyped.",
     backHome: "Back to home",
     errorTitle: "Something interrupted this page",
     errorBody: "Your data was not changed. Try rendering the page again."
@@ -30,7 +30,7 @@ export const dictionaries = {
     offlineBody: "Јавната обвивка е достапна. Приватните записи никогаш не се вчитуваат од небезбеден заеднички кеш.",
     retry: "Обиди се повторно",
     notFound: "Страницата не е пронајдена",
-    notFoundBody: "Оваа основна рута не постои.",
+    notFoundBody: "Не ја најдовме таа страница. Можеби е преместена или врската е погрешно напишана.",
     backHome: "Назад на почетна",
     errorTitle: "Нешто ја прекина страницата",
     errorBody: "Вашите податоци не се променети. Обидете се повторно да ја прикажете страницата."

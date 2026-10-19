@@ -16,9 +16,9 @@ Content explains general anatomy, movement, nutrition, recovery, and health lite
 
 The current Clinical Atlas is an owned SVG educational illustration. It communicates regions and relationships without claiming diagnostic or surgical accuracy. Future images or 3D models must be owned, public domain, or covered by a documented compatible license with attribution where required.
 
-## Local content and future Supabase synchronization
+## Local content and future Appwrite synchronization
 
-Paired Markdown files remain the current source of truth. Pages consume repository functions rather than filesystem paths. A future synchronization layer can map validated article metadata, Markdown bodies, references, and relationship keys into public Supabase tables while preserving the repository interface and URLs.
+Paired Markdown files remain the current source of truth. Pages consume repository functions rather than filesystem paths. A future synchronization layer can map validated article metadata, Markdown bodies, references, and relationship keys into public Appwrite tables while preserving the repository interface and URLs.
 
 ## Review commands
 

@@ -52,7 +52,7 @@ export const publicContent = {
     demo: {
       nav: { today: "Today", nutrition: "Nutrition", training: "Training", progress: "Progress" },
       banner: {
-        message: "You're viewing example data — sign up to start tracking your own.",
+        message: "Explore sample data. Sign up to track your own.",
         cta: "Get started",
         signUp: "Sign up"
       },
@@ -274,7 +274,7 @@ export const publicContent = {
     demo: {
       nav: { today: "Денес", nutrition: "Исхрана", training: "Тренинг", progress: "Напредок" },
       banner: {
-        message: "Гледаш пример-податоци — регистрирај се за да го следиш своето.",
+        message: "Истражи пример-податоци. Регистрирај се за лично следење.",
         cta: "Започни",
         signUp: "Регистрирај се"
       },

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const getUser = vi.hoisted(() => vi.fn());
+const getCurrentAppwriteUser = vi.hoisted(() => vi.fn());
 
 vi.mock("server-only", () => ({}));
 vi.mock("next/navigation", () => ({
@@ -8,11 +8,7 @@ vi.mock("next/navigation", () => ({
     throw new Error(`redirect:${href}`);
   }),
 }));
-vi.mock("@/lib/supabase/server", () => ({
-  createClient: async () => ({
-    auth: { getUser },
-  }),
-}));
+vi.mock("@/lib/appwrite/server", () => ({ getCurrentAppwriteUser }));
 vi.mock("react", async (importOriginal) => {
   const actual = await importOriginal<typeof import("react")>();
   return {
@@ -33,10 +29,8 @@ import { requireUser } from "@/features/auth/session";
 
 describe("request-scoped session reads", () => {
   beforeEach(() => {
-    getUser.mockReset();
-    getUser.mockResolvedValue({
-      data: { user: { id: "user-1", email: "ana@example.com" } },
-    });
+    getCurrentAppwriteUser.mockReset();
+    getCurrentAppwriteUser.mockResolvedValue({ $id: "user-1", id: "user-1", email: "ana@example.com", name: "Ana" });
   });
 
   it("deduplicates repeated current-user reads in one server request", async () => {
@@ -44,6 +38,6 @@ describe("request-scoped session reads", () => {
     const second = await requireUser();
 
     expect(first).toBe(second);
-    expect(getUser).toHaveBeenCalledTimes(1);
+    expect(getCurrentAppwriteUser).toHaveBeenCalledTimes(1);
   });
 });

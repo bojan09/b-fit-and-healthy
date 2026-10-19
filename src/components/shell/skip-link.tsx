@@ -7,7 +7,6 @@ export function SkipLink({ label }: { label: string }) {
     event.preventDefault();
     main.focus();
     main.scrollIntoView({ block: "start" });
-    window.history.replaceState(null, "", "#main-content");
   }
 
   return (
