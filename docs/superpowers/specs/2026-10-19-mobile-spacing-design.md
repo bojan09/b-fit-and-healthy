@@ -30,3 +30,12 @@ No horizontal document overflow; readable navigation labels; banner under 100px 
 - Independent diff review: no actionable findings.
 - Scope limit: protected workflows were inspected structurally and with layout fixtures; no live personal health records were created.
 - Public/auth regression smoke checks: 15 passed across home, blog, anatomy, nutrition feature and sign-in at 320/768/1280px, without horizontal overflow.
+
+## Follow-up: mobile navigation and authentication entry
+- Reproduced the open public menu at 390px with x=-188px, leaving links off-screen. The menu is now anchored to the header container (x=16px, width=358px), and the trigger follows the utility controls.
+- Added outside-pointer and current-link dismissal, plus correct active links for locale-prefixed routes.
+- Verified Get started reaches /sign-up both locally and on the live domain; no broken destination was reproduced.
+- Verified the live production sign-in has Google, but production registration does not. The production master branch still has the older sign-in-only condition; audit-improvements contains Google entry for both modes. PR #1 targets master and is mergeable.
+- Replaced the generic user icon with the Google mark on the existing authentication buttons.
+- Production build and lint passed; 71 contract and 374 unit/component tests passed. Eleven browser tests passed for menu bounds and dismissal at 320/390/768/1024px in both languages, Get started navigation, and intercepted OAuth launches from both auth pages.
+- The live Appwrite Google provider accepted the production callback URL and returned HTTP 301 to accounts.google.com. No Google account sign-in or callback session was completed by the agent.
